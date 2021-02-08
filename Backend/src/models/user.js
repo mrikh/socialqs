@@ -49,6 +49,9 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    socialId : {
+        type : String
+    },
     token : {
         type : String,
         required : true
