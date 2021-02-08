@@ -16,18 +16,6 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    username : {
-        type : String,
-        required : [true, constants.invalid_username],
-        trim : true,
-        lowercase : true,
-        unique : true,
-        validate(value){
-            if (!value || '' === value){
-                throw new Error(constants.invalid_username)
-            }
-        }
-    },
     email : {
         type : String,
         required : [true, constants.invalid_email],
