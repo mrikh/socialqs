@@ -12,6 +12,12 @@
     <string name="password">Password</string>
     <string name="sign_up_button">SIGN UP</string>
     <string name="forgot_password">Forgot Password?</string>
-
+    <string name="name">Full Name</string>
+    <string name="note">Note:</string>
+    <string name="agree_our_terms">By creating an account, you agree to our</string>
+    <string name="terms">Terms</string>
+    <string name="already_account">Already have an account?</string>
+    <string name="login_small">Login</string>
+    <string name="name_error">Your name seems incorrect!</string>
 
 </resources>

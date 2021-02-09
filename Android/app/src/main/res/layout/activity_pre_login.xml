@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/loginBackground"
     tools:context=".activities.prelogin.PreLoginActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment2"
+        android:id="@+id/preLoginFragmentContainer"
         android:name="com.example.socialqs.activities.prelogin.fragments.LoginFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

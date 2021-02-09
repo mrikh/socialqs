@@ -5,6 +5,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 public class NetworkHandler {
 
     private static NetworkHandler shared = null;
-    private static String httpUrl = "";
+    private static String httpUrl = "https://socialqs-android-app.herokuapp.com/";
 
     public static NetworkHandler getInstance(){
 
@@ -22,6 +23,32 @@ public class NetworkHandler {
 
         return shared;
     }
+
+    public void signUp(String email, String password, String name, NetworkingClosure completion){
+
+        try {
+            JSONObject params = new JSONObject();
+            params.put("email", email);
+            params.put("name", name);
+            params.put("password", password);
+            performPostRequest(EndPoints.signUp, params, completion);
+        }catch(Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
+
+    public void login(String email, String password, NetworkingClosure completion){
+
+        try {
+            JSONObject params = new JSONObject();
+            params.put("email", email);
+            params.put("password", password);
+            performPostRequest(EndPoints.login, params, completion);
+        }catch(Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
+
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 

@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.3">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTextEmailAddress"
+            android:id="@+id/editTextEmailTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-8dp"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailTextField">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/editTextPasswordTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-8dp"
