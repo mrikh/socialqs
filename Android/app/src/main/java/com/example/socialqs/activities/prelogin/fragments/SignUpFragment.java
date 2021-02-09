@@ -52,8 +52,12 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         validator = new InputValidator();
+    }
 
-        ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.sign_up), "#000000", R.color.black);
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.sign_up), "#ffffff", R.color.black);
     }
 
     @Override
@@ -84,7 +88,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { nameField.setError(null); }
         });
-        
+
         TextView terms = view.findViewById(R.id.termsTextView);
         terms.setTypeface(null, Typeface.BOLD);
         terms.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);

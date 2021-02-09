@@ -49,7 +49,7 @@ public class PreLoginActivity extends AppCompatActivity {
     public void setActionBarTitle(String title, String color, int titleColorId) {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
         Spannable text = new SpannableString(title);
-        text.setSpan(new ForegroundColorSpan(titleColorId), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(getResources().getColor(titleColorId)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(text);
     }
 }
