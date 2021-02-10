@@ -40,6 +40,11 @@ public class SignUpFragment extends Fragment {
     private InputValidator validator;
     private ProgressBar progressBar;
 
+    private String name;
+    private String email;
+    private String profilePhoto;
+    private String socialId;
+
     public SignUpFragment() {
         // Required empty public constructor
     }
@@ -53,6 +58,20 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         validator = new InputValidator();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            String paramsString = bundle.getString("params");
+            try {
+                JSONObject params = new JSONObject(paramsString);
+                name = params.getString("name");
+                profilePhoto = params.getString("profilePhoto");
+                socialId = params.getString("socialId");
+                email = params.getString("email");
+            }catch(Exception e){
+
+            }
+        }
     }
 
     @Override
@@ -73,6 +92,9 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextInputEditText emailField = view.findViewById(R.id.editTextSignUpEmailTextField);
+        if (email != null){
+            emailField.setText(email);
+        }
         emailField.addTextChangedListener(new ErrorRemoveInterface() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { emailField.setError(null); }
@@ -85,6 +107,9 @@ public class SignUpFragment extends Fragment {
         });
 
         TextInputEditText nameField = view.findViewById(R.id.editTextName);
+        if (name != null){
+            nameField.setText(name);
+        }
         nameField.addTextChangedListener(new ErrorRemoveInterface() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { nameField.setError(null); }
@@ -115,7 +140,7 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        ProgressBar progressBar = view.findViewById(R.id.progress);
+        progressBar = view.findViewById(R.id.progress);
         Sprite doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.INVISIBLE);
@@ -147,7 +172,7 @@ public class SignUpFragment extends Fragment {
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
-                NetworkHandler.getInstance().signUp(email, password, name, new NetworkingClosure() {
+                NetworkHandler.getInstance().signUp(email, password, name, socialId, profilePhoto, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
                         progressBar.setVisibility(View.INVISIBLE);
@@ -164,10 +189,6 @@ public class SignUpFragment extends Fragment {
                                 UserModel currentUser = new UserModel(finalObject);
                                 UserModel.current = currentUser;
                                 UserModel.current.saveToDefaults(getActivity().getApplicationContext());
-//                                //go to verify email
-//                                Intent myIntent = new Intent(SignUpActivity.this, LandingSearchActivity.class);
-//                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                startActivity(myIntent);
                             }catch (Exception e){
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }

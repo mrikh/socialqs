@@ -24,29 +24,27 @@ public class NetworkHandler {
         return shared;
     }
 
-    public void signUp(String email, String password, String name, NetworkingClosure completion){
+    public void signUp(String email, String password, String name, String socialId, String profilePhoto, NetworkingClosure completion){
 
         try {
             JSONObject params = new JSONObject();
             params.put("email", email);
             params.put("name", name);
             params.put("password", password);
+            if (socialId != null){
+                params.put("socialId", socialId);
+            }
+            if (profilePhoto != null){
+                params.put("profilePhoto", profilePhoto);
+            }
             performPostRequest(EndPoints.signUp, params, completion);
         }catch(Exception e){
             completion.completion(null, e.getMessage());
         }
     }
 
-    public void login(String email, String password, NetworkingClosure completion){
-
-        try {
-            JSONObject params = new JSONObject();
-            params.put("email", email);
-            params.put("password", password);
-            performPostRequest(EndPoints.login, params, completion);
-        }catch(Exception e){
-            completion.completion(null, e.getMessage());
-        }
+    public void login(JSONObject object, NetworkingClosure completion){
+        performPostRequest(EndPoints.login, object, completion);
     }
 
 

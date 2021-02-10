@@ -7,6 +7,7 @@
     <!--    TAGS -->
     <string name="login_fragment">login_fragment</string>
 
+    <!--    Strings-->
     <string name="app_name">SocialQs</string>
     <string name="invalid_email">Email address is incorrect</string>
     <string name="password_short">Your password needs to be at least 8 characters</string>
@@ -28,5 +29,5 @@
     <string name="already_account">Already have an account?</string>
     <string name="login_small">Login</string>
     <string name="name_error">Your name seems incorrect!</string>
-
+    <string name="fb_no_email">Unable to fetch your email! Navigating to Sign up to manually verify email</string>
 </resources>

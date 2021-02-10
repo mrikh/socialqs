@@ -32,35 +32,42 @@ router.post('/users/login', async (req, res, next) => {
         const user = await User.findOne({email : params.email})
 
         if (!user){
-            const error = new Error(constants.user_not_found)
-            error.statusCode = 404
-            throw error
-        }
-
-        if (params.password){
-            const isMatch = await bcrypt.compare(params.password, user.password)
-            if (isMatch){
+            if (params.socialId){
+                //create new user
+                const user = new User(req.body)
                 const token = await user.generateAuthToken()
-                return res.send({code : 200, message : constants.success, data : {user, token}})
+                res.send({code : 200, message : constants.success_signup, data : {user, token}})
             }else{
-                const error = new Error(constants.params_missing)
-                error.statusCode = 404
-                throw error
-            }
-        }else if (params.socialId){
-            //social id exists, different social id, social id wrong
-            if (user.socialId === params.socialId){
-                const token = await user.generateAuthToken()
-                return res.send({code : 200, message : constants.success, data : {user, token}})
-            }else{
-                const error = new Error(constants.params_missing)
+                const error = new Error(constants.user_not_found)
                 error.statusCode = 404
                 throw error
             }
         }else{
-            const error = new Error(constants.params_missing)
-            error.statusCode = 404
-            throw error
+            if (params.password){
+                const isMatch = await bcrypt.compare(params.password, user.password)
+                if (isMatch){
+                    const token = await user.generateAuthToken()
+                    return res.send({code : 200, message : constants.success, data : {user, token}})
+                }else{
+                    const error = new Error(constants.params_missing)
+                    error.statusCode = 404
+                    throw error
+                }
+            }else if (params.socialId){
+                //social id exists, different social id, social id wrong
+                if (user.socialId === params.socialId){
+                    const token = await user.generateAuthToken()
+                    return res.send({code : 200, message : constants.success, data : {user, token}})
+                }else{
+                    const error = new Error(constants.params_missing)
+                    error.statusCode = 404
+                    throw error
+                }
+            }else{
+                const error = new Error(constants.params_missing)
+                error.statusCode = 404
+                throw error
+            }
         }
 
     }catch(error){

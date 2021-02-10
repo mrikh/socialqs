@@ -1,6 +1,7 @@
 package com.example.socialqs.activities.prelogin.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,12 +31,23 @@ import com.example.socialqs.utils.networking.NetworkHandler;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -45,6 +57,10 @@ public class LoginFragment extends Fragment {
     private InputValidator validator;
     private ProgressBar progressBar;
     private CallbackManager callbackManager;
+    private GoogleSignInClient mGoogleSignInClient;
+    private ProfileTracker profileTracker;
+    //needed for google
+    private static int RC_SIGN_IN = 100;
 
     public LoginFragment() {}
 
@@ -59,14 +75,51 @@ public class LoginFragment extends Fragment {
         validator = new InputValidator();
         callbackManager = CallbackManager.Factory.create();
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
         LoginManager.getInstance().registerCallback(
                 callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        //TODO: Handle this
-                        System.out.println("==================");
-                        System.out.println(loginResult);
+                        //get data. Since profile has no email
+                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                try {
+                                    JSONObject params = new JSONObject();
+                                    String email = response.getJSONObject().getString("email");
+                                    String name = response.getJSONObject().getString("name");
+                                    Profile profile = Profile.getCurrentProfile();
+                                    String id = profile.getId();
+                                    params.put("email", email);
+                                    params.put("name", name);
+                                    params.put("socialId", id);
+
+                                    Uri profilePhotoUri = Profile.getCurrentProfile().getProfilePictureUri(1024, 1024);
+                                    if (profilePhotoUri != null){
+                                        params.put("profilePhoto", profilePhotoUri.toString());
+                                    }
+
+                                    //now we may not receive email, in which case we need to go to sign up
+                                    if (email == null){
+                                        Toast.makeText(getActivity(), getText(R.string.fb_no_email), Toast.LENGTH_LONG).show();
+                                        goToSignUp(params);
+                                    }else{
+                                        beginLogin(params);
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        progressBar.setVisibility(View.VISIBLE);
+                        request.executeAsync();
                     }
 
                     @Override
@@ -85,7 +138,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -115,12 +176,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Load sign up fragment
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
-                        .replace(R.id.preLoginFragmentContainer, SignUpFragment.class, null)
-                        .setReorderingAllowed(true)
-                        .commit();
+                goToSignUp(null);
             }
         });
 
@@ -128,7 +184,7 @@ public class LoginFragment extends Fragment {
         exploreTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //go to landing
+                //TODO: go to landing
             }
         });
 
@@ -145,6 +201,16 @@ public class LoginFragment extends Fragment {
                 LoginManager.getInstance().logInWithReadPermissions(
                         getActivity(), Arrays.asList("email", "public_profile")
                 );
+            }
+        });
+
+        ImageView googleButton = view.findViewById(R.id.googleButton);
+        googleButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
@@ -166,7 +232,14 @@ public class LoginFragment extends Fragment {
                     return;
                 }
 
-                beginLogin(email, password, null);
+                try{
+                    JSONObject object = new JSONObject();
+                    object.put("email", email);
+                    object.put("password", password);
+                    beginLogin(object);
+                } catch (JSONException e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -179,9 +252,9 @@ public class LoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-    private void beginLogin(String email, String password, String socialId){
+    private void beginLogin(JSONObject object){
         progressBar.setVisibility(View.VISIBLE);
-        NetworkHandler.getInstance().login(email, password, new NetworkingClosure() {
+        NetworkHandler.getInstance().login(object, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
                 progressBar.setVisibility(View.INVISIBLE);
@@ -204,5 +277,48 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void goToSignUp(JSONObject params){
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+
+        Bundle arguments = new Bundle();
+
+        if (params != null) {
+            arguments.putString("params", params.toString());
+        }
+
+        manager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+                .replace(R.id.preLoginFragmentContainer, SignUpFragment.class, arguments)
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
+            // Signed in successfully, show authenticated UI.
+            if (acct != null) {
+                String personDisplayName = acct.getDisplayName();
+                String personEmail = acct.getEmail();
+                String id = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+                JSONObject object = new JSONObject();
+                object.put("name", personDisplayName);
+                object.put("email", personEmail);
+                object.put("socialId", id);
+                if (personPhoto != null){
+                    object.put("profilePhoto", personPhoto.toString());
+                }
+                beginLogin(object);
+            }else{
+                Toast.makeText(getActivity(), getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
