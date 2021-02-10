@@ -1,8 +1,17 @@
 <resources>
+
+    <!--  KEYS  -->
+    <string name="facebook_app_id">757408744896556</string>
+    <string name="fb_login_protocol_scheme">fb757408744896556</string>
+
+    <!--    TAGS -->
+    <string name="login_fragment">login_fragment</string>
+
     <string name="app_name">SocialQs</string>
     <string name="invalid_email">Email address is incorrect</string>
     <string name="password_short">Your password needs to be at least 8 characters</string>
     <string name="something_wrong">Something went wrong. Try again!</string>
+    <string name="login_cancelled">Login Cancelled</string>
     <string name="login_button">LOGIN</string>
     <string name="dont_have_account">Dont have an account?</string>
     <string name="sign_up"><u>Sign Up</u></string>

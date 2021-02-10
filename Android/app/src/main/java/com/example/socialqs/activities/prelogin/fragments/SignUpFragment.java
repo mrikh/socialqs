@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.InputValidator;
 import com.example.socialqs.utils.helperInterfaces.ErrorRemoveInterface;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -149,17 +150,21 @@ public class SignUpFragment extends Fragment {
                 NetworkHandler.getInstance().signUp(email, password, name, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
-                        System.out.println("===========================");
                         progressBar.setVisibility(View.INVISIBLE);
                         if (object == null){
                             //this will only happen if api fails
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{
+                            //TODO: Handle model and success blah blah
                             try {
-//                                UserModel current = new UserModel(object.getInt("id"), object.getString("name"), object.getString("email"));
-//                                UserModel.currentUser = current;
-//                                Utilities.getInstance().saveJsonObject(object, getApplicationContext());
-//                                //go to landing
+
+                                JSONObject finalObject = object.getJSONObject("user");
+                                finalObject.put("token", object.getString("token"));
+
+                                UserModel currentUser = new UserModel(finalObject);
+                                UserModel.current = currentUser;
+                                UserModel.current.saveToDefaults(getActivity().getApplicationContext());
+//                                //go to verify email
 //                                Intent myIntent = new Intent(SignUpActivity.this, LandingSearchActivity.class);
 //                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                                startActivity(myIntent);
