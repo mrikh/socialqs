@@ -3,6 +3,7 @@ package com.example.socialqs.utils.networking;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 
 import org.json.JSONException;
@@ -47,16 +48,29 @@ public class NetworkHandler {
         performPostRequest(EndPoints.login, object, completion);
     }
 
+    public void resendVerification(NetworkingClosure completion){
+        performPostRequest(EndPoints.resendVerification, null, completion);
+    }
+
+    public void verifyEmail(String otp, NetworkingClosure completion){
+        try{
+            JSONObject object = new JSONObject();
+            object.put("otp", otp);
+            performPostRequest(EndPoints.verifyEmail, object, completion);
+        }catch(Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
-        AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params).build().getAsJSONObject(new JSONObjectRequestListener() {
+        AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params).addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     String code = response.get("code").toString();
                     if (code.equalsIgnoreCase("200")){
-                        completion.completion(response.getJSONObject("data"), null);
+                        completion.completion(response.getJSONObject("data"), response.get("message").toString());
                     }else{
                         completion.completion(null, response.get("message").toString());
                     }
@@ -84,13 +98,13 @@ public class NetworkHandler {
 
     private void performGetRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
 
-        AndroidNetworking.get(httpUrl + endpoint).addQueryParameter(params).build().getAsJSONObject(new JSONObjectRequestListener() {
+        AndroidNetworking.get(httpUrl + endpoint).addQueryParameter(params).addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     String code = response.get("code").toString();
                     if (code.equalsIgnoreCase("200")){
-                        completion.completion(response.getJSONObject("data"), null);
+                        completion.completion(response.getJSONObject("data"), response.get("message").toString());
                     }else{
                         completion.completion(null, response.get("message").toString());
                     }

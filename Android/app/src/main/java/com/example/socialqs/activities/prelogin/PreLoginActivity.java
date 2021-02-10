@@ -56,6 +56,12 @@ public class PreLoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(text);
     }
 
+    public void updateActionBarBack(boolean show){
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(show);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

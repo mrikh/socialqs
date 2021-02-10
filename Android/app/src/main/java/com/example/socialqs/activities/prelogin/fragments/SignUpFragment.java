@@ -70,7 +70,7 @@ public class SignUpFragment extends Fragment {
                 socialId = params.getString("socialId");
                 email = params.getString("email");
             }catch(Exception e){
-
+                e.printStackTrace();
             }
         }
     }
@@ -78,6 +78,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((PreLoginActivity)getActivity()).updateActionBarBack(false);
         ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.sign_up), "#ffffff", R.color.black);
     }
 
@@ -122,7 +123,7 @@ public class SignUpFragment extends Fragment {
         terms.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                //TODO: Add terms screens
             }
         });
 
@@ -179,7 +180,7 @@ public class SignUpFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         if (object == null){
                             //this will only happen if api fails
-                            Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong): message, getText(R.string.okay), getActivity(), null);
+                            Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong): message, getText(R.string.okay), getActivity(), null).show();
                         }else{
                             try {
 
@@ -190,7 +191,13 @@ public class SignUpFragment extends Fragment {
                                 UserModel.current = currentUser;
                                 UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
-                                //TODO: Open verify email
+                                FragmentManager manager = getActivity().getSupportFragmentManager();
+                                manager.beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+                                        .replace(R.id.preLoginFragmentContainer, VerifyEmailFragment.class, null)
+                                        .setReorderingAllowed(true)
+                                        .addToBackStack(null)
+                                        .commit();
                             }catch (Exception e){
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }

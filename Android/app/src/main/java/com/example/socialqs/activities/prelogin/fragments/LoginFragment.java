@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment {
                                                 dialog.dismiss();
                                                 goToSignUp(params);
                                             }
-                                        });
+                                        }).show();
                                     }else{
                                         String email = responseObject.getString("email");
                                         params.put("email", email);
@@ -272,7 +272,6 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                 }else{
                     try {
-                        //TODO: Handle model and success blah blah and open appropriate screen
                         JSONObject finalObject = object.getJSONObject("user");
                         finalObject.put("token", object.getString("token"));
 
@@ -280,6 +279,7 @@ public class LoginFragment extends Fragment {
                         UserModel.current = currentUser;
                         UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
+                        //TODO: Open landing
                     }catch (Exception e){
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }

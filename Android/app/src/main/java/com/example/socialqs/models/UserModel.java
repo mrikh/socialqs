@@ -12,12 +12,12 @@ public class UserModel {
 
     public static UserModel current;
 
-    boolean emailVerified;
-    String profilePhoto;
-    String id;
-    String name;
-    String email;
-    String token;
+    public boolean emailVerified;
+    public String profilePhoto;
+    public String id;
+    public String name;
+    public String email;
+    public String token;
 
     public UserModel(JSONObject json) throws JSONException {
         emailVerified = json.getBoolean("emailVerified");
@@ -39,5 +39,13 @@ public class UserModel {
         json.put("token", token);
 
         Utilities.getInstance().saveJsonObject("user", json, c);
+    }
+
+    public static String networkingHeader(){
+        if (UserModel.current != null){
+            return "Bearer " + UserModel.current.token;
+        }
+
+        return null;
     }
 }
