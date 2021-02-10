@@ -16,6 +16,7 @@ module.exports = Object.freeze({
     url_not_exist : 'Url does not exist',
     success : 'Success!',
     params_missing : 'There seems to be a problem with the parameters',
+    social_login_attempt_unverified_email : 'You previously signed up with the email id you are now using for social sign up. Please verify email to use the app completely. Or use a different email id.',
 
     //User Model
     authentication_missing : 'Authentication missing',

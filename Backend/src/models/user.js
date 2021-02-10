@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
     },
     password : {
         type : String,
-        required : [true, constants.invalid_password],
         validator(value){
             if (!value || '' === value){
                 throw new Error(constants.invalid_password)

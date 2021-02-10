@@ -180,7 +180,6 @@ public class SignUpFragment extends Fragment {
                             //this will only happen if api fails
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{
-                            //TODO: Handle model and success blah blah
                             try {
 
                                 JSONObject finalObject = object.getJSONObject("user");
@@ -189,6 +188,8 @@ public class SignUpFragment extends Fragment {
                                 UserModel currentUser = new UserModel(finalObject);
                                 UserModel.current = currentUser;
                                 UserModel.current.saveToDefaults(getActivity().getApplicationContext());
+
+                                //TODO: Open verify email
                             }catch (Exception e){
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }

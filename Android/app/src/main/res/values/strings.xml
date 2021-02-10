@@ -14,6 +14,7 @@
     <string name="something_wrong">Something went wrong. Try again!</string>
     <string name="login_cancelled">Login Cancelled</string>
     <string name="login_button">LOGIN</string>
+    <string name="okay">Okay</string>
     <string name="dont_have_account">Dont have an account?</string>
     <string name="sign_up"><u>Sign Up</u></string>
     <string name="or">or</string>
@@ -29,5 +30,5 @@
     <string name="already_account">Already have an account?</string>
     <string name="login_small">Login</string>
     <string name="name_error">Your name seems incorrect!</string>
-    <string name="fb_no_email">Unable to fetch your email! Navigating to Sign up to manually verify email</string>
+    <string name="fb_no_email">Unable to fetch your email! Navigating to Sign up to manually verify email. Please use this email to login, unfortunately facebook login will not work by just tapping the button.</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.prelogin.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.InputValidator;
+import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.ErrorRemoveInterface;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -92,11 +94,11 @@ public class LoginFragment extends Fragment {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 try {
                                     JSONObject params = new JSONObject();
-                                    String email = response.getJSONObject().getString("email");
-                                    String name = response.getJSONObject().getString("name");
+                                    JSONObject responseObject = response.getJSONObject();
+
+                                    String name = responseObject.getString("name");
                                     Profile profile = Profile.getCurrentProfile();
                                     String id = profile.getId();
-                                    params.put("email", email);
                                     params.put("name", name);
                                     params.put("socialId", id);
 
@@ -106,15 +108,22 @@ public class LoginFragment extends Fragment {
                                     }
 
                                     //now we may not receive email, in which case we need to go to sign up
-                                    if (email == null){
-                                        Toast.makeText(getActivity(), getText(R.string.fb_no_email), Toast.LENGTH_LONG).show();
-                                        goToSignUp(params);
+                                    if (!responseObject.has("email")){
+                                        Utilities.getInstance().createSingleActionAlert(getText(R.string.fb_no_email), getText(R.string.okay), getActivity(), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                goToSignUp(params);
+                                            }
+                                        });
                                     }else{
+                                        String email = responseObject.getString("email");
+                                        params.put("email", email);
                                         beginLogin(params);
                                     }
 
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
