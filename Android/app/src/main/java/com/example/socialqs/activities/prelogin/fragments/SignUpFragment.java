@@ -26,6 +26,7 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.InputValidator;
+import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.ErrorRemoveInterface;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -178,7 +179,7 @@ public class SignUpFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         if (object == null){
                             //this will only happen if api fails
-                            Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
+                            Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong): message, getText(R.string.okay), getActivity(), null);
                         }else{
                             try {
 

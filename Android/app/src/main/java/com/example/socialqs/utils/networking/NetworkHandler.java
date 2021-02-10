@@ -69,7 +69,9 @@ public class NetworkHandler {
             public void onError(ANError anError) {
                 if (anError != null){
                     try {
-                        completion.completion(null, anError.getErrorDetail());
+                        JSONObject errorBody = new JSONObject(anError.getErrorBody());
+                        String message = errorBody.getString("message");
+                        completion.completion(null, message);
                     }catch (Exception e){
                         completion.completion(null, null);
                     }
