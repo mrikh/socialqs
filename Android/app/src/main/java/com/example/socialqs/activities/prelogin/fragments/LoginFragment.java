@@ -75,7 +75,9 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 //Load sign up fragment
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.preLoginFragmentContainer, SignUpFragment.class, null)
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+                        .replace(R.id.preLoginFragmentContainer, SignUpFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
             }
