@@ -9,6 +9,7 @@ module.exports = Object.freeze({
     unverified_email : 'You haven\'t verified your email address.',
     verification_failed : "Otp is incorrect or it has expired.",
     verification_success : "Otp has been successfully verified",
+    password_not_match : "Your old password is incorrect",
 
     //general
     invalid_updates : 'Invalid Updates!',

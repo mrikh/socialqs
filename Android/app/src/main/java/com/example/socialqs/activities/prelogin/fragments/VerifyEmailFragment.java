@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,10 +135,18 @@ public class VerifyEmailFragment extends Fragment {
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{
                             try{
-
                                 if (forgot){
-                                    //TODO: Change password screen
+                                    Bundle arguments = new Bundle();
+                                    arguments.putString("email", email);
+                                    arguments.putBoolean("isResetPassword", true);
 
+                                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                                    manager.beginTransaction()
+                                            .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+                                            .replace(R.id.preLoginFragmentContainer, ResetPasswodFragment.class, arguments)
+                                            .setReorderingAllowed(true)
+                                            .addToBackStack(null)
+                                            .commit();
                                 }else{
                                     UserModel.current.emailVerified = true;
                                     UserModel.current.saveToDefaults(getActivity());

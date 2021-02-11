@@ -153,4 +153,56 @@ router.post('/users/forgotPass', async (req, res, next) => {
     }
 })
 
+router.post('/users/resetPassword', async (req, res, next) => {
+
+    try{
+        const email = req.body.email
+        const user = await User.findOne({email : email})
+
+        if (!user){
+            const error = new Error(constants.user_not_found)    
+            error.statusCode = 404
+            throw error
+        }
+        
+        const newPass = req.body.password
+        user.password = newPass
+        await user.save()
+        return res.send({code : 200, message : constants.success})
+    }catch (error){
+        next(error)
+    }
+})
+
+router.post('/users/updatePassword', async (req, res, next) => {
+
+    try{
+        const email = req.body.email
+        const user = await User.findOne({email : email})
+
+        if (!user){
+            const error = new Error(constants.user_not_found)    
+            error.statusCode = 404
+            throw error
+        }
+        
+        const oldPass = req.body.oldPassword
+        const newPass = req.body.password
+
+        const isMatch = await bcrypt.compare(oldPass, user.password)
+
+        if (isMatch){
+            user.password = newPass
+            await user.save()
+            return res.send({code : 200, message : constants.success})
+        }else{
+            const error = new Error(constants.password_not_match)    
+            error.statusCode = 404
+            throw error
+        }
+    }catch (error){
+        next(error)
+    }
+})
+
 module.exports = router

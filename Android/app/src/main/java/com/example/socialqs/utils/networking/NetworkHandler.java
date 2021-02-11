@@ -65,7 +65,13 @@ public class NetworkHandler {
         try{
             JSONObject params = new JSONObject();
             params.put("email", email);
-            performPostRequest(EndPoints.forgotPass, params, completion);
+            performPostRequest(EndPoints.forgotPass, params, new NetworkingClosure() {
+                @Override
+                public void completion(JSONObject object, String message) {
+                    //had to do this as in case of forgot password success, we don't send back object
+                    completion.completion(new JSONObject(), message);
+                }
+            });
         }catch (Exception e){
             completion.completion(null, e.getMessage());
         }

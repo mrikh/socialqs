@@ -43,4 +43,9 @@
     <string name="forgot_password_title">Forgot Password</string>
     <string name="forgot_password_info">You will receive an email with more information on how to proceed</string>
 
+    <string name="update_password">Update Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password_not_equal">Both the passwords need to be equal</string>
 </resources>

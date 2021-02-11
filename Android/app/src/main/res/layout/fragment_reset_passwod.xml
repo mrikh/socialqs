@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.prelogin.fragments.ResetPasswodFragment">
+
+
+    <Button
+        android:id="@+id/forgotPassConfirmButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="35dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/confirm"
+        android:textStyle="bold"
+        app:backgroundTint="@color/black"
+        app:cornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmNewPasswordTextField" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmNewPasswordTextField"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="35dp"
+        android:autofillHints="email"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="@+id/newPasswordTextField"
+        app:layout_constraintStart_toStartOf="@+id/newPasswordTextField"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordTextField">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirmNewPasswordEditTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-8dp"
+            android:layout_marginLeft="-8dp"
+            android:background="@color/white"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/oldPasswordTextField"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="25dp"
+        android:autofillHints="email"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/oldPasswordEditTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-8dp"
+            android:layout_marginLeft="-8dp"
+            android:background="@color/white"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newPasswordTextField"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="35dp"
+        android:autofillHints="email"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="@+id/oldPasswordTextField"
+        app:layout_constraintStart_toStartOf="@+id/oldPasswordTextField"
+        app:layout_constraintTop_toBottomOf="@+id/oldPasswordTextField">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newPasswordEditTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-8dp"
+            android:layout_marginLeft="-8dp"
+            android:background="@color/white"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
