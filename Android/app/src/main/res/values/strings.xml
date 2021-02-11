@@ -33,10 +33,14 @@
     <string name="fb_no_email">Unable to fetch your email! Navigating to Sign up to manually verify email. Please use this email to login, unfortunately facebook login will not work by just tapping the button.</string>
 
     <string name="verify_email">Verify Your Email</string>
+    <string name="verify_forgot_pass_text">We have sent you an email with the code. Please enter it to verify your email!</string>
     <string name="code_sent">We have sent you an email with the code. Please enter it to complete Sign Up!</string>
     <string name="resend_code">Resend Code</string>
     <string name="confirm">Confirm</string>
     <string name="do_it">or do it</string>
     <string name="later">later</string>
+
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_info">You will receive an email with more information on how to proceed</string>
 
 </resources>

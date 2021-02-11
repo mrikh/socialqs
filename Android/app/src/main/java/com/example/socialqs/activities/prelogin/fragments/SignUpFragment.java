@@ -39,7 +39,6 @@ import org.json.JSONObject;
 public class SignUpFragment extends Fragment {
 
     private InputValidator validator;
-    private ProgressBar progressBar;
 
     private String name;
     private String email;
@@ -142,11 +141,6 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        progressBar = view.findViewById(R.id.progress);
-        Sprite doubleBounce = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(doubleBounce);
-        progressBar.setVisibility(View.INVISIBLE);
-
         Button signUp = view.findViewById(R.id.signUpButton);
         signUp.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -173,11 +167,11 @@ public class SignUpFragment extends Fragment {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                updateProgress(View.VISIBLE);
                 NetworkHandler.getInstance().signUp(email, password, name, socialId, profilePhoto, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        updateProgress(View.INVISIBLE);
                         if (object == null){
                             //this will only happen if api fails
                             Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong): message, getText(R.string.okay), getActivity(), null).show();
@@ -191,10 +185,13 @@ public class SignUpFragment extends Fragment {
                                 UserModel.current = currentUser;
                                 UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
+                                Bundle arguments = new Bundle();
+                                arguments.putString("email", email);
+
                                 FragmentManager manager = getActivity().getSupportFragmentManager();
                                 manager.beginTransaction()
                                         .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
-                                        .replace(R.id.preLoginFragmentContainer, VerifyEmailFragment.class, null)
+                                        .replace(R.id.preLoginFragmentContainer, VerifyEmailFragment.class, arguments)
                                         .setReorderingAllowed(true)
                                         .addToBackStack(null)
                                         .commit();
@@ -206,5 +203,9 @@ public class SignUpFragment extends Fragment {
                 });
             }
         });
+    }
+
+    private void updateProgress(int visibility){
+        ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
 }

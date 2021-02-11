@@ -30,21 +30,28 @@ import org.json.JSONObject;
 
 public class VerifyEmailFragment extends Fragment {
 
-    private ProgressBar progressBar;
+    private boolean forgot;
+    private String email;
 
     public VerifyEmailFragment() {
         // Required empty public constructor
     }
 
-    public static VerifyEmailFragment newInstance(String param1, String param2) {
+    public static VerifyEmailFragment newInstance() {
         VerifyEmailFragment fragment = new VerifyEmailFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            this.forgot = bundle.getBoolean("isForgot");
+            this.email = bundle.getString("email");
+        }
     }
 
     @Override
@@ -53,7 +60,6 @@ public class VerifyEmailFragment extends Fragment {
         ((PreLoginActivity)getActivity()).updateActionBarBack(true);
         ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.verify_email), "#ffffff", R.color.black);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,11 +71,6 @@ public class VerifyEmailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        progressBar = view.findViewById(R.id.progress);
-        Sprite doubleBounce = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(doubleBounce);
-        progressBar.setVisibility(View.INVISIBLE);
 
         TextView laterTextView = view.findViewById(R.id.skipTextView);
         laterTextView.setTypeface(null, Typeface.BOLD);
@@ -88,11 +89,11 @@ public class VerifyEmailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //resend api
-                progressBar.setVisibility(View.VISIBLE);
-                NetworkHandler.getInstance().resendVerification(new NetworkingClosure() {
+                updateProgress(View.VISIBLE);
+                NetworkHandler.getInstance().resendVerification(email, forgot, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        updateProgress(View.INVISIBLE);
                         if (object == null){
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{
@@ -103,32 +104,47 @@ public class VerifyEmailFragment extends Fragment {
             }
         });
 
+        if (forgot){
+            laterTextView.setVisibility(View.INVISIBLE);
+
+            TextView orDoIt = view.findViewById(R.id.doItLaterTextView);
+            orDoIt.setVisibility(View.INVISIBLE);
+
+            TextView emailSent = view.findViewById(R.id.emailSentTextView);
+            emailSent.setText(R.string.verify_forgot_pass_text);
+        }
+
         PinView otpView = view.findViewById(R.id.otp_view);
         otpView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.black, getActivity().getTheme()));
         otpView.setLineColor(ResourcesCompat.getColor(getResources(), R.color.black, getActivity().getTheme()));
         otpView.setItemCount(4);
         otpView.setCursorColor(ResourcesCompat.getColor(getResources(), R.color.black, getActivity().getTheme()));
 
-
-
         Button confirm = view.findViewById(R.id.verifyConfirmButton);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                progressBar.setVisibility(View.VISIBLE);
-                NetworkHandler.getInstance().verifyEmail(otpView.getText().toString(), new NetworkingClosure() {
+                updateProgress(View.VISIBLE);
+                NetworkHandler.getInstance().verifyEmail(email, otpView.getText().toString(), new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        updateProgress(View.INVISIBLE);
                         if (object == null){
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{
                             try{
-                                UserModel.current.emailVerified = true;
-                                UserModel.current.saveToDefaults(getActivity());
-                                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                                //TODO: Go to landing screen
+
+                                if (forgot){
+                                    //TODO: Change password screen
+
+                                }else{
+                                    UserModel.current.emailVerified = true;
+                                    UserModel.current.saveToDefaults(getActivity());
+                                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                                    //TODO: Go to landing screen
+                                }
+
                             }catch(Exception e){
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }
@@ -137,5 +153,9 @@ public class VerifyEmailFragment extends Fragment {
                 });
             }
         });
+    }
+
+    private void updateProgress(int visibility){
+        ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
 }

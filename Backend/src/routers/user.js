@@ -87,23 +87,34 @@ router.post('/users/login', async (req, res, next) => {
     }
 })
 
-router.post('/users/resendVerification', auth, async (req, res, next) => {
+router.post('/users/resendVerification', async (req, res, next) => {
     try{
-        const user = req.user
+        const email = req.body.email
+        const user = await User.findOne({email : email})
+        const isForgotPassword = req.body.isForgot
+
         if (!user){
-            res.send({code : 404, message : constants.user_not_found})
+            return res.send({code : 404, message : constants.user_not_found})
         }else{
-            sendVerificationMail(user)
-            res.send({code : 200, message : constants.success_signup})
+
+            if (isForgotPassword){
+                sendForgotMail(email)
+                return res.send({code : 200, message : constants.forgot_success})
+            }else{
+                sendVerificationMail(user)
+                return res.send({code : 200, message : constants.success_signup})
+            }
         }
     }catch (error){
         next(error)
     }
 })
 
-router.post('/users/verifyEmail', auth, async (req, res, next) => {
+router.post('/users/verifyEmail', async (req, res, next) => {
     try{
-        const user = req.user
+        const email = req.body.email
+        const user = await User.findOne({email: email})
+
         if (!user){
             res.send({code : 404, message : constants.user_not_found})
         }else{

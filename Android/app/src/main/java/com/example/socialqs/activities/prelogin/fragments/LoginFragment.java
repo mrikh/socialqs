@@ -57,7 +57,6 @@ import java.util.Arrays;
 public class LoginFragment extends Fragment {
 
     private InputValidator validator;
-    private ProgressBar progressBar;
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private ProfileTracker profileTracker;
@@ -91,7 +90,7 @@ public class LoginFragment extends Fragment {
                         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                updateProgress(View.INVISIBLE);
                                 try {
                                     JSONObject params = new JSONObject();
                                     JSONObject responseObject = response.getJSONObject();
@@ -127,7 +126,7 @@ public class LoginFragment extends Fragment {
                                 }
                             }
                         });
-                        progressBar.setVisibility(View.VISIBLE);
+                        updateProgress(View.VISIBLE);
                         request.executeAsync();
                     }
 
@@ -197,11 +196,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        progressBar = view.findViewById(R.id.progress);
-        Sprite doubleBounce = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(doubleBounce);
-        progressBar.setVisibility(View.INVISIBLE);
-
         ImageView facebookButton = view.findViewById(R.id.facebookButton);
         facebookButton.setOnClickListener(new View.OnClickListener(){
 
@@ -262,11 +256,11 @@ public class LoginFragment extends Fragment {
     }
 
     private void beginLogin(JSONObject object){
-        progressBar.setVisibility(View.VISIBLE);
+        updateProgress(View.VISIBLE);
         NetworkHandler.getInstance().login(object, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
-                progressBar.setVisibility(View.INVISIBLE);
+                updateProgress(View.INVISIBLE);
                 if (object == null){
                     //this will only happen if api fails
                     Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
@@ -330,5 +324,9 @@ public class LoginFragment extends Fragment {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void updateProgress(int visibility){
+        ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
 }

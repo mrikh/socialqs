@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentContainerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,11 +16,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 
 import com.example.socialqs.R;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 
 public class PreLoginActivity extends AppCompatActivity {
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,11 @@ public class PreLoginActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        progressBar = findViewById(R.id.progress);
+        Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void onClick(View v){ }
@@ -68,5 +79,9 @@ public class PreLoginActivity extends AppCompatActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.preLoginFragmentContainer);
         fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateProgress(int visibility){
+        progressBar.setVisibility(visibility);
     }
 }

@@ -60,18 +60,6 @@
         app:lineColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/emailSentTextView" />
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/progress"
-        style="@style/SpinKitView.Large.DoubleBounce"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:SpinKit_Color="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/verifyConfirmButton"
         android:layout_width="0dp"
@@ -80,7 +68,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="25dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -92,6 +80,16 @@
         app:layout_constraintBottom_toTopOf="@+id/doItLaterTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/resendTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/resend_code"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/otp_view"
+        app:layout_constraintTop_toBottomOf="@+id/otp_view" />
 
     <TextView
         android:id="@+id/doItLaterTextView"
@@ -119,15 +117,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/doItLaterTextView"
         app:layout_constraintTop_toTopOf="@+id/doItLaterTextView" />
-
-    <TextView
-        android:textColor="@color/black"
-        android:id="@+id/resendTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/resend_code"
-        app:layout_constraintEnd_toEndOf="@+id/otp_view"
-        app:layout_constraintTop_toBottomOf="@+id/otp_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

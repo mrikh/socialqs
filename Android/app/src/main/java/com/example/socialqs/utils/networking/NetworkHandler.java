@@ -48,14 +48,34 @@ public class NetworkHandler {
         performPostRequest(EndPoints.login, object, completion);
     }
 
-    public void resendVerification(NetworkingClosure completion){
-        performPostRequest(EndPoints.resendVerification, null, completion);
+    public void resendVerification(String email, boolean isForgot, NetworkingClosure completion){
+
+        try {
+            JSONObject params = new JSONObject();
+            params.put("isForgot", isForgot);
+            params.put("email", email);
+            performPostRequest(EndPoints.resendVerification, params, completion);
+        }catch(Exception e){
+            completion.completion(null, e.getMessage());
+        }
     }
 
-    public void verifyEmail(String otp, NetworkingClosure completion){
+    public void forgotPassword(String email, NetworkingClosure completion){
+
+        try{
+            JSONObject params = new JSONObject();
+            params.put("email", email);
+            performPostRequest(EndPoints.forgotPass, params, completion);
+        }catch (Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
+
+    public void verifyEmail(String email, String otp, NetworkingClosure completion){
         try{
             JSONObject object = new JSONObject();
             object.put("otp", otp);
+            object.put("email", email);
             performPostRequest(EndPoints.verifyEmail, object, completion);
         }catch(Exception e){
             completion.completion(null, e.getMessage());
