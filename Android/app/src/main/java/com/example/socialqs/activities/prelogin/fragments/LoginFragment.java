@@ -280,6 +280,7 @@ public class LoginFragment extends Fragment {
                         UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
                         //TODO: Open landing
+                        Toast.makeText(getActivity(), "Success! Remove message and navigate to landing :P", Toast.LENGTH_LONG).show();
                     }catch (Exception e){
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
