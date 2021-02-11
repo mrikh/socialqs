@@ -50,6 +50,13 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((PreLoginActivity)getActivity()).updateActionBarBack(true);
+        ((PreLoginActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -63,7 +70,7 @@ public class ForgotPasswordFragment extends Fragment {
         TextView forgotPassword = view.findViewById(R.id.forgotPasswordTitle);
         forgotPassword.setTypeface(null, Typeface.BOLD);
 
-        TextInputEditText emailField = view.findViewById(R.id.forgotPassEmailTextField);
+        TextInputEditText emailField = view.findViewById(R.id.editTextForgotEmailTextField);
         emailField.addTextChangedListener(new ErrorRemoveInterface() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { emailField.setError(null); }
@@ -84,6 +91,7 @@ public class ForgotPasswordFragment extends Fragment {
                 NetworkHandler.getInstance().forgotPassword(email, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
+                        updateProgress(View.INVISIBLE);
                         if (object == null){
                             Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
                         }else{

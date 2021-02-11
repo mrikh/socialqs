@@ -160,6 +160,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((PreLoginActivity)getActivity()).updateActionBarBack(false);
         ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.app_name), "#000000", R.color.white);
     }
 
@@ -185,6 +186,21 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 //Load sign up fragment
                 goToSignUp(null);
+            }
+        });
+
+        TextView forgotTextView = view.findViewById(R.id.forgotPasswordTextView);
+        forgotTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Load sign up fragment
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+                        .replace(R.id.preLoginFragmentContainer, ForgotPasswordFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

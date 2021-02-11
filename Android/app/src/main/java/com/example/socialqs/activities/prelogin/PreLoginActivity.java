@@ -3,6 +3,7 @@ package com.example.socialqs.activities.prelogin;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.prelogin.fragments.ForgotPasswordFragment;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
@@ -54,22 +56,33 @@ public class PreLoginActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            if (getFragmentManager().getBackStackEntryCount() > 0 ) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void setActionBarTitle(String title, String color, int titleColorId) {
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
+
+        if (title == null) {
+            return;
+        }
+
         Spannable text = new SpannableString(title);
         text.setSpan(new ForegroundColorSpan(getResources().getColor(titleColorId)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(text);
     }
 
     public void updateActionBarBack(boolean show){
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(show);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(show);
         }
     }
 

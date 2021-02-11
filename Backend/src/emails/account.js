@@ -15,12 +15,12 @@ const sendVerificationMail = (user) => {
     })
 }
 
-const sendForgotMail = (email) => {
+const sendForgotMail = (user) => {
     
     const token = otpHandler.generateOtp(user)
 
     sgMail.send({
-        to : email,
+        to : user.email,
         from : 'mayankrikh@gmail.com',
         subject: 'Forgot Password',
         text : `Please enter ${token} to verify your account.`

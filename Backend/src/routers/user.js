@@ -141,13 +141,12 @@ router.post('/users/forgotPass', async (req, res, next) => {
     try{
         const email = req.body.email
         const user = await User.findOne({email : email})
-
         if (!user){
             const error = new Error(constants.user_not_found)    
             error.statusCode = 404
             throw error
         }
-        sendForgotMail(email)
+        sendForgotMail(user)
         res.send({code : 200, message : constants.forgot_success})
     }catch (error){
         next(error)
