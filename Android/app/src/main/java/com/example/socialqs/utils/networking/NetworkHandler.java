@@ -65,14 +65,20 @@ public class NetworkHandler {
         try{
             JSONObject params = new JSONObject();
             params.put("email", email);
-            performPostRequest(EndPoints.forgotPass, params, new NetworkingClosure() {
-                @Override
-                public void completion(JSONObject object, String message) {
-                    //had to do this as in case of forgot password success, we don't send back object
-                    completion.completion(new JSONObject(), message);
-                }
-            });
+            performPostRequest(EndPoints.forgotPass, params, completion);
         }catch (Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
+
+    public void resetPassword(String email, String password, NetworkingClosure completion){
+
+        try{
+            JSONObject object = new JSONObject();
+            object.put("password", password);
+            object.put("email", email);
+            performPostRequest(EndPoints.resetPass, object, completion);
+        }catch(Exception e){
             completion.completion(null, e.getMessage());
         }
     }
@@ -96,7 +102,14 @@ public class NetworkHandler {
                 try {
                     String code = response.get("code").toString();
                     if (code.equalsIgnoreCase("200")){
-                        completion.completion(response.getJSONObject("data"), response.get("message").toString());
+                        boolean hasData = response.has("data");
+                        if (hasData) {
+                            //since in closures we check if object is null, we add in dummy object for
+                            // success as we never use it for the apis that return empty object anyways
+                            completion.completion(response.getJSONObject("data"), response.get("message").toString());
+                        }else{
+                            completion.completion(new JSONObject(), response.get("message").toString());
+                        }
                     }else{
                         completion.completion(null, response.get("message").toString());
                     }
@@ -130,7 +143,12 @@ public class NetworkHandler {
                 try {
                     String code = response.get("code").toString();
                     if (code.equalsIgnoreCase("200")){
-                        completion.completion(response.getJSONObject("data"), response.get("message").toString());
+                        boolean hasData = response.has("data");
+                        if (hasData) {
+                            completion.completion(response.getJSONObject("data"), response.get("message").toString());
+                        }else{
+                            completion.completion(new JSONObject(), response.get("message").toString());
+                        }
                     }else{
                         completion.completion(null, response.get("message").toString());
                     }

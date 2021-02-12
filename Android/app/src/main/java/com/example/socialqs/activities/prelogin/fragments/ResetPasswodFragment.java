@@ -5,17 +5,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.utils.InputValidator;
 import com.example.socialqs.utils.helperInterfaces.ErrorRemoveInterface;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONObject;
 
 public class ResetPasswodFragment extends Fragment {
 
@@ -68,6 +75,11 @@ public class ResetPasswodFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) { oldPassField.setError(null); }
         });
 
+        if (isResetPassword){
+            TextInputLayout oldPassLayout = view.findViewById(R.id.oldPasswordTextField);
+            oldPassLayout.setVisibility(View.GONE);
+        }
+
         TextInputEditText newPassField = view.findViewById(R.id.newPasswordEditTextField);
         newPassField.addTextChangedListener(new ErrorRemoveInterface() {
             @Override
@@ -91,20 +103,20 @@ public class ResetPasswodFragment extends Fragment {
                 if (!isResetPassword) {
                     if (!validator.isValidPassword(oldPass)) {
                         //error
-                        oldPassField.setError(getString(R.string.invalid_email));
+                        oldPassField.setError(getString(R.string.password_short));
                         return;
                     }
                 }
 
                 if (!validator.isValidPassword(newPass)){
                     //error
-                    newPassField.setError(getString(R.string.invalid_email));
+                    newPassField.setError(getString(R.string.password_short));
                     return;
                 }
 
                 if (!validator.isValidPassword(confirmPass)){
                     //error
-                    confirmPassField.setError(getString(R.string.invalid_email));
+                    confirmPassField.setError(getString(R.string.password_short));
                     return;
                 }
 
@@ -113,9 +125,25 @@ public class ResetPasswodFragment extends Fragment {
                     return;
                 }
 
-                //TODO: Update password api
                 updateProgress(View.VISIBLE);
-                
+                if (isResetPassword){
+                    NetworkHandler.getInstance().resetPassword(email, newPass, new NetworkingClosure() {
+                        @Override
+                        public void completion(JSONObject object, String message) {
+                            updateProgress(View.INVISIBLE);
+                            if (object == null){
+                                Toast.makeText(getActivity(), (message == null) ? getText(R.string.something_wrong): message, Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getActivity(), getText(R.string.password_updated), Toast.LENGTH_LONG).show();
+                                FragmentManager manager = getActivity().getSupportFragmentManager();
+                                manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            }
+                        }
+                    });
+                }else{
+
+                    //TODO: Add update pass api
+                }
             }
         });
     }

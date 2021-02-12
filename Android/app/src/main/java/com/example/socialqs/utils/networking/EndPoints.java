@@ -7,4 +7,5 @@ public class EndPoints{
     public static String resendVerification = "users/resendVerification";
     public static String verifyEmail = "users/verifyEmail";
     public static String forgotPass = "users/forgotPass";
+    public static String resetPass = "users/resetPassword";
 }
