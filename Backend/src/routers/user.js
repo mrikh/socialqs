@@ -1,6 +1,8 @@
 const express = require('express')
 const User = require('../models/user')
+const Question = require('../models/question')
 const constants = require('../utils/constants')
+const mongoose = require('mongoose')
 const {sendVerificationMail, sendForgotMail} = require('../emails/account')
 const auth = require('../middleware/auth')
 const bcrypt = require('bcrypt')
@@ -233,6 +235,56 @@ router.get('/users/search', auth, async (req, res, next) => {
                 }
             }
         ])
+
+        return res.status(200).send({code : 200, message : constants.success, data : {'results' : results}})
+    }catch(error){
+        next(error)
+    }
+})
+
+router.get('/users/:id', auth, async (req, res, next) => {
+
+    try{
+        const id = req.params.id
+
+        if (!id){   
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        var aggregate = [{
+            $match: {
+                _id : mongoose.Types.ObjectId(id)
+            }   
+        },{
+            $lookup: {
+                from: "questions",
+                as: "created",
+                let: { currentId: "$_id" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$$currentId", "$creator"] } } },
+                    {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator"]}],
+            }
+        },{
+            $unset: ["createdAt", "updatedAt", "__v", "password", "socialId", "email", "emailVerified", "token"]
+        }]
+
+        if (id == req.user._id){
+            aggregate.push({
+                $lookup: {
+                    from: "questions",
+                    as : "bookmarked",
+                    let : {currentId : "$_id"},
+                    pipeline : [
+                        {$match : {$expr : {$in: ["$$currentId","$bookmarkedBy"]}}},
+                        {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator"]}
+                    ]
+                }
+            })
+        }
+
+        const results = await User.aggregate(aggregate)
 
         return res.status(200).send({code : 200, message : constants.success, data : {'results' : results}})
     }catch(error){

@@ -80,7 +80,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
                 $options : 'i'
             }
         }
-        console.log(conditions)
+        
         const results = await Question.aggregate([
             {
                 $match: conditions
