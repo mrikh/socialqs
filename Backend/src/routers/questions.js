@@ -129,7 +129,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
 })
 
 
-router.patch('/question/bookmark', auth, async (req, res, next) => {
+router.patch('/questions/bookmark', auth, async (req, res, next) => {
     try{
         const questionId = req.body.questionId
         const isBookmarked = req.body.isBookmarked
@@ -140,7 +140,7 @@ router.patch('/question/bookmark', auth, async (req, res, next) => {
             throw error
         }
 
-        const question = Question.findById(questionId)
+        const question = await Question.findById(questionId)
 
         if (isBookmarked){
             question.bookmarkedBy.push(req.user._id)
@@ -151,6 +151,23 @@ router.patch('/question/bookmark', auth, async (req, res, next) => {
         await question.save()
         return res.send({code : 200, message : constants.success})
         
+    }catch(error){
+        next(error)
+    }
+})
+
+router.delete('/questions/:id', auth, async (req, res, next) => {
+    try{
+        const questionId = req.params.id
+        
+        if (!questionId){
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        await Question.deleteOne({_id : questionId})
+        return res.send({code : 200, message : constants.success})
     }catch(error){
         next(error)
     }

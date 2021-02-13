@@ -79,6 +79,13 @@ router.patch('/answers/update', auth, async (req, res, next) => {
             }
 
         const answer = await Answer.findById(answerId)
+
+        if (!answer){   
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
         if (isCorrect != null || isCorrect != undefined){
             answer.isCorrect = isCorrect
         }
@@ -98,10 +105,26 @@ router.patch('/answers/update', auth, async (req, res, next) => {
                 answer.dislikes.pull(req.user._id)
             }
         }
-        
         await answer.save()
         return res.send({code : 200, message : constants.success})
         
+    }catch(error){
+        next(error)
+    }
+})
+
+router.delete('/answers/:id', auth, async (req, res, next) => {
+    try{
+        const answerId = req.params.id
+        
+        if (!answerId){
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        await Answer.deleteOne({_id : answerId})
+        return res.send({code : 200, message : constants.success})
     }catch(error){
         next(error)
     }
