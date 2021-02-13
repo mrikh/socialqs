@@ -13,6 +13,7 @@ module.exports = Object.freeze({
 
     //Questions
     category_added : 'Successfully created a category.',
+    incorrect_category : 'Incorrect Category',
 
     //general
     invalid_updates : 'Invalid Updates!',

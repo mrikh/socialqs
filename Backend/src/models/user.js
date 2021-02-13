@@ -50,15 +50,7 @@ const userSchema = new mongoose.Schema({
     profilePhoto:{
         type : String,
         default : ''
-    },
-    createdQuestions : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Question'
-    }],
-    bookmarked : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Question'
-    }],
+    }
 },{
     timestamps : true
 })
@@ -77,6 +69,7 @@ userSchema.methods.generateAuthToken = async function (){
 }
 
 userSchema.methods.toJSON = function() {
+
     const userObject = this.toObject()
     delete userObject.token
     delete userObject.password

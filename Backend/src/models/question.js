@@ -40,7 +40,11 @@ const questionSchema = new mongoose.Schema({
                 throw new Error(constants.invalid_url)
             }
         }
-    }
+    },
+    bookmarkedBy : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User'   
+    }]
 },{
     timestamps : true
 })

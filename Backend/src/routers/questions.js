@@ -31,12 +31,15 @@ router.post('/questions/create', auth, async (req, res, next) => {
         var params = req.body
         params.creator = req.user._id
 
+        const category = await Category.findById(params.category)
+        if (!category){
+            const error = new Error(constants.incorrect_category)
+            error.statusCode = 400
+            throw error
+        }
+
         const question = new Question(req.body)
         await question.save()
-
-        const user = req.user
-        user.createdQuestions.push(question._id)
-        await user.save()
 
         await question.populate({
             path : 'creator',
@@ -48,6 +51,7 @@ router.post('/questions/create', auth, async (req, res, next) => {
 
         var questionJson = question.toJSON()
         questionJson.answerCount = 0
+        delete questionJson.bookmarkedBy
         return res.status(200).send({code : 200, message : constants.success, data : questionJson})
     }catch(error){
         next(error)
@@ -104,11 +108,52 @@ router.get('/questions/list', auth, async (req, res, next) => {
             }
         ])
 
-        return res.status(200).send({code : 200, message : constants.success, data : { 'result':results}})
+        const finalJson = results.map((question) => {
+            const temp = question
+            if (req.user._id){
+                temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                    return id.equals(req.user._id)
+                })
+            }else{
+                temp.isBookmarked = false
+            }
+
+            delete temp.bookmarkedBy
+            return temp
+        })
+
+        return res.status(200).send({code : 200, message : constants.success, data : { 'result':finalJson}})
     }catch(error){
         next(error)
     }
 })
 
+
+router.patch('/question/bookmark', auth, async (req, res, next) => {
+    try{
+        const questionId = req.body.questionId
+        const isBookmarked = req.body.isBookmarked
+        
+        if (!questionId || (isBookmarked == null || isBookmarked == undefined)){
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        const question = Question.findById(questionId)
+
+        if (isBookmarked){
+            question.bookmarkedBy.push(req.user._id)
+        }else{
+            question.bookmarkedBy.pull(req.user._id)
+        }
+        
+        await question.save()
+        return res.send({code : 200, message : constants.success})
+        
+    }catch(error){
+        next(error)
+    }
+})
 
 module.exports = router
