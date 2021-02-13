@@ -61,21 +61,30 @@ router.post('/questions/create', auth, async (req, res, next) => {
 router.get('/questions/list', auth, async (req, res, next) => {
     try{
         const categoryId = req.query.categoryId
+        const search = req.query.search
 
-        if (!categoryId){
-            const error = new Error(constants.params_missing)
-            error.statusCode = 400
-            throw error
+        var conditions = {}
+        if (categoryId){
+            conditions = {
+                category : mongoose.Types.ObjectId(categoryId)
+            }
+        }else{
+            conditions = {
+                category : {$ne : null}
+            }
         }
 
+        if (search){
+            conditions.title = {
+                $regex: search,
+                $options : 'i'
+            }
+        }
+        console.log(conditions)
         const results = await Question.aggregate([
             {
-                $match:{
-                    $and : [
-                        { category : mongoose.Types.ObjectId(categoryId) },
-                        { category : {$ne : null} }
-                    ]
-                }
+                $match: conditions
+                
             },{
                 $lookup: {
                     from: "answers",

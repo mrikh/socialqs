@@ -5,7 +5,6 @@ const constants = require('../utils/constants.js')
 
 const router = new express.Router()
 
-
 router.post('/answers/answer', auth, async (req, res, next) => {
 
     try{

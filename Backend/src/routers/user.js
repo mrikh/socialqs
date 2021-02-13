@@ -30,7 +30,6 @@ router.post('/users/login', async (req, res, next) => {
         }
 
         const user = await User.findOne({email : params.email})
-
         if (!user){
             if (params.socialId){
                 const user = new User(req.body)
@@ -43,7 +42,9 @@ router.post('/users/login', async (req, res, next) => {
             }
         }else{
             if (params.password){
+
                 const isMatch = await bcrypt.compare(params.password, user.password)
+                
                 if (isMatch){
                     const token = await user.generateAuthToken()
                     return res.send({code : 200, message : constants.success, data : {user, token}})
@@ -204,5 +205,40 @@ router.post('/users/updatePassword', async (req, res, next) => {
         next(error)
     }
 })
+
+router.get('/users/search', auth, async (req, res, next) => {
+
+    try{
+        const searchString = req.query.search
+
+        if (!searchString){   
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        const results = await User.aggregate([
+            {
+                $match: {
+                    name : {
+                        $regex: searchString,
+                        $options : 'i'
+                    }
+                }                
+            },{
+                $project : {
+                    name : 1,
+                    profilePhoto : 1,
+                    _id : 1
+                }
+            }
+        ])
+
+        return res.status(200).send({code : 200, message : constants.success, data : {'results' : results}})
+    }catch(error){
+        next(error)
+    }
+})
+
 
 module.exports = router

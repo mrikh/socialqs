@@ -1,5 +1,6 @@
 const express = require('express')
 require('./db/mongoose')
+const followRouter = require('./routers/follow.js')
 const answerRouter = require('./routers/answer.js')
 const questionsRouter = require('./routers/questions.js')
 const userRouter = require('./routers/user')
@@ -11,6 +12,7 @@ const port = process.env.PORT
 
 app.use(express.json())
 //routers
+app.use(followRouter)
 app.use(answerRouter)
 app.use(questionsRouter)
 app.use(userRouter)

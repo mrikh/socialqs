@@ -26,6 +26,7 @@ module.exports = Object.freeze({
     //Question
     invalid_title : 'Invalid Title',
     invalid_url : 'Invalid Url',
+    invalid_follower_following : 'Both ids cannot be the same',
 
     //User Model
     authentication_missing : 'Authentication missing',
