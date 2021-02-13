@@ -21,7 +21,7 @@ const followSchema = new mongoose.Schema({
 
 followSchema.methods.toJSON = function() {
 
-    const f = this.toObject()
+    const followObject = this.toObject()
     delete followObject.__v
     delete followObject.createdAt
     delete followObject.updatedAt

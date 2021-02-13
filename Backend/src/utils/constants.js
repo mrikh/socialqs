@@ -11,6 +11,11 @@ module.exports = Object.freeze({
     verification_success : "Otp has been successfully verified",
     password_not_match : "Your old password is incorrect",
 
+    //notifications
+    new_answer_title : "New Answer added!",
+    new_answer_body : "A new answer has been added to",
+    by : "by",
+
     //Questions
     category_added : 'Successfully created a category.',
     incorrect_category : 'Incorrect Category',

@@ -54,7 +54,6 @@ answerSchema.methods.toJSON = function() {
     const answerObject = this.toObject()
     delete answerObject.__v
     delete answerObject.updatedAt
-    delete answerObject.questionId
     answerObject.createdAt = answerObject.createdAt.getTime()
     return answerObject
 }

@@ -2,6 +2,7 @@ const express = require('express')
 const auth = require('../middleware/auth')
 const Answer = require('../models/answer.js')
 const constants = require('../utils/constants.js')
+const Notification = require('../models/notification.js')
 
 const router = new express.Router()
 
@@ -19,12 +20,26 @@ router.post('/answers/answer', auth, async (req, res, next) => {
             throw error
         }
 
-        await answer.save()
-
+        await answer.save()        
         await answer.populate({
-            path : 'creator',
-            options : { select : { _id : 1, name : 1, profilePhoto : 1 }}
+            path: 'creator',
+            options: { select: { _id: 1, name: 1, profilePhoto: 1 } }
+        }).populate({
+            path: 'questionId',
+            options: { select: { creator: 1, _id: 1, title: 1 } }
         }).execPopulate()
+
+        if (!req.user._id.equals(answer.questionId.creator._id)){
+            //create notification
+            const notification = new Notification({
+                users : [answer.questionId.creator], 
+                questionId : answer.questionId, 
+                title : constants.new_answer_title,
+                body: constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+            })
+            
+            await notification.save()   
+        }
 
         return res.status(200).send({code : 200, message : constants.success, data : answer})
 
