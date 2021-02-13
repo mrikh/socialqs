@@ -11,6 +11,9 @@ module.exports = Object.freeze({
     verification_success : "Otp has been successfully verified",
     password_not_match : "Your old password is incorrect",
 
+    //Questions
+    category_added : 'Successfully created a category.',
+
     //general
     invalid_updates : 'Invalid Updates!',
     something_wrong : 'Sorry. Something went wrong!',
@@ -18,6 +21,10 @@ module.exports = Object.freeze({
     success : 'Success!',
     params_missing : 'There seems to be a problem with the parameters',
     social_login_attempt_unverified_email : 'You previously signed up with the email id you are now using for social sign up. Please verify email to use the app completely. Or use a different email id.',
+
+    //Question
+    invalid_title : 'Invalid Title',
+    invalid_url : 'Invalid Url',
 
     //User Model
     authentication_missing : 'Authentication missing',

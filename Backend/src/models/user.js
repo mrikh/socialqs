@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         required : [true, constants.invalid_name],
         trim : true,
         validate(value){
-            if (!value || '' === value){
+            if (validator.isEmpty(value)){
                 throw new Error(constants.invalid_name)
             }
         }
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     password : {
         type : String,
         validator(value){
-            if (!value || '' === value){
+            if (validator.isEmpty(value)){
                 throw new Error(constants.invalid_password)
             }
         }
@@ -50,7 +50,15 @@ const userSchema = new mongoose.Schema({
     profilePhoto:{
         type : String,
         default : ''
-    }
+    },
+    createdQuestions : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Question'
+    }],
+    bookmarked : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Question'
+    }],
 },{
     timestamps : true
 })
