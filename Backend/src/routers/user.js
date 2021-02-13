@@ -285,8 +285,32 @@ router.get('/users/:id', auth, async (req, res, next) => {
         }
 
         const results = await User.aggregate(aggregate)
-
         return res.status(200).send({code : 200, message : constants.success, data : {'results' : results}})
+    }catch(error){
+        next(error)
+    }
+})
+
+router.patch('/users/updateInfo', auth, async (req, res, next) => {
+
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['name', 'profilePhoto']
+    const isValid = updates.every((update) => allowedUpdates.includes(update))
+
+    try{
+        if (!isValid){
+            const error = new Error(constants.invalid_updates)
+            error.statusCode = 400
+            throw error
+        }
+
+        const user = req.user
+        updates.forEach((update) => {
+            user[update] = req.body[update]
+        })
+        await user.save()
+        res.send({code : 200, message : constants.success, data : user})
+        
     }catch(error){
         next(error)
     }

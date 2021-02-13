@@ -137,6 +137,74 @@ router.get('/questions/list', auth, async (req, res, next) => {
     }
 })
 
+router.get('/questions/:id', auth, async (req, res, next) => {
+    try{
+        const questionId = req.params.id
+
+        if (!questionId){
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        const results = await Question.aggregate([
+            {
+                $match: {
+                    _id : mongoose.Types.ObjectId(questionId)
+                }
+                
+            },{
+                $lookup: {
+                    from: "answers",
+                    let: { questionId: "$_id" },
+                    pipeline: [{ $match: { $expr: { $eq: ["$$questionId", "$questionId"] } } }],
+                    as: "answerCount"
+                }
+            },{ $addFields: { answerCount: { $size: "$answerCount" }}}, {
+                $lookup: {
+                    from: "users",
+                    let : {id : "$creator"},
+                    as : "creator",
+                    pipeline : [
+                        {$match : {$expr : {$eq: ["$$id","$_id"]}}},
+                        {$project : {name : 1, profilePhoto : 1}}
+                    ]
+                }
+            }, {$unwind: "$creator"},{
+                $lookup: {
+                    from: "categories",
+                    let : { id: "$category" },
+                    as : "category",
+                    pipeline: [
+                        { $match : { $expr: { $eq: ["$_id", "$$id"] } }},
+                        { $project: { name: 1}}
+                    ]
+                }
+            }, {$unwind : "$category"},{
+                $unset: ["createdAt", "updatedAt", "__v"]
+            }
+        ])
+
+        const finalJson = results.map((question) => {
+            const temp = question
+            if (req.user._id){
+                temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                    return id.equals(req.user._id)
+                })
+            }else{
+                temp.isBookmarked = false
+            }
+
+            delete temp.bookmarkedBy
+            return temp
+        })
+
+        return res.status(200).send({code : 200, message : constants.success, data : { 'result':finalJson}})
+    }catch(error){
+        next(error)
+    }
+})
+
 
 router.patch('/questions/bookmark', auth, async (req, res, next) => {
     try{
