@@ -5,6 +5,7 @@ const constants = require('../utils/constants')
 const auth = async (req, res, next) => {
     
     try{
+        
         const authValue = req.header('Authorization')
         if (!authValue){
             const error = new Error(constants.authenticate)

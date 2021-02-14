@@ -1,6 +1,5 @@
 const express = require('express')
 const User = require('../models/user')
-const Question = require('../models/question')
 const constants = require('../utils/constants')
 const mongoose = require('mongoose')
 const {sendVerificationMail, sendForgotMail} = require('../emails/account')
@@ -242,10 +241,10 @@ router.get('/users/search', auth, async (req, res, next) => {
     }
 })
 
-router.get('/users/:id', auth, async (req, res, next) => {
+router.get('/users/details', auth, async (req, res, next) => {
 
     try{
-        const id = req.params.id
+        const id = req.query.id
 
         if (!id){   
             const error = new Error(constants.params_missing)
@@ -264,10 +263,10 @@ router.get('/users/:id', auth, async (req, res, next) => {
                 let: { currentId: "$_id" },
                 pipeline: [
                     { $match: { $expr: { $eq: ["$$currentId", "$creator"] } } },
-                    {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator"]}],
+                    {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers"]}],
             }
         },{
-            $unset: ["createdAt", "updatedAt", "__v", "password", "socialId", "email", "emailVerified", "token"]
+            $unset: ["createdAt", "updatedAt", "__v", "password", "socialId", "email", "emailVerified", "token", "blockedUsers"]
         }]
 
         if (id == req.user._id){
@@ -278,7 +277,7 @@ router.get('/users/:id', auth, async (req, res, next) => {
                     let : {currentId : "$_id"},
                     pipeline : [
                         {$match : {$expr : {$in: ["$$currentId","$bookmarkedBy"]}}},
-                        {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator"]}
+                        {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers"]}
                     ]
                 }
             })
@@ -316,5 +315,44 @@ router.patch('/users/updateInfo', auth, async (req, res, next) => {
     }
 })
 
+router.patch('/users/block', auth, async (req, res, next) => {
+
+    try{
+        const userToBlock = req.body.userId
+        const currentUser = req.user
+        const block = req.body.block
+
+        if (!userToBlock || userToBlock === currentUser._id || block == undefined){   
+            const error = new Error(constants.params_missing)
+            error.statusCode = 400
+            throw error
+        }
+
+        if (block){
+            req.user.blockedUsers.push(userToBlock)
+        }else{
+            req.user.blockedUsers.pull(userToBlock)
+        }
+        await req.user.save()
+        return res.status(200).send({code : 200, message : constants.success})
+        
+    }catch(error){
+        next(error)
+    }
+})
+
+router.get('/users/block', auth, async (req, res, next) => {
+
+    try{
+        const currentUser = req.user
+        await currentUser.populate({
+            path : 'blockedUsers',
+            options : { select : { _id : 1, name : 1, profilePhoto : 1 }}
+        }).execPopulate()
+        return res.status(200).send({code : 200, message : constants.success, data : {'results' : currentUser.blockedUsers}})
+    }catch(error){
+        next(error)
+    }
+})
 
 module.exports = router

@@ -99,7 +99,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
                     as : "creator",
                     pipeline : [
                         {$match : {$expr : {$eq: ["$$id","$_id"]}}},
-                        {$project : {name : 1, profilePhoto : 1}}
+                        {$project : {name : 1, profilePhoto : 1, _id : 1}}
                     ]
                 }
             }, {$unwind: "$creator"},{
@@ -109,7 +109,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
                     as : "category",
                     pipeline: [
                         { $match : { $expr: { $eq: ["$_id", "$$id"] } }},
-                        { $project: { name: 1}}
+                        { $project: { name: 1, _id : 1}}
                     ]
                 }
             }, {$unwind : "$category"},{
@@ -137,9 +137,9 @@ router.get('/questions/list', auth, async (req, res, next) => {
     }
 })
 
-router.get('/questions/:id', auth, async (req, res, next) => {
+router.get('/questions/details', auth, async (req, res, next) => {
     try{
-        const questionId = req.params.id
+        const questionId = req.query.id
 
         if (!questionId){
             const error = new Error(constants.params_missing)
@@ -167,7 +167,7 @@ router.get('/questions/:id', auth, async (req, res, next) => {
                     as : "creator",
                     pipeline : [
                         {$match : {$expr : {$eq: ["$$id","$_id"]}}},
-                        {$project : {name : 1, profilePhoto : 1}}
+                        {$project : {name : 1, profilePhoto : 1, _id : 1}}
                     ]
                 }
             }, {$unwind: "$creator"},{
@@ -177,7 +177,7 @@ router.get('/questions/:id', auth, async (req, res, next) => {
                     as : "category",
                     pipeline: [
                         { $match : { $expr: { $eq: ["$_id", "$$id"] } }},
-                        { $project: { name: 1}}
+                        { $project: { name: 1, _id : 1}}
                     ]
                 }
             }, {$unwind : "$category"},{
