@@ -64,6 +64,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
         const search = req.query.search
 
         var conditions = {}
+
         if (categoryId){
             conditions = {
                 category : mongoose.Types.ObjectId(categoryId)
@@ -99,7 +100,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
                     as : "creator",
                     pipeline : [
                         {$match : {$expr : {$eq: ["$$id","$_id"]}}},
-                        {$project : {name : 1, profilePhoto : 1, _id : 1}}
+                        {$project : {name : 1, profilePhoto : 1, _id : 1, blockedUsers : 1}}
                     ]
                 }
             }, {$unwind: "$creator"},{
@@ -117,7 +118,7 @@ router.get('/questions/list', auth, async (req, res, next) => {
             }
         ])
 
-        const finalJson = results.map((question) => {
+        var finalJson = results.map((question) => {
             const temp = question
             if (req.user._id){
                 temp.isBookmarked = question.bookmarkedBy.some((id) => {
@@ -131,11 +132,33 @@ router.get('/questions/list', auth, async (req, res, next) => {
             return temp
         })
 
-        return res.status(200).send({code : 200, message : constants.success, data : { 'result':finalJson}})
+        //dont show posts of users you are blocking
+        finalJson = finalJson.filter((question) => {
+            if (req.user.blockedUsers.includes(question.creator._id)){
+                return false
+            }else{
+                return true
+            }
+        })
+        //dont show posts of users who have blocked you
+        finalJson = finalJson.filter((question) => {
+            const isInArray = question.creator.blockedUsers.some((user) => {
+                return user.equals(req.user._id);
+            });
+            delete question.creator.blockedUsers
+            if (isInArray){
+                return false
+            }else{
+                return true
+            }
+        })
+
+        return res.status(200).send({code : 200, message : constants.success, data : { 'result' : finalJson}})
     }catch(error){
         next(error)
     }
 })
+
 
 router.get('/questions/details', auth, async (req, res, next) => {
     try{

@@ -61,10 +61,31 @@ router.get('/answers/list', auth, async (req, res, next) => {
 
         const results = await Answer.find({questionId : questionId}).populate({
             path: 'creator',
-            options : { select : { _id : 1, name : 1, profilePhoto : 1 }}
+            options : { select : { _id : 1, name : 1, profilePhoto : 1 , blockedUsers : 1}}
+        })
+
+         //dont show posts of users you are blocking
+        var finalJson = results.filter((answer) => {
+            if (req.user.blockedUsers.includes(answer.creator._id)){
+                return false
+            }else{
+                return true
+            }
+        })
+        //dont show posts of users who have blocked you
+        finalJson = finalJson.filter((answer) => {
+            const isInArray = answer.creator.blockedUsers.some((user) => {
+                return user.equals(req.user._id);
+            });
+            delete answer.creator.blockedUsers
+            if (isInArray){
+                return false
+            }else{
+                return true
+            }
         })
         
-        return res.status(200).send({code : 200, message : constants.success, data : {'result' : results}})
+        return res.status(200).send({code : 200, message : constants.success, data : {'result' : finalJson}})
 
     }catch(error){
         next(error)

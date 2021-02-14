@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const Follow = require('../models/follow')
 const constants = require('../utils/constants')
 const mongoose = require('mongoose')
 const {sendVerificationMail, sendForgotMail} = require('../emails/account')
@@ -230,12 +231,35 @@ router.get('/users/search', auth, async (req, res, next) => {
                 $project : {
                     name : 1,
                     profilePhoto : 1,
-                    _id : 1
+                    _id : 1,
+                    blockedUsers : 1
                 }
             }
         ])
 
-        return res.status(200).send({code : 200, message : constants.success, data : {'results' : results}})
+        //dont show posts of users you are blocking
+        var finalJson = results.filter((user) => {
+            if (req.user.blockedUsers.includes(user._id)){
+                return false
+            }else{
+                return true
+            }
+        })
+        
+        //dont show posts of users who have blocked you
+        finalJson = finalJson.filter((user) => {
+            const isInArray = user.blockedUsers.some((temp) => {
+                return temp.equals(req.user._id);
+            });
+            delete user.blockedUsers
+            if (isInArray){
+                return false
+            }else{
+                return true
+            }
+        })
+
+        return res.status(200).send({code : 200, message : constants.success, data : {'results' : finalJson}})
     }catch(error){
         next(error)
     }
@@ -333,7 +357,24 @@ router.patch('/users/block', auth, async (req, res, next) => {
         }else{
             req.user.blockedUsers.pull(userToBlock)
         }
+
         await req.user.save()
+
+        //remove from follower and following listing as well
+        const mineFollowObject = await Follow.findOne({userId : req.user._id})
+        if (mineFollowObject){
+            mineFollowObject.followers.pull(userToBlock)
+            mineFollowObject.following.pull(userToBlock)
+        }
+        await mineFollowObject.save()
+
+        const hisFollowObject = await Follow.findOne({userId : req.user._id})
+        if (hisFollowObject){
+            hisFollowObject.followers.pull(req.user._id)
+            hisFollowObject.following.pull(req.user._id)
+        }
+
+        await hisFollowObject.save()
         return res.status(200).send({code : 200, message : constants.success})
         
     }catch(error){
@@ -345,10 +386,12 @@ router.get('/users/block', auth, async (req, res, next) => {
 
     try{
         const currentUser = req.user
+
         await currentUser.populate({
             path : 'blockedUsers',
             options : { select : { _id : 1, name : 1, profilePhoto : 1 }}
         }).execPopulate()
+
         return res.status(200).send({code : 200, message : constants.success, data : {'results' : currentUser.blockedUsers}})
     }catch(error){
         next(error)
