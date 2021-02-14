@@ -15,6 +15,7 @@ const port = process.env.PORT
 
 app.use(express.json())
 //routers
+app.use(pushClass)
 app.use(notificationsRouter)
 app.use(followRouter)
 app.use(answerRouter)

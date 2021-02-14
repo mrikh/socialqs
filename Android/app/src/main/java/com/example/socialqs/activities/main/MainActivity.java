@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get new FCM registration token
                 String token = task.getResult();
-
+                System.out.println("========================");
+                System.out.println(token);
                 if (UserModel.current != null){
                     NetworkHandler.getInstance().updateInfo(token, null, null, new NetworkingClosure() {
                         @Override
