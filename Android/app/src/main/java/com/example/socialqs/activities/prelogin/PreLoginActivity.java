@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.opengl.Visibility;
@@ -20,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.main.MainActivity;
 import com.example.socialqs.activities.prelogin.fragments.ForgotPasswordFragment;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -28,10 +33,24 @@ import com.github.ybq.android.spinkit.style.DoubleBounce;
 public class PreLoginActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
+    public String pushToken;
+
+    private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getExtras() != null) {
+                String pushToken = intent.getExtras().getString("pushToken");
+                if (pushToken != null) {
+                    PreLoginActivity.this.pushToken = pushToken;
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_pre_login);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -84,6 +103,18 @@ public class PreLoginActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(show);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(messagesReceiver, new IntentFilter("PushTokenIntent"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(messagesReceiver);
     }
 
     @Override

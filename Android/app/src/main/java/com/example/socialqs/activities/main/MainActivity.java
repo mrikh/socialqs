@@ -3,6 +3,7 @@ package com.example.socialqs.activities.main;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,8 +25,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-
-    String pushToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 }else{
 
                     //store as instance variable and pass to prelogin flow
-                    MainActivity.this.pushToken = token;
+                    Intent newIntent = new Intent("PushTokenIntent");
+                    newIntent.putExtra("pushToken", token);
+                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(newIntent);
                 }
             }
         });
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             myIntent = new Intent(MainActivity.this, PreLoginActivity.class);
         }else{
             myIntent = new Intent(MainActivity.this, PreLoginActivity.class);
-            myIntent.putExtra("pushToken", pushToken);
         }
 
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

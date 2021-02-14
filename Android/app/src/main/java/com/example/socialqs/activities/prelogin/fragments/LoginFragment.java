@@ -274,15 +274,14 @@ public class LoginFragment extends Fragment {
     private void beginLogin(JSONObject object){
 
         //get push token and add if it exists
-        Bundle extras = getActivity().getIntent().getExtras();
-        if (extras != null){
-            String push = extras.getString("pushToken");
-            if (push != null){
-                try {
-                    object.put("pushToken", push);
-                }catch(Exception e){
-                    System.out.println(e.getMessage());
-                }
+
+        String pushToken = ((PreLoginActivity)getActivity()).pushToken;
+
+        if (pushToken != null){
+            try {
+                object.put("pushToken", pushToken);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
             }
         }
 
