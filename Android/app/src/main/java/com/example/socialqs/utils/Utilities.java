@@ -44,7 +44,6 @@ public class Utilities {
     public void saveJsonObject(String key, @NotNull JSONObject json, Context c){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = pref.edit();
-
         editor.putString(key, json.toString());
         editor.commit();
     }

@@ -55,7 +55,10 @@ const userSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
         default : []
-    }]
+    }],
+    pushToken : {
+        type : String
+    }
 },{
     timestamps : true
 })
@@ -82,6 +85,7 @@ userSchema.methods.toJSON = function() {
     delete userObject.createdAt
     delete userObject.updatedAt
     delete userObject.blockedUsers
+    delete userObject.pushToken
     return userObject
 }
 

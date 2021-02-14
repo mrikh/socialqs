@@ -25,7 +25,29 @@ public class NetworkHandler {
         return shared;
     }
 
-    public void signUp(String email, String password, String name, String socialId, String profilePhoto, NetworkingClosure completion){
+    public void updateInfo(String pushToken, String name, String profilePhoto, NetworkingClosure completion){
+
+        try {
+            JSONObject params = new JSONObject();
+            if (pushToken != null){
+                params.put("pushToken", pushToken);
+            }
+
+            if (name != null){
+                params.put("name", name);
+            }
+
+            if (profilePhoto != null){
+                params.put("profilePhoto", profilePhoto);
+            }
+
+            performPostRequest(EndPoints.updateInfo, params, completion);
+        }catch(Exception e){
+            completion.completion(null, e.getMessage());
+        }
+    }
+
+    public void signUp(String email, String password, String name, String socialId, String profilePhoto, String pushToken, NetworkingClosure completion){
 
         try {
             JSONObject params = new JSONObject();
@@ -38,6 +60,10 @@ public class NetworkHandler {
             if (profilePhoto != null){
                 params.put("profilePhoto", profilePhoto);
             }
+            if (pushToken != null){
+                params.put("pushToken", pushToken);
+            }
+
             performPostRequest(EndPoints.signUp, params, completion);
         }catch(Exception e){
             completion.completion(null, e.getMessage());

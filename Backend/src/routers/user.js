@@ -287,10 +287,10 @@ router.get('/users/details', auth, async (req, res, next) => {
                 let: { currentId: "$_id" },
                 pipeline: [
                     { $match: { $expr: { $eq: ["$$currentId", "$creator"] } } },
-                    {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers"]}],
+                    {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers", "pushToken"]}],
             }
         },{
-            $unset: ["createdAt", "updatedAt", "__v", "password", "socialId", "email", "emailVerified", "token", "blockedUsers"]
+            $unset: ["createdAt", "updatedAt", "__v", "password", "socialId", "email", "emailVerified", "token", "blockedUsers", "pushToken"]
         }]
 
         if (id == req.user._id){
@@ -301,7 +301,7 @@ router.get('/users/details', auth, async (req, res, next) => {
                     let : {currentId : "$_id"},
                     pipeline : [
                         {$match : {$expr : {$in: ["$$currentId","$bookmarkedBy"]}}},
-                        {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers"]}
+                        {$unset : ["bookmarkedBy", "createdAt", "updatedAt", "__v", "creator", "blockedUsers", "pushToken"]}
                     ]
                 }
             })
@@ -317,7 +317,7 @@ router.get('/users/details', auth, async (req, res, next) => {
 router.patch('/users/updateInfo', auth, async (req, res, next) => {
 
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'profilePhoto']
+    const allowedUpdates = ['name', 'profilePhoto', 'pushToken']
     const isValid = updates.every((update) => allowedUpdates.includes(update))
 
     try{

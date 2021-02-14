@@ -272,6 +272,20 @@ public class LoginFragment extends Fragment {
     }
 
     private void beginLogin(JSONObject object){
+
+        //get push token and add if it exists
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null){
+            String push = extras.getString("pushToken");
+            if (push != null){
+                try {
+                    object.put("pushToken", push);
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
         updateProgress(View.VISIBLE);
         NetworkHandler.getInstance().login(object, new NetworkingClosure() {
             @Override

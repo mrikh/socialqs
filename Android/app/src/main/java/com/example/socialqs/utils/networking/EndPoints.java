@@ -8,4 +8,5 @@ public class EndPoints{
     public static String verifyEmail = "users/verifyEmail";
     public static String forgotPass = "users/forgotPass";
     public static String resetPass = "users/resetPassword";
+    public static String updateInfo = "users/updateInfo";
 }

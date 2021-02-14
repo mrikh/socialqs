@@ -7,6 +7,8 @@ const questionsRouter = require('./routers/questions.js')
 const userRouter = require('./routers/user')
 const errorHandler = require('./middleware/error')
 const constants = require('./utils/constants')
+const pushClass = require('./utils/firebase')
+
 
 const app = express()
 const port = process.env.PORT

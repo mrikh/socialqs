@@ -168,7 +168,15 @@ public class SignUpFragment extends Fragment {
                 }
 
                 updateProgress(View.VISIBLE);
-                NetworkHandler.getInstance().signUp(email, password, name, socialId, profilePhoto, new NetworkingClosure() {
+
+                //get push token and add if it exists
+                String push = null;
+                Bundle extras = getActivity().getIntent().getExtras();
+                if (extras != null){
+                    push = extras.getString("pushToken");
+                }
+
+                NetworkHandler.getInstance().signUp(email, password, name, socialId, profilePhoto, push, new NetworkingClosure() {
                     @Override
                     public void completion(JSONObject object, String message) {
                         updateProgress(View.INVISIBLE);
@@ -179,6 +187,7 @@ public class SignUpFragment extends Fragment {
                             try {
 
                                 JSONObject finalObject = object.getJSONObject("user");
+
                                 finalObject.put("token", object.getString("token"));
 
                                 UserModel currentUser = new UserModel(finalObject);
