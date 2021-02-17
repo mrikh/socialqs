@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.prelogin.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,19 +11,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.telecom.Call;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.HomeActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.InputValidator;
@@ -39,8 +37,6 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,6 +52,7 @@ import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
 
+    private Context context;
     private InputValidator validator;
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
@@ -167,6 +164,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = this.getContext().getApplicationContext();
 
         TextInputEditText emailField = view.findViewById(R.id.editTextEmailTextField);
         emailField.addTextChangedListener(new ErrorRemoveInterface() {
@@ -208,7 +206,8 @@ public class LoginFragment extends Fragment {
         exploreTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: go to landing
+                Intent myIntent = new Intent(context, HomeActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -302,8 +301,9 @@ public class LoginFragment extends Fragment {
                         UserModel.current = currentUser;
                         UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
-                        //TODO: Open landing
-                        Toast.makeText(getActivity(), "Success! Remove message and navigate to landing :P", Toast.LENGTH_LONG).show();
+                        //Navigate to Home Screen
+                        Intent myIntent = new Intent(context, HomeActivity.class);
+                        startActivity(myIntent);
                     }catch (Exception e){
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }

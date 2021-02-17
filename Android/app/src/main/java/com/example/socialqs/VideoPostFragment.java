@@ -1,5 +1,6 @@
 package com.example.socialqs;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -68,9 +69,10 @@ public class VideoPostFragment extends Fragment {
 
         // TODO: REMOVE HARDCODED ELEMENTS
         authorName.setText("John Smith");
-        System.out.println("Test");
+        authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         postQuestion.setText("What is the best way to cook pasta?");
 
+        //Sample Video
         String videoPath = "android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
         Uri uri = Uri.parse(videoPath);
         postVideo.setVideoURI(uri);
