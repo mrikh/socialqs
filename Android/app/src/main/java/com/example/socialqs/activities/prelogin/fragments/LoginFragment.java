@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.socialqs.R;
-import com.example.socialqs.activities.home.HomeActivity;
+import com.example.socialqs.activities.landing.MainMenuActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.InputValidator;
@@ -206,7 +206,7 @@ public class LoginFragment extends Fragment {
         exploreTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(context, HomeActivity.class);
+                Intent myIntent = new Intent(context, MainMenuActivity.class);
                 startActivity(myIntent);
             }
         });
@@ -302,7 +302,7 @@ public class LoginFragment extends Fragment {
                         UserModel.current.saveToDefaults(getActivity().getApplicationContext());
 
                         //Navigate to Home Screen
-                        Intent myIntent = new Intent(context, HomeActivity.class);
+                        Intent myIntent = new Intent(context, MainMenuActivity.class);
                         startActivity(myIntent);
                     }catch (Exception e){
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();

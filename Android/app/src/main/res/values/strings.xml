@@ -1,14 +1,21 @@
 <resources>
+    <!--   App  Name   -->
+    <string name="app_name">SocialQs</string>
 
-    <!--  KEYS  -->
+    <!--   KEYS   -->
     <string name="facebook_app_id">757408744896556</string>
     <string name="fb_login_protocol_scheme">fb757408744896556</string>
 
-    <!--    TAGS -->
+    <!--   TAGS   -->
     <string name="login_fragment">login_fragment</string>
 
-    <!--    Strings-->
-    <string name="app_name">SocialQs</string>
+    <!--   Navigation Bar   -->
+    <string name="title_home">Home</string>
+    <string name="title_following">Following</string>
+    <string name="title_create">Create</string>
+    <string name="title_profile">Profile</string>
+
+    <!--   Strings   -->
     <string name="invalid_email">Email address is incorrect</string>
     <string name="password_short">Your password needs to be at least 8 characters</string>
     <string name="something_wrong">Something went wrong. Try again!</string>

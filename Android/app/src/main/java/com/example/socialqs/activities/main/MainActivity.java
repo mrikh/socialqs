@@ -10,7 +10,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidnetworking.AndroidNetworking;
 import com.example.socialqs.R;
-import com.example.socialqs.activities.home.HomeActivity;
+import com.example.socialqs.activities.landing.MainMenuActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent myIntent;
         if(UserModel.current != null){
-            myIntent = new Intent(MainActivity.this, HomeActivity.class);
+            myIntent = new Intent(MainActivity.this, MainMenuActivity.class);
         }else{
             myIntent = new Intent(MainActivity.this, PreLoginActivity.class);
         }
