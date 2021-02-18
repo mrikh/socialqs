@@ -59,7 +59,7 @@
         android:paddingRight="15dp"
         android:text="Question"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
         android:layout_marginTop="12dp"
         android:text="Answers  >"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,8 +80,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/comment_cardview"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginStart="260dp"
         android:layout_marginLeft="260dp"
         app:cardCornerRadius="50dp"
@@ -100,8 +100,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/bookmark_cardview"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         app:cardCornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,5 +117,16 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bookmark" />
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/play_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/play_arrow_24"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/video_view"
+        app:layout_constraintEnd_toEndOf="@+id/video_view"
+        app:layout_constraintStart_toStartOf="@+id/video_view"
+        app:layout_constraintTop_toTopOf="@+id/video_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
