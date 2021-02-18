@@ -4,21 +4,5 @@ var serviceAccount = require("./socialqs-config.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 })
-const sendPush = (user, title, body) => {
 
-    const message = {
-        notification : {
-            title : title,
-            body : body
-        },
-        token : user.pushToken
-    }
-
-    admin.messaging().send(message).then( response => {
-        console.log("Notification sent successfully")
-    }).catch( error => {
-        console.log(error);
-    });   
-}
-
-module.exports = sendPush
+module.exports.admin = admin

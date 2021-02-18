@@ -1,6 +1,11 @@
 package com.example.socialqs.utils.networking;
 
+import android.net.Network;
+
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.Method;
+import com.androidnetworking.common.RequestBuilder;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.socialqs.models.UserModel;
@@ -122,43 +127,21 @@ public class NetworkHandler {
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
-        AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params).addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String code = response.get("code").toString();
-                    if (code.equalsIgnoreCase("200")){
-                        boolean hasData = response.has("data");
-                        if (hasData) {
-                            //since in closures we check if object is null, we add in dummy object for
-                            // success as we never use it for the apis that return empty object anyways
-                            completion.completion(response.getJSONObject("data"), response.get("message").toString());
-                        }else{
-                            completion.completion(new JSONObject(), response.get("message").toString());
-                        }
-                    }else{
-                        completion.completion(null, response.get("message").toString());
-                    }
-                }catch (Exception e){
-                    completion.completion(null, e.getMessage());
-                }
-            }
+        performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);
+    }
 
-            @Override
-            public void onError(ANError anError) {
-                if (anError != null){
-                    try {
-                        JSONObject errorBody = new JSONObject(anError.getErrorBody());
-                        String message = errorBody.getString("message");
-                        completion.completion(null, message);
-                    }catch (Exception e){
-                        completion.completion(null, null);
-                    }
-                }else{
-                    completion.completion(null, null);
-                }
-            }
-        });
+    private void performPatchRequest(String endpoint, JSONObject params, NetworkingClosure completion){
+
+        performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addJSONObjectBody(params), completion);
+    }
+
+    private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
+
+        if (params != null){
+            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addPathParameter(params), completion);
+        }else{
+            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), completion);
+        }
     }
 
     private void performGetRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
@@ -197,4 +180,46 @@ public class NetworkHandler {
             }
         });
     }
+
+    private void performBodyRequest(ANRequest.PostRequestBuilder builder, NetworkingClosure completion){
+
+        builder.addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String code = response.get("code").toString();
+                    if (code.equalsIgnoreCase("200")){
+                        boolean hasData = response.has("data");
+                        if (hasData) {
+                            //since in closures we check if object is null, we add in dummy object for
+                            // success as we never use it for the apis that return empty object anyways
+                            completion.completion(response.getJSONObject("data"), response.get("message").toString());
+                        }else{
+                            completion.completion(new JSONObject(), response.get("message").toString());
+                        }
+                    }else{
+                        completion.completion(null, response.get("message").toString());
+                    }
+                }catch (Exception e){
+                    completion.completion(null, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                if (anError != null){
+                    try {
+                        JSONObject errorBody = new JSONObject(anError.getErrorBody());
+                        String message = errorBody.getString("message");
+                        completion.completion(null, message);
+                    }catch (Exception e){
+                        completion.completion(null, null);
+                    }
+                }else{
+                    completion.completion(null, null);
+                }
+            }
+        });
+    }
+
 }
