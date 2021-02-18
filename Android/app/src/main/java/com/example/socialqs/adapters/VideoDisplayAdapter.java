@@ -52,33 +52,35 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     }
 
     static class VideoViewHolder extends RecyclerView.ViewHolder {
-        private VideoView postVideo;
-        private TextView authorName, postQuestion;
+        private VideoView videoView;
+        private TextView authorName, videoQuestion, videoReplies;
         private ImageView authorImg, playBtn;
 
         public VideoViewHolder(@NonNull View itemView){
             super(itemView);
-            authorImg = itemView.findViewById(R.id.author_img_view);
-            authorName = itemView.findViewById(R.id.author_name);
-            postQuestion = itemView.findViewById(R.id.question_title);
-            postVideo = itemView.findViewById(R.id.video_view);
+            authorImg = itemView.findViewById(R.id.video_author_imgView);
+            authorName = itemView.findViewById(R.id.video_author_name);
+            videoQuestion = itemView.findViewById(R.id.video_question);
+            videoReplies = itemView.findViewById(R.id.video_replies);
+            videoView = itemView.findViewById(R.id.video_view);
             playBtn = itemView.findViewById(R.id.play_btn);
         }
 
         @SuppressLint("ClickableViewAccessibility")
         void setVideoData(VideoItem videoItem){
-            postQuestion.setText(videoItem.postQuestion);
-            postVideo.setVideoPath(videoItem.videoURL);
+            videoView.setVideoPath(videoItem.videoURL);
+            videoQuestion.setText(videoItem.videoQuestion);
+            videoReplies.setText(videoItem.replyAmount1);
             authorImg.setImageResource(videoItem.authorImg);
             authorName.setText(videoItem.authorName);
 
-            postVideo.start();
+            videoView.start();
 
-            postVideo.setOnTouchListener(new View.OnTouchListener() {
+            videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if(postVideo.isPlaying()) {
-                        postVideo.pause();
+                    if(videoView.isPlaying()) {
+                        videoView.pause();
                         playBtn.setVisibility(View.VISIBLE);
 
                         // TODO Can this work if added to the res anim folder?
@@ -91,7 +93,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                         });
 
                     }else{
-                        postVideo.start();
+                        videoView.start();
                         playBtn.setVisibility(View.INVISIBLE);
                     }
                     return false;

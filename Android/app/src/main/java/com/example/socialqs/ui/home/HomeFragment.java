@@ -33,14 +33,16 @@ public class HomeFragment extends Fragment {
         // TODO: REMOVE HARDCODED ELEMENTS
         VideoItem videoItem1 = new VideoItem();
         videoItem1.videoURL="android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
-        videoItem1.postQuestion = "What is the best way to cook pasta?";
+        videoItem1.videoQuestion = "What is the best way to cook pasta?";
+        videoItem1.replyAmount1 = "7 Answers  >";
         videoItem1.authorName = "John Smith";
         videoItem1.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
         videoItems.add(videoItem1);
 
         VideoItem videoItem2 = new VideoItem();
         videoItem2.videoURL="android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
-        videoItem2.postQuestion = "How can you solve this maths problem??";
+        videoItem2.videoQuestion = "How can you solve this maths problem??";
+        videoItem2.replyAmount1 = "1 Answer  >";
         videoItem2.authorName = "Sarah Fox";
         videoItem2.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
         videoItems.add(videoItem2);
