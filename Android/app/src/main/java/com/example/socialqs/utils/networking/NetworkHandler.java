@@ -4,6 +4,7 @@ import android.net.Network;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RequestBuilder;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -126,49 +127,21 @@ public class NetworkHandler {
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
-        performBodyRequest(AndroidNetworking.post(httpUrl + endpoint), params, completion);
+        performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);
     }
 
     private void performPatchRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
-        performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), params, completion);
+        performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addJSONObjectBody(params), completion);
     }
 
     private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
 
-        AndroidNetworking.delete(httpUrl + endpoint).addPathParameter(params).addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String code = response.get("code").toString();
-                    if (code.equalsIgnoreCase("200")){
-                        boolean hasData = response.has("data");
-                        if (hasData) {
-                            completion.completion(response.getJSONObject("data"), response.get("message").toString());
-                        }else{
-                            completion.completion(new JSONObject(), response.get("message").toString());
-                        }
-                    }else{
-                        completion.completion(null, response.get("message").toString());
-                    }
-                }catch (Exception e){
-                    completion.completion(null, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(ANError anError) {
-                if (anError != null){
-                    try {
-                        completion.completion(null, anError.getErrorDetail());
-                    }catch (Exception e){
-                        completion.completion(null, null);
-                    }
-                }else{
-                    completion.completion(null, null);
-                }
-            }
-        });
+        if (params != null){
+            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addPathParameter(params), completion);
+        }else{
+            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), completion);
+        }
     }
 
     private void performGetRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
@@ -208,9 +181,9 @@ public class NetworkHandler {
         });
     }
 
-    private void performBodyRequest(ANRequest.PostRequestBuilder builder, JSONObject params, NetworkingClosure completion){
+    private void performBodyRequest(ANRequest.PostRequestBuilder builder, NetworkingClosure completion){
 
-        builder.addJSONObjectBody(params).addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
+        builder.addHeaders("Authorization", UserModel.networkingHeader()).build().getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -248,4 +221,5 @@ public class NetworkHandler {
             }
         });
     }
+
 }
