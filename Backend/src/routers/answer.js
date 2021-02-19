@@ -4,7 +4,7 @@ const User = require('../models/user.js')
 const Answer = require('../models/answer.js')
 const constants = require('../utils/constants.js')
 const Notification = require('../models/notification.js')
-const FirebasePush = require('../utils/firebase.js')
+const admin = require('../utils/firebase.js')
 
 const router = new express.Router()
 
@@ -33,19 +33,22 @@ router.post('/answers/answer', auth, async (req, res, next) => {
 
         if (!req.user._id.equals(answer.questionId.creator._id)){
             //create notification
-            const message = constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
-            const title = constants.new_answer_title
-            const notification = new Notification({
-                users : [answer.questionId.creator], 
-                questionId : answer.questionId, 
-                title : title,
-                body: message
-            })
+            const creatorUser = await User.findById(req.creator._id)
+            const message = {
+                notification : {
+                    title : constants.new_answer_title,
+                    body : constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+                },
+                token : creatorUser.pushToken
+            }
+        
+            admin.messaging().send(message).then( response => {
+                console.log("Notification sent successfully")
+            }).catch( error => {
+                console.log(error);
+            });   
             
             await notification.save()   
-
-            const creatorUser = await User.findById(req.creator._id)
-            FirebasePush.sendPush(creatorUser, title, message)
         }
 
         return res.status(200).send({code : 200, message : constants.success, data : answer})
