@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment {
 
         viewPager = (ViewPager) root.findViewById(R.id.view_pager);
         tabs = (TabLayout) root.findViewById(R.id.tabLayout);
+        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
 
