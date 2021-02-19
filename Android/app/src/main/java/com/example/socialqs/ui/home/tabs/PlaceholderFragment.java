@@ -55,7 +55,7 @@ public class PlaceholderFragment extends Fragment {
         videoItem2.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
         videoItems.add(videoItem2);
 
-        videoViewPager.setAdapter(new VideoDisplayAdapter(videoItems));
+        videoViewPager.setAdapter(new VideoDisplayAdapter(getContext(), videoItems));
         return root;
     }
 }
