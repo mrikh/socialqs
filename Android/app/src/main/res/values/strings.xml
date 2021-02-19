@@ -15,6 +15,11 @@
     <string name="title_create">Create</string>
     <string name="title_profile">Profile</string>
 
+    <!--  Landing Screen Tabs  -->
+    <string name="home_tab_1">All</string>
+    <string name="home_tab_2">Sports</string>
+    <string name="home_tab_3">Cooking</string>
+
     <!--   Strings   -->
     <string name="invalid_email">Email address is incorrect</string>
     <string name="password_short">Your password needs to be at least 8 characters</string>

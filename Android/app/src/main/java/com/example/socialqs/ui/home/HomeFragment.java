@@ -8,46 +8,35 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.socialqs.R;
-import com.example.socialqs.adapters.VideoDisplayAdapter;
-import com.example.socialqs.models.VideoItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.socialqs.ui.home.tabs.SectionsPagerAdapter;
+import com.google.android.material.tabs.TabLayout;
+
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private List<VideoItem> videoItems;
+    private SectionsPagerAdapter adapter;
+    private TabLayout tabs;
+    private ViewPager viewPager;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final ViewPager2 videoViewPager = root.findViewById((R.id.videoViewPager));
-        videoItems = new ArrayList<>();
+        adapter = new SectionsPagerAdapter(getContext(), getChildFragmentManager());
 
-        // TODO: REMOVE HARDCODED ELEMENTS
-        VideoItem videoItem1 = new VideoItem();
-        videoItem1.videoURL="android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
-        videoItem1.videoQuestion = "What is the best way to cook pasta?";
-        videoItem1.replyAmount1 = "7 Answers  >";
-        videoItem1.authorName = "John Smith";
-        videoItem1.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
-        videoItems.add(videoItem1);
+        viewPager = (ViewPager) root.findViewById(R.id.view_pager);
+        tabs = (TabLayout) root.findViewById(R.id.tabLayout);
+        viewPager.setAdapter(adapter);
+        tabs.setupWithViewPager(viewPager);
 
-        VideoItem videoItem2 = new VideoItem();
-        videoItem2.videoURL="android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
-        videoItem2.videoQuestion = "How can you solve this maths problem??";
-        videoItem2.replyAmount1 = "1 Answer  >";
-        videoItem2.authorName = "Sarah Fox";
-        videoItem2.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
-        videoItems.add(videoItem2);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
 
-        videoViewPager.setAdapter(new VideoDisplayAdapter(videoItems));
         return root;
     }
 }

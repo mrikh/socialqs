@@ -76,9 +76,9 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
             videoView.start();
 
-            videoView.setOnTouchListener(new View.OnTouchListener() {
+            videoView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
+                public void onClick(View v) {
                     if(videoView.isPlaying()) {
                         videoView.pause();
                         playBtn.setVisibility(View.VISIBLE);
@@ -96,7 +96,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                         videoView.start();
                         playBtn.setVisibility(View.INVISIBLE);
                     }
-                    return false;
                 }
             });
 
