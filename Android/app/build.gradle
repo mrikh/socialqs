@@ -64,4 +64,7 @@ dependencies {
 
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-login:[8.1)'
+
+
+    implementation 'com.amplifyframework:core:1.16.13'
 }

@@ -18,9 +18,25 @@
         tools:layout="@layout/fragment_following" />
 
     <fragment
+        android:id="@+id/navigation_create"
+        android:name="com.example.socialqs.ui.create.CreateFragment"
+        android:label="@string/title_create"
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_navigation_create_to_videoFragment"
+            app:destination="@id/videoFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.socialqs.ui.notifications.NotificationsFragment"
         android:label="change"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="com.example.socialqs.ui.create.VideoFragment"
+        android:label="fragment_video"
+        tools:layout="@layout/fragment_video" />
+
 
 </navigation>
