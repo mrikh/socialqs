@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,10 +19,9 @@ public class FollowingFragment extends Fragment {
 
     private FollowingViewModel followingViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        followingViewModel =
-                new ViewModelProvider(this).get(FollowingViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        followingViewModel = new ViewModelProvider(this).get(FollowingViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_following, container, false);
         final TextView textView = root.findViewById(R.id.text_following);
         followingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
@@ -22,10 +22,17 @@ import java.util.List;
  */
 public class PlaceholderFragment extends Fragment {
 
+    private static final String ARG_SECTION_NUMBER = "section_number";
+
     private PageViewModel pageViewModel;
+    private boolean isVisibleFrag = false;
 
     public static PlaceholderFragment newInstance(int index) {
-        return new PlaceholderFragment();
+        PlaceholderFragment fragment = new PlaceholderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_SECTION_NUMBER, index);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -49,13 +56,16 @@ public class PlaceholderFragment extends Fragment {
 
         VideoItem videoItem2 = new VideoItem();
         videoItem2.videoURL="android.resource://" + getContext().getPackageName() + "/" + R.raw.foodvideo;
-        videoItem2.videoQuestion = "How can you solve this maths problem??";
+        videoItem2.videoQuestion = "How do you solve this maths problem??";
         videoItem2.replyAmount1 = "1 Answer  >";
         videoItem2.authorName = "Sarah Fox";
         videoItem2.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
         videoItems.add(videoItem2);
 
-        videoViewPager.setAdapter(new VideoDisplayAdapter(getContext(), videoItems));
+        System.out.println("VISIBLE: " + isVisibleFrag);
+
+        videoViewPager.setAdapter(new VideoDisplayAdapter(videoItems, isVisibleFrag));
         return root;
     }
+
 }

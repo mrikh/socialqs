@@ -1,44 +1,50 @@
 package com.example.socialqs.ui.home.tabs;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.socialqs.R;
+
+import java.util.List;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.home_tab_1, R.string.home_tab_2, R.string.home_tab_3, R.string.home_tab_1, R.string.home_tab_1, R.string.home_tab_1};
     private final Context mContext;
+    private List<String> categoryNames;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, List<String> categoryNames) {
         super(fm);
         mContext = context;
+        this.categoryNames = categoryNames;
+        System.out.println("Category 3: " + categoryNames.toString());
     }
+
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
         return PlaceholderFragment.newInstance(position + 1);
     }
 
-    @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        return categoryNames.get(position);
     }
 
     @Override
     public int getCount() {
-        return TAB_TITLES.length;
+        return categoryNames.size();
     }
+
 }

@@ -1,45 +1,33 @@
 package com.example.socialqs.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
 import com.example.socialqs.models.VideoItem;
-import com.google.android.material.animation.AnimationUtils;
 
 import java.util.List;
 
 public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapter.VideoViewHolder>{
 
-    private Context context;
     private List<VideoItem> videoItems;
+    private boolean isVisible;
 
-    public VideoDisplayAdapter(Context context, List<VideoItem> videoItems){
-        this.context = context;
+    public VideoDisplayAdapter(List<VideoItem> videoItems, boolean isVisible){
         this.videoItems = videoItems;
+        this.isVisible = isVisible;
     }
 
     @NonNull
@@ -60,6 +48,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     }
 
 
+
     public class VideoViewHolder extends RecyclerView.ViewHolder {
         private VideoView videoView;
         private TextView authorName, videoQuestion, videoReplies;
@@ -75,6 +64,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             playBtn = itemView.findViewById(R.id.play_btn);
         }
 
+
         @SuppressLint("ClickableViewAccessibility")
         void setVideoData(VideoItem videoItem){
             videoView.setVideoPath(videoItem.videoURL);
@@ -83,45 +73,45 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             authorImg.setImageResource(videoItem.authorImg);
             authorName.setText(videoItem.authorName);
 
-            videoView.start();
-
             //Prepare Video
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    playBtn.setVisibility(View.INVISIBLE);
+                    if(isVisible) {
+                        mp.start();
+                        playBtn.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
 
-                    videoView.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            int action = event.getActionMasked();
+            videoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int action = event.getActionMasked();
 
-                            if(action == MotionEvent.ACTION_DOWN){ return true; }
+                    if(action == MotionEvent.ACTION_DOWN){ return true; }
 
-                            if(action == MotionEvent.ACTION_UP) {
-                                if (mp.isPlaying()) {
-                                    mp.pause();
-                                    playBtn.setVisibility(View.VISIBLE);
+                    if(action == MotionEvent.ACTION_UP) {
+                        if (videoView.isPlaying()) {
+                            videoView.pause();
+                            playBtn.setVisibility(View.VISIBLE);
 
-                                    // TODO Can this work if added to the res anim folder?
-                                    //Play Button Animation
-                                    playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            playBtn.animate().scaleX(1).scaleY(1).setDuration(300);
-                                        }
-                                    });
-                                } else {
-                                    mp.start();
-                                    playBtn.setVisibility(View.INVISIBLE);
+                            // TODO Can this work if added to the res anim folder?
+                            //Play Button Animation
+                            playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    playBtn.animate().scaleX(1).scaleY(1).setDuration(300);
                                 }
-                                return true;
-                            }
-                            return false;
+                            });
+                        } else {
+                            videoView.start();
+                            playBtn.setVisibility(View.INVISIBLE);
                         }
-                    });
+                        return true;
+                    }
+                    return false;
                 }
             });
 
@@ -130,12 +120,10 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 @Override
                 public void onCompletion(MediaPlayer mp) { mp.start(); }
             });
-
-
-
         }
 
     }
+
 
 
 }

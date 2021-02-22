@@ -125,6 +125,12 @@ public class NetworkHandler {
         }
     }
 
+    public void categoryListing(NetworkingClosure completion){
+        performGetRequest(EndPoints.categoryList, new HashMap<>(), completion);
+    }
+
+
+
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
         performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);

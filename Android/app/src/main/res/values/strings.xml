@@ -61,4 +61,6 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="password_not_equal">Both the passwords need to be equal</string>
     <string name="password_updated">Password has been changed.</string>
+
+    <string name="search">Search SocialQ\'s</string>
 </resources>
