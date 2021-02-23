@@ -129,7 +129,9 @@ public class NetworkHandler {
         performGetRequest(EndPoints.categoryList, new HashMap<>(), completion);
     }
 
-
+    public void questionListing(NetworkingClosure completion){
+        performGetRequest(EndPoints.questionList, new HashMap<>(), completion);
+    }
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 

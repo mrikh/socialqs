@@ -28,7 +28,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         mContext = context;
         this.categoryNames = categoryNames;
-        System.out.println("Category 3: " + categoryNames.toString());
     }
 
 

@@ -1,13 +1,18 @@
 package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -16,18 +21,21 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
+import com.example.socialqs.models.UserModel;
 import com.example.socialqs.models.VideoItem;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapter.VideoViewHolder>{
 
     private List<VideoItem> videoItems;
-    private boolean isVisible;
+    private Context context;
 
-    public VideoDisplayAdapter(List<VideoItem> videoItems, boolean isVisible){
+    public VideoDisplayAdapter(List<VideoItem> videoItems, Context context){
         this.videoItems = videoItems;
-        this.isVisible = isVisible;
+        this.context = context;
     }
 
     @NonNull
@@ -39,14 +47,15 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
-        holder.setVideoData(videoItems.get(position));
+        try {
+            holder.setVideoData(videoItems.get(position));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public int getItemCount() {
-        return videoItems.size();
-    }
-
+    public int getItemCount() { return videoItems.size(); }
 
 
     public class VideoViewHolder extends RecyclerView.ViewHolder {
@@ -64,13 +73,14 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             playBtn = itemView.findViewById(R.id.play_btn);
         }
 
-
         @SuppressLint("ClickableViewAccessibility")
-        void setVideoData(VideoItem videoItem){
+        void setVideoData(VideoItem videoItem) throws IOException {
+
             videoView.setVideoPath(videoItem.videoURL);
             videoQuestion.setText(videoItem.videoQuestion);
-            videoReplies.setText(videoItem.replyAmount1);
-            authorImg.setImageResource(videoItem.authorImg);
+            videoReplies.setText(videoItem.getVideoReplyAmount());
+            //TODO SET CORRECT IMAGE WHEN DATABASE IS UPDATED
+            authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoItem.authorName);
 
             //Prepare Video
@@ -78,10 +88,8 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    if(isVisible) {
-                        mp.start();
-                        playBtn.setVisibility(View.INVISIBLE);
-                    }
+                    mp.start();
+                    playBtn.setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -118,12 +126,31 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             //Loop Video
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) { mp.start(); }
+                public void onCompletion(MediaPlayer mp) {
+
+                    mp.start();
+                    }
             });
         }
 
     }
-
+//            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//        @Override
+//        public void onPrepared(MediaPlayer mp) {
+//            mp.start();
+//
+//            float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
+//            float screenRatio = videoView.getWidth() / (float) videoView.getHeight();
+//
+//            float scale = videoRatio/screenRatio;
+//
+//            if(scale >= 1f){
+//                videoView.setScaleX(scale);
+//            }else {
+//                videoView.setScaleY(1f / scale);
+//            }
+//        }
+//    });
 
 
 }

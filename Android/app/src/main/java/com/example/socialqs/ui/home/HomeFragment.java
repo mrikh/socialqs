@@ -1,10 +1,13 @@
 package com.example.socialqs.ui.home;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,9 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-
 
 public class HomeFragment extends Fragment {
 
@@ -50,7 +52,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        ((MainMenuActivity) getActivity()).getSupportActionBar().hide();
+        ((MainMenuActivity) getActivity()).getSupportActionBar().hide(); //Hide action bar at top
 
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
@@ -77,15 +79,12 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+                Collections.sort(categoryNames);
                 adapter = new SectionsPagerAdapter(getContext(), getChildFragmentManager(), categoryNames);
                 viewPager.setAdapter(adapter);
                 tabs.setupWithViewPager(viewPager);
             }
         });
     }
-
-
-
-
 
 }
