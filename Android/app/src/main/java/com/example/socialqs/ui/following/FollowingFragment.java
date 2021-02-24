@@ -17,19 +17,21 @@ import com.example.socialqs.R;
 
 public class FollowingFragment extends Fragment {
 
-    private FollowingViewModel followingViewModel;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        followingViewModel = new ViewModelProvider(this).get(FollowingViewModel.class);
-
-        View root = inflater.inflate(R.layout.fragment_following, container, false);
-        final TextView textView = root.findViewById(R.id.text_following);
-        followingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        return inflater.inflate(R.layout.fragment_following, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //Bind UI Here
+    }
+
+
 }

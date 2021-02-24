@@ -63,4 +63,6 @@
     <string name="password_updated">Password has been changed.</string>
 
     <string name="search">Search SocialQ\'s...</string>
+    <string name="likes">Likes</string>
+    <string name="dislikes">Dislikes</string>
 </resources>

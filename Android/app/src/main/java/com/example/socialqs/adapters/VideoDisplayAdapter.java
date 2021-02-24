@@ -2,17 +2,13 @@ package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -21,11 +17,8 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
-import com.example.socialqs.models.UserModel;
 import com.example.socialqs.models.VideoItem;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapter.VideoViewHolder>{
@@ -36,6 +29,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     public VideoDisplayAdapter(List<VideoItem> videoItems, Context context){
         this.videoItems = videoItems;
         this.context = context;
+
     }
 
     @NonNull
@@ -47,11 +41,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
-        try {
-            holder.setVideoData(videoItems.get(position));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        holder.setVideoData(videoItems.get(position));
     }
 
     @Override
@@ -74,7 +64,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        void setVideoData(VideoItem videoItem) throws IOException {
+        void setVideoData(VideoItem videoItem) {
 
             videoView.setVideoPath(videoItem.videoURL);
             videoQuestion.setText(videoItem.videoQuestion);
@@ -126,31 +116,9 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             //Loop Video
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) {
-
-                    mp.start();
-                    }
+                public void onCompletion(MediaPlayer mp) { mp.start(); }
             });
         }
 
     }
-//            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//        @Override
-//        public void onPrepared(MediaPlayer mp) {
-//            mp.start();
-//
-//            float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
-//            float screenRatio = videoView.getWidth() / (float) videoView.getHeight();
-//
-//            float scale = videoRatio/screenRatio;
-//
-//            if(scale >= 1f){
-//                videoView.setScaleX(scale);
-//            }else {
-//                videoView.setScaleY(1f / scale);
-//            }
-//        }
-//    });
-
-
 }
