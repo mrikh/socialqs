@@ -1,7 +1,6 @@
 package com.example.socialqs.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
@@ -23,6 +18,7 @@ import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,16 +27,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Landing home screen fragment that displays the video category tabs
+ */
 public class HomeFragment extends Fragment {
 
     private TabSectionsAdapter adapter;
     private TabLayout tabs;
-    private ViewPager viewPager;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private ViewPager2 viewPager;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -52,10 +46,9 @@ public class HomeFragment extends Fragment {
 
         ((MainMenuActivity) getActivity()).getSupportActionBar().hide(); //Hide action bar at top
 
-        viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabs.setupWithViewPager(viewPager);
 
         List<String> categoryList = new ArrayList<>();
 
@@ -74,16 +67,18 @@ public class HomeFragment extends Fragment {
                         name = arr.getJSONObject(i).getString("name");
                         categoryList.add(name);
                     }
-                    Collections.sort(categoryList);
+                    Collections.sort(categoryList); //Alphabetically Sorted
 
-                    adapter = new TabSectionsAdapter(getContext(), getChildFragmentManager(), categoryList);
+                    adapter = new TabSectionsAdapter(HomeFragment.this, categoryList);
                     viewPager.setAdapter(adapter);
+
+                    //Adding the category names to the tabs
+                    new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab.setText(categoryList.get(position))).attach();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-
     }
 }

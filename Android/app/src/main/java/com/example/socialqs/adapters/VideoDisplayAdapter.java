@@ -63,6 +63,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             playBtn = itemView.findViewById(R.id.play_btn);
         }
 
+
         @SuppressLint("ClickableViewAccessibility")
         void setVideoData(VideoItem videoItem) {
 

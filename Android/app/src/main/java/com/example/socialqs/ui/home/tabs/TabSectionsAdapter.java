@@ -1,42 +1,32 @@
 package com.example.socialqs.ui.home.tabs;
 
-import android.content.Context;
-import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.List;
 
 /**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
+ * Category Tab Adapter that returns a fragment corresponding to
+ * one of the tabs.
  */
-public class TabSectionsAdapter extends FragmentStatePagerAdapter {
+public class TabSectionsAdapter extends FragmentStateAdapter {
 
-    private final Context mContext;
     private List<String> categoryNames;
 
-    public TabSectionsAdapter(Context context, FragmentManager fm, List<String> categoryNames) {
-        super(fm);
-        mContext = context;
+    public TabSectionsAdapter(Fragment fragment, List<String> categoryNames) {
+        super(fragment);
         this.categoryNames = categoryNames;
     }
 
+    @NonNull
     @Override
-    public Fragment getItem(int position) {
-        return TabFragment.newInstance(position, categoryNames.get(position));
+    public Fragment createFragment(int position) {
+        return new TabFragment(categoryNames.get(position));
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return categoryNames.get(position);
-    }
-
-    @Override
-    public int getCount() {
+    public int getItemCount() {
         return categoryNames.size();
     }
 
