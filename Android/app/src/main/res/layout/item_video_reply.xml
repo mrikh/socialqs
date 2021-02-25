@@ -44,8 +44,6 @@
             cardView:layout_constraintStart_toEndOf="@+id/reply_user_imgCardView"
             cardView:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TODO Fix Correct Comment Feature -->
-
         <RelativeLayout
             android:id="@+id/video_view_layout"
             android:layout_width="match_parent"
@@ -67,6 +65,7 @@
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
+        <!-- TODO Fix Correct Comment Feature -->
         <TextView
             android:id="@+id/correct_answer"
             android:layout_width="150dp"
