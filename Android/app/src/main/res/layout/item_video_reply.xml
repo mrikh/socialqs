@@ -5,8 +5,8 @@
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     android:id="@+id/carpark_cardView"
     android:layout_width="match_parent"
-    android:layout_height="430dp"
-    cardView:cardElevation="8dp">
+    android:layout_height="475dp"
+    cardView:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             cardView:cardCornerRadius="50dp"
             cardView:layout_constraintStart_toStartOf="parent"
             cardView:layout_constraintTop_toTopOf="parent">
@@ -35,7 +35,7 @@
             android:id="@+id/reply_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="15dp"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -44,18 +44,28 @@
             cardView:layout_constraintStart_toEndOf="@+id/reply_user_imgCardView"
             cardView:layout_constraintTop_toTopOf="parent" />
 
-        <VideoView
-            android:id="@+id/reply_video_view"
-            android:layout_width="0dp"
-            android:layout_height="300dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+        <!-- TODO Fix Correct Comment Feature -->
+
+        <RelativeLayout
+            android:id="@+id/video_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
             cardView:layout_constraintBottom_toBottomOf="parent"
             cardView:layout_constraintEnd_toEndOf="parent"
             cardView:layout_constraintHorizontal_bias="0.0"
             cardView:layout_constraintStart_toStartOf="parent"
             cardView:layout_constraintTop_toBottomOf="@+id/reply_user_name"
-            cardView:layout_constraintVertical_bias="0.144" />
+            cardView:layout_constraintVertical_bias="0.18">
+
+            <VideoView
+                android:id="@+id/reply_video_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/correct_answer"
@@ -64,25 +74,25 @@
             android:layout_marginTop="3dp"
             cardView:layout_constraintBottom_toBottomOf="parent"
             cardView:layout_constraintStart_toStartOf="parent"
-            cardView:layout_constraintTop_toBottomOf="@+id/reply_video_view"
-            cardView:layout_constraintVertical_bias="0.137" />
+            cardView:layout_constraintTop_toBottomOf="@+id/video_view_layout"
+            cardView:layout_constraintVertical_bias="0.0" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/likes_cardview"
+            android:id="@+id/reply_likes_cardview"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="7dp"
             cardView:cardBackgroundColor="@color/like_btn"
             cardView:cardCornerRadius="50dp"
             cardView:layout_constraintBottom_toBottomOf="parent"
             cardView:layout_constraintStart_toEndOf="@+id/correct_answer"
-            cardView:layout_constraintTop_toBottomOf="@+id/reply_video_view"
+            cardView:layout_constraintTop_toBottomOf="@+id/video_view_layout"
             cardView:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/likes_img_view"
+                android:id="@+id/reply_likes_img"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center"
@@ -92,22 +102,22 @@
 
         <TextView
             android:id="@+id/reply_like_textview"
-            android:layout_width="75dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
-            android:gravity=""
+            android:gravity="center"
             android:text="@string/likes"
             android:textColor="@color/black"
             android:textSize="18sp"
             cardView:layout_constraintBottom_toBottomOf="parent"
-            cardView:layout_constraintStart_toEndOf="@+id/likes_cardview"
-            cardView:layout_constraintTop_toBottomOf="@+id/reply_video_view"
+            cardView:layout_constraintStart_toEndOf="@+id/reply_likes_cardview"
+            cardView:layout_constraintTop_toBottomOf="@+id/video_view_layout"
             cardView:layout_constraintVertical_bias="0.0" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/dislikes_cardview"
+            android:id="@+id/reply_dislikes_cardview"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="4dp"
@@ -119,12 +129,13 @@
             cardView:cardCornerRadius="50dp"
             cardView:layout_constraintBottom_toBottomOf="parent"
             cardView:layout_constraintEnd_toStartOf="@+id/reply_dislike_textview"
+            cardView:layout_constraintHorizontal_bias="0.0"
             cardView:layout_constraintStart_toEndOf="@+id/reply_like_textview"
-            cardView:layout_constraintTop_toBottomOf="@+id/reply_video_view"
+            cardView:layout_constraintTop_toBottomOf="@+id/video_view_layout"
             cardView:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/dislikes_img_view"
+                android:id="@+id/reply_dislikes_img"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center"
@@ -134,21 +145,22 @@
 
         <TextView
             android:id="@+id/reply_dislike_textview"
-            android:layout_width="85dp"
+            android:layout_width="95dp"
             android:layout_height="40dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:gravity=""
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
             android:text="@string/dislikes"
             android:textColor="@color/black"
             android:textSize="18sp"
             cardView:layout_constraintBottom_toBottomOf="parent"
             cardView:layout_constraintEnd_toEndOf="parent"
-            cardView:layout_constraintTop_toBottomOf="@+id/reply_video_view"
+            cardView:layout_constraintTop_toBottomOf="@+id/video_view_layout"
             cardView:layout_constraintVertical_bias="0.0" />
 
         <TextView
+            android:id="@+id/reply_post_time"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:text="Post Time"
@@ -158,6 +170,17 @@
             cardView:layout_constraintStart_toStartOf="parent"
             cardView:layout_constraintTop_toBottomOf="@+id/reply_dislike_textview"
             cardView:layout_constraintVertical_bias="0.375" />
+
+        <ImageView
+            android:id="@+id/reply_play_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/play_arrow_24"
+            android:visibility="visible"
+            cardView:layout_constraintBottom_toBottomOf="@+id/video_view_layout"
+            cardView:layout_constraintEnd_toEndOf="parent"
+            cardView:layout_constraintStart_toStartOf="parent"
+            cardView:layout_constraintTop_toTopOf="@+id/video_view_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

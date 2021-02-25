@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
 import com.example.socialqs.adapters.VideoDisplayAdapter;
-import com.example.socialqs.models.VideoItem;
+import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -41,7 +41,7 @@ public class TabFragment extends Fragment {
         View root =  inflater.inflate(R.layout.fragment_home_tab, container, false);
         final ViewPager2 videoViewPager = root.findViewById((R.id.video_view_pager));
 
-        List<VideoItem> videoList = new ArrayList<>();
+        List<VideoItemModel> videoList = new ArrayList<>();
 
         NetworkHandler.getInstance().questionListing(new NetworkingClosure() {
              @Override
@@ -54,12 +54,13 @@ public class TabFragment extends Fragment {
                  try {
                      JSONArray arr = object.getJSONArray("result");
                      for (int i = 0; i < arr.length(); i++) {
-                         VideoItem item = new VideoItem(arr.getJSONObject(i));
-                         if(item.category.equals(categoryName)) {
+                         VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
+                         if(item.getCategory().equals(categoryName)) {
                             videoList.add(item);
                          }
                      }
                      videoViewPager.setAdapter( new VideoDisplayAdapter(videoList, getContext()));
+
                  } catch (Exception e) {
                      e.printStackTrace();
                  }
@@ -68,5 +69,4 @@ public class TabFragment extends Fragment {
 
         return root;
     }
-
 }

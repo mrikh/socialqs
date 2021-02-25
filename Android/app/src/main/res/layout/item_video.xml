@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/video_question" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/comment_cardview"
+        android:id="@+id/reply_to_video_cardview"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginStart="260dp"
@@ -93,7 +93,7 @@
         app:layout_constraintVertical_bias="0.941">
 
         <ImageView
-            android:id="@+id/comment_img_view"
+            android:id="@+id/reply_to_video_img_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -108,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toEndOf="@+id/comment_cardview"
+        app:layout_constraintStart_toEndOf="@+id/reply_to_video_cardview"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.941">
 
