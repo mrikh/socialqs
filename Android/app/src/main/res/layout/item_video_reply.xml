@@ -96,6 +96,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/reply_likes_cardview"
+            android:alpha="0.6"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="40dp"
@@ -135,6 +136,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/reply_dislikes_cardview"
+            android:alpha="0.6"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="4dp"

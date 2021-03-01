@@ -29,25 +29,21 @@ public class VideoRepliesModel {
 
 //    public int getAuthorImg(){return authorImg; }
 
-    public String getNoOfLikes(){
+    public int getNoOfLikes(){
         if(noOfLikes.equals("[]")){
-            return "0 Likes";
-        }else if(noOfLikes.equals(1)){
-            return noOfLikes + " Like";
-        }else{
-            return noOfLikes + " Likes";
+            return 0;
         }
-    }
+        return Integer.parseInt(noOfLikes); }
 
-    public String getNoOfDislikes(){
+    public void setNoOfLikes(int value){ noOfLikes = String.valueOf(value); }
+
+    public int getNoOfDislikes(){
         if(noOfDislikes.equals("[]")){
-            return "0 Dislikes";
-        }else if(noOfDislikes.equals(1)){
-            return noOfDislikes + " Dislike";
-        }else{
-            return noOfDislikes + " Dislikes";
+            return 0;
         }
-    }
+        return Integer.parseInt(noOfDislikes); }
+
+    public void setNoOfDislikes(int value){ noOfDislikes = String.valueOf(value); }
 
     public int getCreatedAt(){ return createdAt; }
 
