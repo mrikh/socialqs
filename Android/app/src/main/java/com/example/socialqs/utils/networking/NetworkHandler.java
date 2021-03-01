@@ -135,7 +135,7 @@ public class NetworkHandler {
 
     public void repliesListing(String questionId, NetworkingClosure completion){
         HashMap hashmap = new HashMap<>();
-        hashmap.put(questionId, "questionId");
+        hashmap.put("questionId", questionId);
 
         performGetRequest(EndPoints.repliesList, hashmap, completion);
     }

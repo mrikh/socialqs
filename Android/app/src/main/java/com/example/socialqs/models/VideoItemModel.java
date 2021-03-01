@@ -33,6 +33,8 @@ public class VideoItemModel {
 
 //    public int getAuthorImg(){return authorImg; }
 
+    public int getReplyNumber(){ return replyAmount; }
+
     public String getVideoReplyAmount(){
         if(replyAmount == 1){
             return replyAmount + " Answer  >";

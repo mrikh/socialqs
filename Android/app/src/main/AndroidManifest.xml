@@ -29,11 +29,13 @@
 
         <activity
             android:name=".activities.landing.MainMenuActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activities.landing.VideoRepliesActivity"
-            android:label="@string/title_answers" />
+            android:label="@string/title_answers"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"

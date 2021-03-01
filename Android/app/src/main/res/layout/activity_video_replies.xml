@@ -16,4 +16,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/no_replies_layout"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="228dp"
+            android:src="@drawable/no_answers"
+            android:alpha="0.5"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_answers"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

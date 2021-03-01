@@ -61,4 +61,6 @@
     <string name="search">Search SocialQ\'s...</string>
     <string name="likes">Likes</string>
     <string name="dislikes">Dislikes</string>
+    <string name="no_answers">No Answers</string>
+    <string name="correct_answer">Correct</string>
 </resources>

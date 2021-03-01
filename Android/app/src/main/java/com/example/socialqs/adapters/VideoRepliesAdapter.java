@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapter.RepliesViewHolder> {
 
     private List<VideoRepliesModel> replyList;
+    private LinearLayout noRepliesLayout;
 
     public VideoRepliesAdapter(List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
@@ -46,6 +48,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     public class RepliesViewHolder extends RecyclerView.ViewHolder {
         private VideoView videoView;
+        private LinearLayout correctAnswer;
         private TextView authorName, likes, dislikes;
         private ImageView authorImg, playBtn;
         private String videoQuestionID;
@@ -59,18 +62,22 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             likes = itemView.findViewById(R.id.reply_like_textview);
             dislikes = itemView.findViewById(R.id.reply_dislike_textview);
             playBtn = itemView.findViewById(R.id.reply_play_btn);
+            correctAnswer = itemView.findViewById(R.id.correct_answer);
         }
 
-        @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
+        @SuppressLint({"ClickableViewAccessibility"})
         void setData(VideoRepliesModel videoReplies) {
-            //TODO UPDATE WHEN DATABASE IS ADDED
             videoQuestionID = videoReplies.getVideoQuestionID();
             videoView.setVideoPath(videoReplies.getVideoURL());
-            likes.setText(videoReplies.getNoOfLikes() + " Likes");
-            dislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+            likes.setText(videoReplies.getNoOfLikes());
+            dislikes.setText(videoReplies.getNoOfDislikes());
+            //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
 
+            if(videoReplies.isCorrect()){
+                correctAnswer.setVisibility(View.VISIBLE);
+            }
 
             //Prepare Video
             videoView.setOnPreparedListener(mp -> {

@@ -3,6 +3,8 @@ package com.example.socialqs.activities.landing;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,7 +31,7 @@ import java.util.List;
 public class VideoRepliesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private String url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    private LinearLayout noRepliesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class VideoRepliesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.video_replies_recycler);
+        noRepliesLayout = findViewById(R.id.no_replies_layout);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -52,10 +56,10 @@ public class VideoRepliesActivity extends AppCompatActivity {
         NetworkHandler.getInstance().repliesListing(videoID, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
-//                if (object == null) {
-//                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
-//                    return;
-//                }
+                if (object == null) {
+                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
+                    return;
+                }
 
                 try {
                     JSONArray arr = object.getJSONArray("result");
@@ -64,24 +68,17 @@ public class VideoRepliesActivity extends AppCompatActivity {
                         videoReplies.add(item);
                     }
 
-                    recyclerView.setAdapter(new VideoRepliesAdapter(videoReplies));
+                    if(videoReplies.size() == 0){
+                        noRepliesLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        recyclerView.setAdapter(new VideoRepliesAdapter(videoReplies));
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-
-//        for(int i=0; i<videoReplies.size(); i++){
-//            System.out.println("VIDEO REPLIES: " + videoReplies.get(i).videoQuestionID);
-//
-//            if(!videoReplies.get(i).videoQuestionID.equals(videoID)){
-//                videoReplies.remove(i);
-//            }
-//        }
-//
-//        final VideoRepliesAdapter adapter = new VideoRepliesAdapter(this, videoReplies);
-//        recyclerView.setAdapter(adapter);
     }
 
     @Override
