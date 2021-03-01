@@ -5,12 +5,13 @@ import org.json.JSONObject;
 
 public class VideoItemModel {
 
-    private String videoURL, videoQuestion, authorName, authorImg, category;
+    private String videoID, videoURL, videoQuestion, authorName, authorImg, category;
     private int replyAmount;
     private boolean isBookmarked;
     private UserModel person;
 
     public VideoItemModel(JSONObject object) throws JSONException {
+        this.videoID = object.getString("_id");
         this.category = object.getJSONObject("category").getString("name");
         this.videoURL = object.getString("videoUrl");
         this.videoQuestion = object.getString("title");
@@ -19,6 +20,8 @@ public class VideoItemModel {
         this.replyAmount = object.getInt("answerCount");
         this.isBookmarked = object.getBoolean("isBookmarked");
     }
+
+    public String getVideoID(){ return videoID; }
 
     public String getCategory(){ return category; }
 

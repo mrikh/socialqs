@@ -50,6 +50,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         private VideoView videoView;
         private TextView authorName, videoQuestion, videoReplies;
         private ImageView authorImg, playBtn, bookmarkBtn, replyToVideoBtn;
+        private String videoID;
 
         public VideoViewHolder(@NonNull View itemView){
             super(itemView);
@@ -65,6 +66,8 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
         @SuppressLint("ClickableViewAccessibility")
         void setVideoData(VideoItemModel videoItemModel) {
+            videoID = videoItemModel.getVideoID();
+            System.out.println("video id: " + videoID);
             videoView.setVideoPath(videoItemModel.getVideoURL());
             videoQuestion.setText(videoItemModel.getVideoQuestion());
             videoReplies.setText(videoItemModel.getVideoReplyAmount());
@@ -73,6 +76,8 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             authorName.setText(videoItemModel.getAuthorName());
 
             // TODO NAVIGATE TO 'CREATE' TO REPLY TO VIDEO POST
+
+            // TODO BOOKMARK
 
             //Prepare Video
             videoView.setOnPreparedListener(mp -> {
@@ -115,6 +120,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 @Override
                 public void onClick(View v) {
                     Intent myIntent = new Intent(context, VideoRepliesActivity.class);
+                    myIntent.putExtra("Video ID", videoID);
                     context.startActivity(myIntent);
                 }
             });

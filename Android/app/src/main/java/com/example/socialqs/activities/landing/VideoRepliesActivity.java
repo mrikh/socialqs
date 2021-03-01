@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.landing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,8 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
+import com.example.socialqs.adapters.VideoDisplayAdapter;
 import com.example.socialqs.adapters.VideoRepliesAdapter;
+import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
+import com.example.socialqs.utils.Utilities;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +36,11 @@ public class VideoRepliesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_replies);
 
+        Intent intent = getIntent();
+        String videoID = intent.getStringExtra("Video ID");
+
+        System.out.println("VIDEO ID: " + videoID);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.video_replies_recycler);
@@ -37,24 +51,41 @@ public class VideoRepliesActivity extends AppCompatActivity {
 
         List<VideoRepliesModel> videoReplies = new ArrayList<>();
 
-        VideoRepliesModel videoItem1 = new VideoRepliesModel();
-        videoItem1.videoURL= url;
-        videoItem1.authorName = "John Smith";
-        videoItem1.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
-        videoItem1.noOfLikes = 9;
-        videoItem1.noOfDislikes = 2;
-        videoReplies.add(videoItem1);
+        NetworkHandler.getInstance().repliesListing(new NetworkingClosure() {
+            @Override
+            public void completion(JSONObject object, String message) {
+//                if (object == null) {
+//                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
+//                    return;
+//                }
 
-        VideoRepliesModel videoItem2 = new VideoRepliesModel();
-        videoItem2.videoURL= url;
-        videoItem2.authorName = "Sarah Fox";
-        videoItem2.authorImg = R.drawable.com_facebook_profile_picture_blank_portrait;
-        videoItem2.noOfLikes = 2;
-        videoItem2.noOfDislikes = 15;
-        videoReplies.add(videoItem2);
+                try {
+                    JSONArray arr = object.getJSONArray("result");
+                    for (int i = 0; i < arr.length(); i++) {
+                        VideoRepliesModel item = new VideoRepliesModel(arr.getJSONObject(i));
+                        if(item.getVideoQuestionID().equals(videoID)) {
+                            videoReplies.add(item);
+                        }
+                    }
 
-        final VideoRepliesAdapter adapter = new VideoRepliesAdapter(this, videoReplies);
-        recyclerView.setAdapter(adapter);
+                    recyclerView.setAdapter(new VideoRepliesAdapter(videoReplies));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+//        for(int i=0; i<videoReplies.size(); i++){
+//            System.out.println("VIDEO REPLIES: " + videoReplies.get(i).videoQuestionID);
+//
+//            if(!videoReplies.get(i).videoQuestionID.equals(videoID)){
+//                videoReplies.remove(i);
+//            }
+//        }
+//
+//        final VideoRepliesAdapter adapter = new VideoRepliesAdapter(this, videoReplies);
+//        recyclerView.setAdapter(adapter);
     }
 
     @Override

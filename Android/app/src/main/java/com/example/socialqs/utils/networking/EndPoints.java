@@ -11,4 +11,5 @@ public class EndPoints{
     public static String updateInfo = "users/updateInfo";
     public static String categoryList = "questions/category";
     public static String questionList = "questions/list";
+    public static String repliesList = "answers/list";
 }

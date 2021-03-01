@@ -21,11 +21,9 @@ import java.util.List;
 
 public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapter.RepliesViewHolder> {
 
-    private Context context;
     private List<VideoRepliesModel> replyList;
 
-    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList) {
-        this.context = context;
+    public VideoRepliesAdapter(List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
     }
 
@@ -50,6 +48,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private VideoView videoView;
         private TextView authorName, likes, dislikes;
         private ImageView authorImg, playBtn;
+        private String videoQuestionID;
+        private boolean isCorrect;
 
         public RepliesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,11 +64,13 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
         void setData(VideoRepliesModel videoReplies) {
             //TODO UPDATE WHEN DATABASE IS ADDED
+            videoQuestionID = videoReplies.getVideoQuestionID();
             videoView.setVideoPath(videoReplies.getVideoURL());
             likes.setText(videoReplies.getNoOfLikes() + " Likes");
             dislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
+
 
             //Prepare Video
             videoView.setOnPreparedListener(mp -> {
