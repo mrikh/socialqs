@@ -39,8 +39,6 @@ public class VideoRepliesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String videoID = intent.getStringExtra("Video ID");
 
-        System.out.println("VIDEO ID: " + videoID);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.video_replies_recycler);
@@ -51,7 +49,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
 
         List<VideoRepliesModel> videoReplies = new ArrayList<>();
 
-        NetworkHandler.getInstance().repliesListing(new NetworkingClosure() {
+        NetworkHandler.getInstance().repliesListing(videoID, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
 //                if (object == null) {
@@ -63,9 +61,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     JSONArray arr = object.getJSONArray("result");
                     for (int i = 0; i < arr.length(); i++) {
                         VideoRepliesModel item = new VideoRepliesModel(arr.getJSONObject(i));
-                        if(item.getVideoQuestionID().equals(videoID)) {
-                            videoReplies.add(item);
-                        }
+                        videoReplies.add(item);
                     }
 
                     recyclerView.setAdapter(new VideoRepliesAdapter(videoReplies));

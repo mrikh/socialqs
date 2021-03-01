@@ -133,8 +133,11 @@ public class NetworkHandler {
         performGetRequest(EndPoints.questionList, new HashMap<>(), completion);
     }
 
-    public void repliesListing(NetworkingClosure completion){
-        performGetRequest(EndPoints.repliesList, new HashMap<>(), completion);
+    public void repliesListing(String questionId, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put(questionId, "questionId");
+
+        performGetRequest(EndPoints.repliesList, hashmap, completion);
     }
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
@@ -233,5 +236,4 @@ public class NetworkHandler {
             }
         });
     }
-
 }
