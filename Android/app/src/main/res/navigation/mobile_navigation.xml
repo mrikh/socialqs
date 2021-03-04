@@ -23,4 +23,27 @@
         android:label="change"
         tools:layout="@layout/fragment_notifications" />
 
+    <fragment
+        android:id="@+id/titleFragment"
+        android:name="com.example.socialqs.activities.create.fragments.TitleFragment"
+        android:label="fragment_title"
+        tools:layout="@layout/fragment_title" >
+        <action
+            android:id="@+id/action_titleFragment_to_selectSourceFragment"
+            app:destination="@id/selectSourceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectSourceFragment"
+        android:name="com.example.socialqs.activities.create.fragments.SelectSourceFragment"
+        android:label="fragment_select_source"
+        tools:layout="@layout/fragment_select_source" >
+        <action
+            android:id="@+id/action_selectSourceFragment_to_finalFragment"
+            app:destination="@id/finalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finalFragment"
+        android:name="com.example.socialqs.activities.create.fragments.FinalFragment"
+        android:label="fragment_final"
+        tools:layout="@layout/fragment_final" />
 </navigation>

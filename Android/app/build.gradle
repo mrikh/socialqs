@@ -54,14 +54,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
 
-    def fragment_version = "1.2.5"
-    // Java language implementation
-    implementation "androidx.fragment:fragment:$fragment_version"
-
-    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-    implementation 'com.amitshekhar.android:android-networking:1.0.2'
-    implementation 'com.chaos.view:pinview:1.4.4'
-
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    implementation 'com.facebook.android:facebook-login:[8.1)'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 }
