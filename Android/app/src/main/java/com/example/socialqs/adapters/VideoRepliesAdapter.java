@@ -1,7 +1,6 @@
 package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
-import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
 
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.List;
 public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapter.RepliesViewHolder> {
 
     private List<VideoRepliesModel> replyList;
-    private LinearLayout noRepliesLayout;
 
     public VideoRepliesAdapter(List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
@@ -73,23 +70,16 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         void setData(VideoRepliesModel videoReplies) {
             videoQuestionID = videoReplies.getVideoQuestionID();
             videoView.setVideoPath(videoReplies.getVideoURL());
-
             noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
-
             noOfDislikes.setText(videoReplies.getNoOfDislikes()+ " Dislikes");
-
             //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
 
-            if(videoReplies.isCorrect()){
-                correctAnswer.setVisibility(View.VISIBLE);
-            }
+            if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
             //Prepare Video
-            videoView.setOnPreparedListener(mp -> {
-                playBtn.setVisibility(View.VISIBLE);
-            });
+            videoView.setOnPreparedListener(mp -> { playBtn.setVisibility(View.VISIBLE); });
 
             //Play / Pause Video
             videoView.setOnTouchListener((v, event) -> {
@@ -119,39 +109,9 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 return false;
             });
 
-            likesBtn.setOnClickListener(v -> {
-                if(likesBtn.getAlpha() < 1) {
-                    if(dislikesBtn.getAlpha() == 1){
-                        dislikesBtn.setAlpha((float) 0.6);
-                        videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-                        noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
-                    }
-                    likesBtn.setAlpha(1);
-                    videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()+1);
-                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
-                }else{
-                    likesBtn.setAlpha((float) 0.6);
-                    videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
-                }
-            });
+            likesBtn.setOnClickListener(v -> { setLikesBtn(videoReplies); });
 
-            dislikesBtn.setOnClickListener(v -> {
-                if(dislikesBtn.getAlpha() < 1) {
-                    if(likesBtn.getAlpha() == 1){
-                        likesBtn.setAlpha((float) 0.6);
-                        videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-                        noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
-                    }
-                    dislikesBtn.setAlpha(1);
-                    videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()+1);
-                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
-                }else{
-                    dislikesBtn.setAlpha((float) 0.6);
-                    videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
-                }
-            });
+            dislikesBtn.setOnClickListener(v -> { setDislikesBtn(videoReplies); });
 
             authorImg.setOnClickListener(v -> {
                 // TODO GO TO OTHER USER PROFILE
@@ -159,6 +119,42 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             authorName.setOnClickListener(v -> {
                 // TODO GO TO OTHER USER PROFILE
             });
+        }
+
+        @SuppressLint("SetTextI18n")
+        private void setLikesBtn(VideoRepliesModel videoReplies){
+            if(likesBtn.getAlpha() < 1) {
+                if(dislikesBtn.getAlpha() == 1){
+                    dislikesBtn.setAlpha((float) 0.6);
+                    videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
+                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+                }
+                likesBtn.setAlpha(1);
+                videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()+1);
+                noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
+            }else{
+                likesBtn.setAlpha((float) 0.6);
+                videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
+                noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
+            }
+        }
+
+        @SuppressLint("SetTextI18n")
+        private void setDislikesBtn(VideoRepliesModel videoReplies){
+            if(dislikesBtn.getAlpha() < 1) {
+                if(likesBtn.getAlpha() == 1){
+                    likesBtn.setAlpha((float) 0.6);
+                    videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
+                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
+                }
+                dislikesBtn.setAlpha(1);
+                videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()+1);
+                noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+            }else{
+                dislikesBtn.setAlpha((float) 0.6);
+                videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
+                noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+            }
         }
     }
 }
