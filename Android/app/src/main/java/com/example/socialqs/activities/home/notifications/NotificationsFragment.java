@@ -1,4 +1,4 @@
-package com.example.socialqs.ui.notifications;
+package com.example.socialqs.activities.home.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

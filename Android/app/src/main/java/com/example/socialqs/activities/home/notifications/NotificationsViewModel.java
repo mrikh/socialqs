@@ -1,4 +1,4 @@
-package com.example.socialqs.ui.notifications;
+package com.example.socialqs.activities.home.notifications;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

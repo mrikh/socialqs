@@ -1,4 +1,4 @@
-package com.example.socialqs.ui.home.tabs;
+package com.example.socialqs.activities.home.tabs;
 ;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class TabFragment extends Fragment {
 
-    private  String categoryName;
+    private String categoryName;
 
     public TabFragment(String categoryName) {
         this.categoryName = categoryName;
@@ -46,6 +46,7 @@ public class TabFragment extends Fragment {
         NetworkHandler.getInstance().questionListing(new NetworkingClosure() {
              @Override
              public void completion(JSONObject object, String message) {
+
                  if (object == null) {
                      Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getActivity(), null).show();
                      return;

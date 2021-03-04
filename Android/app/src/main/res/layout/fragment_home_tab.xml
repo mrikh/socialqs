@@ -6,7 +6,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.tabs.TabFragment">
+    tools:context=".activities.home.tabs.TabFragment">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/video_view_pager"

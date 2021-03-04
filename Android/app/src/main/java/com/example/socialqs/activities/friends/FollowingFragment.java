@@ -1,4 +1,4 @@
-package com.example.socialqs.ui.following;
+package com.example.socialqs.activities.friends;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

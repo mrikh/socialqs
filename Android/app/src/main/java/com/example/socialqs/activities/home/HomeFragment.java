@@ -1,4 +1,4 @@
-package com.example.socialqs.ui.home;
+package com.example.socialqs.activities.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.socialqs.R;
 
 import com.example.socialqs.activities.landing.MainMenuActivity;
-import com.example.socialqs.ui.home.tabs.TabSectionsAdapter;
+import com.example.socialqs.activities.home.tabs.TabSectionsAdapter;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
