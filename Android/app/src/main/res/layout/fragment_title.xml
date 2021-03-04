@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    tools:context=".ui.create.CreateFragment">
+    android:background="@color/white"
+    tools:context=".ui.create.TitleFragment">
 
     <TextView
         android:id="@+id/titleHint"
@@ -116,10 +117,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="377dp"
-        android:layout_marginLeft="377dp"
         android:layout_marginTop="55dp"
         android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
         android:layout_marginBottom="658dp"
         android:rotationY="-180"
         android:src="@drawable/ic_back_arrow"
@@ -145,45 +144,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/titleDescription"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="29dp"
-        android:layout_marginLeft="29dp"
         android:layout_marginTop="297dp"
         android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
         android:layout_marginBottom="410dp"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/title_description"
-        android:inputType="textPersonName"
-        android:textColor="#66000000"
-        android:backgroundTint="@color/black"
+        android:textColor="@color/black"
+        android:textColorHint="#B3373535"
+        android:inputType="textLongMessage"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/categoryDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginStart="29dp"
-        android:layout_marginLeft="29dp"
         android:layout_marginTop="516dp"
         android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
         android:layout_marginBottom="191dp"
-        android:backgroundTint="@color/black"
-        android:ems="10"
-        android:hint="@string/category_description"
-        android:inputType="text"
-        android:textColor="#66000000"
-        android:textSize="16sp"
+        android:dropDownWidth="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

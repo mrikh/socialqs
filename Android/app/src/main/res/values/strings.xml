@@ -67,5 +67,14 @@
     <string name="category_hint">Hint: Try to be as accurate as possible with the options provided.</string>
     <string name="category_description">Category</string>
 
+    <string-array name="category_array">
+        <item>Category</item>
+        <item>Music</item>
+        <item>Dance</item>
+        <item>Arts</item>
+        <item>Sports</item>
+        <item>Cooking</item>
+        <item>Entertainment</item>
+    </string-array>
 
 </resources>
