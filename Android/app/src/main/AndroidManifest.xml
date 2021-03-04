@@ -28,12 +28,12 @@
         </activity>
 
         <activity
-            android:name=".activities.landing.MainMenuActivity"
+            android:name=".activities.home.MainMenuActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activities.landing.VideoRepliesActivity"
+            android:name=".activities.home.VideoRepliesActivity"
             android:label="@string/title_answers"
             android:screenOrientation="portrait"/>
 

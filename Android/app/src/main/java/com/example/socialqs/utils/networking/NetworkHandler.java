@@ -129,8 +129,11 @@ public class NetworkHandler {
         performGetRequest(EndPoints.categoryList, new HashMap<>(), completion);
     }
 
-    public void questionListing(NetworkingClosure completion){
-        performGetRequest(EndPoints.questionList, new HashMap<>(), completion);
+    public void questionListing(String categoryId, NetworkingClosure completion){
+
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("categoryId", categoryId);
+        performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
     public void repliesListing(String questionId, NetworkingClosure completion){

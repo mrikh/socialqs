@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.landing;
+package com.example.socialqs.activities.home;
 
 import android.content.Intent;
 import android.os.Bundle;

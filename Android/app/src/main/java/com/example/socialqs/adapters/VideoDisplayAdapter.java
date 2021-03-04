@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
-import com.example.socialqs.activities.landing.VideoRepliesActivity;
+import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.models.VideoItemModel;
 
 import java.util.List;

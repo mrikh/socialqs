@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.socialqs.models.CategoryModel;
+
 import java.util.List;
 
 /**
@@ -12,22 +14,22 @@ import java.util.List;
  */
 public class TabSectionsAdapter extends FragmentStateAdapter {
 
-    private List<String> categoryNames;
+    private List<CategoryModel> categories;
 
-    public TabSectionsAdapter(Fragment fragment, List<String> categoryNames) {
+    public TabSectionsAdapter(Fragment fragment, List<CategoryModel> categories) {
         super(fragment);
-        this.categoryNames = categoryNames;
+        this.categories = categories;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return new TabFragment(categoryNames.get(position));
+        return new TabFragment(categories.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return categoryNames.size();
+        return categories.size();
     }
 
 }

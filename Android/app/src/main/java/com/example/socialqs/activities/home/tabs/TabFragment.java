@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
 import com.example.socialqs.adapters.VideoDisplayAdapter;
+import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -21,16 +22,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A category tab fragment containing video list.
  */
 public class TabFragment extends Fragment {
 
-    private String categoryName;
+    private CategoryModel category;
 
-    public TabFragment(String categoryName) {
-        this.categoryName = categoryName;
+    public TabFragment(CategoryModel category) {
+        this.category = category;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class TabFragment extends Fragment {
 
         List<VideoItemModel> videoList = new ArrayList<>();
 
-        NetworkHandler.getInstance().questionListing(new NetworkingClosure() {
+        NetworkHandler.getInstance().questionListing(this.category.id, new NetworkingClosure() {
              @Override
              public void completion(JSONObject object, String message) {
 
@@ -56,9 +58,7 @@ public class TabFragment extends Fragment {
                      JSONArray arr = object.getJSONArray("result");
                      for (int i = 0; i < arr.length(); i++) {
                          VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
-                         if(item.getCategory().equals(categoryName)) {
-                            videoList.add(item);
-                         }
+                         videoList.add(item);
                      }
                      videoViewPager.setAdapter( new VideoDisplayAdapter(videoList, getContext()));
 

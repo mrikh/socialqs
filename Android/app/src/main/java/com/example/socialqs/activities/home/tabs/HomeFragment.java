@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.home;
+package com.example.socialqs.activities.home.tabs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +12,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
 
-import com.example.socialqs.activities.landing.MainMenuActivity;
-import com.example.socialqs.activities.home.tabs.TabSectionsAdapter;
+import com.example.socialqs.activities.home.MainMenuActivity;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Landing home screen fragment that displays the video category tabs
@@ -41,6 +43,13 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((MainMenuActivity)getActivity()).updateActionBarBack(false);
+        ((MainMenuActivity)getActivity()).setActionBarTitle(getString(R.string.sign_up), "#ffffff", R.color.black);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -50,7 +59,7 @@ public class HomeFragment extends Fragment {
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        List<String> categoryList = new ArrayList<>();
+        List<CategoryModel> categoryList = new ArrayList<>();
 
         NetworkHandler.getInstance().categoryListing(new NetworkingClosure() {
             @Override
@@ -62,18 +71,26 @@ public class HomeFragment extends Fragment {
 
                 try {
                     JSONArray arr = object.getJSONArray("categories");
-                    String name;
+
+                    int allCategoryIndex = 0;
                     for (int i = 0; i < arr.length(); i++) {
-                        name = arr.getJSONObject(i).getString("name");
-                        categoryList.add(name);
+                        CategoryModel model = new CategoryModel(arr.getJSONObject(i));
+                        categoryList.add(model);
+
+                        if (model.name.equalsIgnoreCase("all")){
+                            allCategoryIndex = i;
+                        }
                     }
-                    Collections.sort(categoryList); //Alphabetically Sorted
+
+                    //put model with all as text to the front
+                    CategoryModel allModel = categoryList.remove(allCategoryIndex);
+                    categoryList.add(0, allModel);
 
                     adapter = new TabSectionsAdapter(HomeFragment.this, categoryList);
                     viewPager.setAdapter(adapter);
 
                     //Adding the category names to the tabs
-                    new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab.setText(categoryList.get(position))).attach();
+                    new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab(categoryList.get(position))).attach();
 
                 } catch (Exception e) {
                     e.printStackTrace();
