@@ -22,4 +22,5 @@
         android:name="com.example.socialqs.activities.home.notifications.NotificationsFragment"
         android:label="change"
         tools:layout="@layout/fragment_notifications" />
+
 </navigation>

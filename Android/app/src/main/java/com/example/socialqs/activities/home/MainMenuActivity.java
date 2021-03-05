@@ -48,11 +48,18 @@ public class MainMenuActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.navigation_create){
-                    Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
-                    startActivity(myIntent);
-                    return false;
+
+                NavController navController = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
+                switch (item.getItemId()){
+                    case R.id.navigation_create:
+                        Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                        startActivity(myIntent);
+                        return false;
+                    default:
+                        NavigationUI.onNavDestinationSelected(item, navController);
+                        break;
                 }
+                
                 return true;
             }
         });
