@@ -78,8 +78,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
-            //Prepare Video
-            videoView.setOnPreparedListener(mp -> { playBtn.setVisibility(View.VISIBLE); });
+            playBtn.setVisibility(View.VISIBLE);
 
             //Play / Pause Video
             videoView.setOnTouchListener((v, event) -> {
@@ -127,7 +126,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 if(dislikesBtn.getAlpha() == 1){
                     dislikesBtn.setAlpha((float) 0.6);
                     videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislike(s)");
                 }
                 likesBtn.setAlpha(1);
                 videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()+1);
@@ -135,7 +134,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 likesBtn.setAlpha((float) 0.6);
                 videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
             }
-            noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
+            noOfLikes.setText(videoReplies.getNoOfLikes() + " Like(s)");
         }
 
         @SuppressLint("SetTextI18n")
@@ -144,7 +143,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 if(likesBtn.getAlpha() == 1){
                     likesBtn.setAlpha((float) 0.6);
                     videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
+                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Like(s)");
                 }
                 dislikesBtn.setAlpha(1);
                 videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()+1);
@@ -152,7 +151,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 dislikesBtn.setAlpha((float) 0.6);
                 videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
             }
-            noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
+            noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislike(s)");
         }
     }
 }

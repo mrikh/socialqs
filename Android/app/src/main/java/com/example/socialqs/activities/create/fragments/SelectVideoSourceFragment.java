@@ -3,6 +3,8 @@ package com.example.socialqs.activities.create.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +41,7 @@ public class SelectVideoSourceFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ((CreateActivity) getActivity()).getSupportActionBar().show();
+        updateActionBar();
 
         recordBtn = view.findViewById(R.id.recordVideo);
         galleryBtn = view.findViewById(R.id.pickFromGallery);
@@ -97,6 +102,17 @@ public class SelectVideoSourceFragment extends Fragment {
         if(requestCode == 103) {
 
         }
+    }
+
+    private void updateActionBar(){
+        ((CreateActivity) getActivity()).getSupportActionBar().show();
+        ((CreateActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((CreateActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
+        ((CreateActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
+
+        Spannable text = new SpannableString(((CreateActivity) getActivity()).getSupportActionBar().getTitle());
+        text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ((CreateActivity) getActivity()).getSupportActionBar().setTitle(text);
     }
 }
 

@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,8 @@ import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +40,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private LinearLayout noRepliesLayout;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,11 @@ public class VideoRepliesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.video_replies_recycler);
         noRepliesLayout = findViewById(R.id.no_replies_layout);
 
+        progressBar = findViewById(R.id.progress);
+        Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.VISIBLE);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -61,6 +70,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
         NetworkHandler.getInstance().repliesListing(videoID, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
+                progressBar.setVisibility(View.INVISIBLE);
                 if (object == null) {
                     Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
                     return;

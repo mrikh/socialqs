@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -37,6 +40,7 @@ public class HomeFragment extends Fragment {
     private TabSectionsAdapter adapter;
     private TabLayout tabs;
     private ViewPager2 viewPager;
+    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -59,11 +63,17 @@ public class HomeFragment extends Fragment {
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 
+        progressBar = view.findViewById(R.id.progress);
+        Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.VISIBLE);
+
         List<CategoryModel> categoryList = new ArrayList<>();
 
         NetworkHandler.getInstance().categoryListing(new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
+                progressBar.setVisibility(View.INVISIBLE);
                 if (object == null) {
                     Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getActivity(), null).show();
                     return;

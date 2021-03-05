@@ -8,6 +8,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.home.tabs.TabFragment">
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/progress"
+        style="@style/SpinKitView.Large.DoubleBounce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/no_questions_layout"
         android:visibility="invisible"
@@ -19,7 +31,7 @@
             android:layout_marginTop="80dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\?"
+            android:text="@string/questionmark"
             android:textSize="100sp"
             android:textAlignment="center"
             android:gravity="center_horizontal" />
@@ -28,7 +40,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No questions yet"
+            android:text="@string/no_questions"
             android:textSize="30sp"
             android:textAlignment="center"
             android:gravity="center_horizontal" />
@@ -36,7 +48,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start asking questions!"
+            android:text="@string/no_questions_extra"
             android:textSize="20sp"
             android:textAlignment="center"
             android:gravity="center_horizontal" />

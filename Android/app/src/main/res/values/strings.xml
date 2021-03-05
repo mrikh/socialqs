@@ -64,6 +64,9 @@
     <string name="dislikes"> Dislike(s)</string>
     <string name="no_answers">No answers yet</string>
     <string name="correct_answer">Correct</string>
+    <string name="questionmark">\?</string>
+    <string name="no_questions">No questions yet</string>
+    <string name="no_questions_extra">Start asking questions!</string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
