@@ -45,8 +45,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        System.out.println(getActivity());
         ((MainMenuActivity)getActivity()).updateActionBarBack(false);
-        ((MainMenuActivity)getActivity()).setActionBarTitle(getString(R.string.sign_up), "#ffffff", R.color.black);
+        ((MainMenuActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class HomeFragment extends Fragment {
                     viewPager.setAdapter(adapter);
 
                     //Adding the category names to the tabs
-                    new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab(categoryList.get(position))).attach();
+                    new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab.setText(categoryList.get(position).name)).attach();
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.adapters.VideoDisplayAdapter;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.VideoItemModel;
@@ -39,13 +40,27 @@ public class TabFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("================");
+        System.out.println(getActivity());
+        ((MainMenuActivity)getActivity()).updateActionBarBack(false);
+        ((MainMenuActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_home_tab, container, false);
         final ViewPager2 videoViewPager = root.findViewById((R.id.video_view_pager));
 
         List<VideoItemModel> videoList = new ArrayList<>();
 
-        NetworkHandler.getInstance().questionListing(this.category.id, new NetworkingClosure() {
+        String categoryId = null;
+        if (!this.category.name.equalsIgnoreCase("all")){
+            categoryId = this.category.id;
+        }
+
+        NetworkHandler.getInstance().questionListing(categoryId, new NetworkingClosure() {
              @Override
              public void completion(JSONObject object, String message) {
 

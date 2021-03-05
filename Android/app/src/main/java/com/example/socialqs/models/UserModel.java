@@ -43,7 +43,8 @@ public class UserModel {
 
     public static String networkingHeader(){
         if (UserModel.current != null){
-            return "Bearer " + UserModel.current.token;
+//            return "Bearer " + UserModel.current.token;
+            return "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDQxNjU1ZTQ1ODFjYjAwMTVjMjJhNWYiLCJpYXQiOjE2MTQ4OTg4OTB9.dzv92mOHMqI_eJ0UxZGkIKHMTYMsLkBX8RraKSr6gD8";
         }
 
         return null;

@@ -132,7 +132,9 @@ public class NetworkHandler {
     public void questionListing(String categoryId, NetworkingClosure completion){
 
         HashMap hashmap = new HashMap<>();
-        hashmap.put("categoryId", categoryId);
+        if (categoryId != null) {
+            hashmap.put("categoryId", categoryId);
+        }
         performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
@@ -188,7 +190,7 @@ public class NetworkHandler {
             public void onError(ANError anError) {
                 if (anError != null){
                     try {
-                        completion.completion(null, anError.getErrorDetail());
+                        completion.completion(null, anError.getMessage());
                     }catch (Exception e){
                         completion.completion(null, null);
                     }
