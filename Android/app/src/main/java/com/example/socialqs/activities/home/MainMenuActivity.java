@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,10 +10,17 @@ import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
+import com.example.socialqs.activities.main.MainActivity;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.models.UserModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -36,6 +44,18 @@ public class MainMenuActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navigation_create){
+                    Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                    startActivity(myIntent);
+                    return false;
+                }
+                return true;
+            }
+        });
     }
 
     @Override

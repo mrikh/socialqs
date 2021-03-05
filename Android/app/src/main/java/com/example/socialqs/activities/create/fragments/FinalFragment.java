@@ -29,18 +29,11 @@ public class FinalFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         choice = (boolean) getArguments().get("choice");
-
-
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
 
         View view = inflater.inflate(R.layout.fragment_final, container, false);
         videoView = view.findViewById(R.id.videoView);

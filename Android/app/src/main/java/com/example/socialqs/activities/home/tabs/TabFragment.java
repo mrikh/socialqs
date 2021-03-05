@@ -42,8 +42,6 @@ public class TabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("================");
-        System.out.println(getActivity());
         ((MainMenuActivity)getActivity()).updateActionBarBack(false);
         ((MainMenuActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
     }
