@@ -8,6 +8,41 @@
     android:layout_height="match_parent"
     tools:context=".activities.home.tabs.TabFragment">
 
+    <LinearLayout
+        android:id="@+id/no_questions_layout"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\?"
+            android:textSize="100sp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No questions yet"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start asking questions!"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/video_view_pager"
         android:layout_width="match_parent"

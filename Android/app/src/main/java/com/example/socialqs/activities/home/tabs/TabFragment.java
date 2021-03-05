@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -50,6 +51,7 @@ public class TabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_home_tab, container, false);
         final ViewPager2 videoViewPager = root.findViewById((R.id.video_view_pager));
+        LinearLayout noQuestionsLayout = root.findViewById(R.id.no_questions_layout);
 
         List<VideoItemModel> videoList = new ArrayList<>();
 
@@ -73,7 +75,11 @@ public class TabFragment extends Fragment {
                          VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
                          videoList.add(item);
                      }
-                     videoViewPager.setAdapter( new VideoDisplayAdapter(videoList, getContext()));
+                     if(videoList.size() == 0){
+                         noQuestionsLayout.setVisibility(View.VISIBLE);
+                     }else {
+                         videoViewPager.setAdapter(new VideoDisplayAdapter(videoList, getContext()));
+                     }
 
                  } catch (Exception e) {
                      e.printStackTrace();
