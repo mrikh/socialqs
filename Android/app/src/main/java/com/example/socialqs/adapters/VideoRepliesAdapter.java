@@ -109,9 +109,9 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 return false;
             });
 
-            likesBtn.setOnClickListener(v -> { setLikesBtn(videoReplies); });
+            likesBtn.setOnClickListener(v -> setLikesBtn(videoReplies));
 
-            dislikesBtn.setOnClickListener(v -> { setDislikesBtn(videoReplies); });
+            dislikesBtn.setOnClickListener(v -> setDislikesBtn(videoReplies));
 
             authorImg.setOnClickListener(v -> {
                 // TODO GO TO OTHER USER PROFILE
@@ -131,12 +131,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 }
                 likesBtn.setAlpha(1);
                 videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()+1);
-                noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
             }else{
                 likesBtn.setAlpha((float) 0.6);
                 videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-                noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
             }
+            noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
         }
 
         @SuppressLint("SetTextI18n")
@@ -149,12 +148,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 }
                 dislikesBtn.setAlpha(1);
                 videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()+1);
-                noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
             }else{
                 dislikesBtn.setAlpha((float) 0.6);
                 videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-                noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
             }
+            noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislikes");
         }
     }
 }

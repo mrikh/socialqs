@@ -15,6 +15,7 @@
     <string name="title_create">Create</string>
     <string name="title_profile">Profile</string>
     <string name="title_answers">Answers</string>
+    <string name="title_video_source">Choose Video Source</string>
 
     <!--   Strings   -->
     <string name="invalid_email">Email address is incorrect</string>
@@ -67,21 +68,24 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="gallery_pick">Upload from Gallery</string>
+    <string name="record">Record Video</string>
 
     <string name="title_heading">What would you like to know?</string>
-    <string name="title_hint">Hint: Try to make it cover the broader picture regarding the question you will ask.</string>
+    <string name="title_hint">Hint: Try keep the question as broad as possible so other members can help answer it</string>
     <string name="title_description">Question</string>
     <string name="category_heading">What area does the question belong to?</string>
-    <string name="category_hint">Hint: Try to be as accurate as possible with the options provided.</string>
+    <string name="category_hint">Hint: Choose as accurately as possible for other members the see your question</string>
     <string name="category_description">Category</string>
 
     <string-array name="category_array">
-        <item>Category</item>
+        <item>General</item>
         <item>Music</item>
         <item>Dance</item>
         <item>Arts</item>
         <item>Sports</item>
         <item>Cooking</item>
         <item>Entertainment</item>
+        <item>Health</item>
     </string-array>
 </resources>

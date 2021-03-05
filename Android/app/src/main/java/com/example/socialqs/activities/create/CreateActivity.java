@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +25,8 @@ public class CreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create);
 
         getSupportActionBar().hide();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         findViewById(R.id.createBackground).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -33,5 +36,18 @@ public class CreateActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home) {
+            if (getFragmentManager().getBackStackEntryCount() > 0 ) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

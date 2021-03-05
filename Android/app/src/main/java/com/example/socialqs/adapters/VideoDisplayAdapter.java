@@ -67,7 +67,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         @SuppressLint("ClickableViewAccessibility")
         void setVideoData(VideoItemModel videoItemModel) {
             videoID = videoItemModel.getVideoID();
-            System.out.println("video id: " + videoID);
             videoView.setVideoPath(videoItemModel.getVideoURL());
             videoQuestion.setText(videoItemModel.getVideoQuestion());
             videoReplies.setText(videoItemModel.getVideoReplyAmount());

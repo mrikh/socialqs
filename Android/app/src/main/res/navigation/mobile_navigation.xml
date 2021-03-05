@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -9,7 +10,24 @@
         android:id="@+id/navigation_home"
         android:name="com.example.socialqs.activities.home.tabs.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_followingFragment"
+            app:destination="@id/navigation_following" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.socialqs.activities.home.notifications.NotificationsFragment"
+        android:label="change"
+        tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_following"
@@ -18,9 +36,8 @@
         tools:layout="@layout/fragment_following" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.socialqs.activities.home.notifications.NotificationsFragment"
-        android:label="change"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.socialqs.activities.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -35,8 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //we will load thumbnail using glid library
         Uri uri = Uri.fromFile(com.example.socialqs.constant.Constant.allMediaList.get(position));
 
-        Glide.with(mContext)
-                .load(uri).thumbnail(0.1f).into(((FileLayoutHolder) holder).thumbnail);
+        Glide.with(mContext).load(uri).thumbnail(0.1f).into(((FileLayoutHolder) holder).thumbnail);
     }
 
     @Override

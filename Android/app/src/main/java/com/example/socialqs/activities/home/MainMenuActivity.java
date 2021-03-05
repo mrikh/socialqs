@@ -45,23 +45,19 @@ public class MainMenuActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                NavController navController = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
-                switch (item.getItemId()){
-                    case R.id.navigation_create:
-                        Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
-                        startActivity(myIntent);
-                        return false;
-                    default:
-                        NavigationUI.onNavDestinationSelected(item, navController);
-                        break;
-                }
-                
-                return true;
+        navView.setOnNavigationItemSelectedListener(item -> {
+            NavController navController1 = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
+            switch (item.getItemId()){
+                case R.id.navigation_create:
+                    Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                    startActivity(myIntent);
+                    return false;
+                default:
+                    NavigationUI.onNavDestinationSelected(item, navController1);
+                    break;
             }
+
+            return true;
         });
     }
 
@@ -79,7 +75,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title, String color, int titleColorId) {
-
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
 

@@ -18,12 +18,12 @@
         tools:targetApi="m">
 
         <activity android:name=".activities.prelogin.PreLoginActivity" />
-        <activity android:name=".activities.create.CreateActivity" />
+        <activity android:name=".activities.create.CreateActivity"
+            android:label="@string/title_video_source"/>
 
         <activity android:name=".activities.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -48,7 +48,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
