@@ -18,6 +18,7 @@
         tools:targetApi="m">
 
         <activity android:name=".activities.prelogin.PreLoginActivity" />
+        <activity android:name=".activities.create.CreateActivity" />
 
         <activity android:name=".activities.main.MainActivity">
             <intent-filter>
