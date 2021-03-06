@@ -68,6 +68,9 @@
     <string name="no_questions">No questions yet</string>
     <string name="no_questions_extra">Start asking questions!</string>
 
+<!--    <string name="video_option_1">Record Video</string>-->
+<!--    <string name="video_option_2">Choose From Gallery</string>-->
+<!--    <string name="video_option_3">Cancel</string>-->
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

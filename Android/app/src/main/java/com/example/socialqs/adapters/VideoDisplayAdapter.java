@@ -2,6 +2,7 @@ package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,9 +13,11 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
+import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.models.VideoItemModel;
 
@@ -123,6 +126,38 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                     context.startActivity(myIntent);
                 }
             });
+
+            replyToVideoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoView.pause();
+                    videoOptions();
+                }
+            });
+        }
+
+        private void videoOptions(){
+            final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (options[item].equals("Record Video"))
+                    {
+                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
+                        context.startActivity(myIntent);
+                    }
+                    else if (options[item].equals("Choose from Gallery"))
+                    {
+                        //TODO Add Gallery Code
+                    }
+                    else {
+                        dialog.dismiss();
+                        videoView.start();
+                    }
+                }
+            });
+            builder.show();
         }
 
     }
