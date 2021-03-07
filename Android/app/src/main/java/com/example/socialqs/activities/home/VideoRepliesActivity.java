@@ -86,7 +86,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     if(videoReplies.size() == 0){
                         noRepliesLayout.setVisibility(View.VISIBLE);
                     }else {
-                        recyclerView.setAdapter(new VideoRepliesAdapter(videoReplies));
+                        recyclerView.setAdapter(new VideoRepliesAdapter(getApplicationContext(), videoReplies));
                     }
 
                 } catch (Exception e) {

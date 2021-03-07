@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/reply_to_video_cardview"
+        android:id="@+id/answer_question"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:cardCornerRadius="50dp"
@@ -41,7 +41,7 @@
         app:layout_constraintVertical_bias="0.942">
 
         <ImageView
-            android:id="@+id/reply_to_video_img_view"
+            android:id="@+id/answer_question_img_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"

@@ -1,6 +1,9 @@
 package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,10 +14,12 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.models.VideoRepliesModel;
 
 import java.util.List;
@@ -22,9 +27,11 @@ import java.util.List;
 public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapter.RepliesViewHolder> {
 
     private List<VideoRepliesModel> replyList;
+    private Context context;
 
-    public VideoRepliesAdapter(List<VideoRepliesModel> replyList) {
+    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
+        this.context = context;
     }
 
     @NonNull
@@ -48,7 +55,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private VideoView videoView;
         private LinearLayout correctAnswer;
         private CardView likesBtn, dislikesBtn;
-        private TextView authorName, noOfLikes, noOfDislikes;
+        private TextView authorName, noOfLikes, noOfDislikes, answerQuestionBtn;
         private ImageView authorImg, playBtn;
         private String videoQuestionID;
         private boolean isCorrect;
@@ -64,6 +71,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn = itemView.findViewById(R.id.reply_dislikes_cardview);
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
+            answerQuestionBtn = itemView.findViewById(R.id.answer_question_img_view);
+
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -117,6 +126,37 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             authorName.setOnClickListener(v -> {
                 // TODO GO TO OTHER USER PROFILE
             });
+
+            answerQuestionBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoView.pause();
+                    videoOptions();
+                }
+            });
+        }
+
+        private void videoOptions(){
+            final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (options[item].equals("Record Video")) {
+                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent.putExtra("videoOption", "1");
+                        context.startActivity(myIntent);
+                    } else if (options[item].equals("Choose from Gallery")) {
+                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent.putExtra("videoOption", "2");
+                        context.startActivity(myIntent);
+                    } else {
+                        dialog.dismiss();
+                        videoView.start();
+                    }
+                }
+            });
+            builder.show();
         }
 
         @SuppressLint("SetTextI18n")
