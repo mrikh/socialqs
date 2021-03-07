@@ -17,14 +17,14 @@ import android.widget.Spinner;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.models.Question;
+import com.example.socialqs.models.QuestionModel;
 
 public class QuestionTitleFragment extends Fragment {
-    Question question = new Question();
+    private QuestionModel question = new QuestionModel();
 
-    ImageView closeBtn, proceedBtn;
-    EditText title, category;
-    Spinner spinner;
+    private ImageView closeBtn, proceedBtn;
+    private EditText title, category;
+    private Spinner spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

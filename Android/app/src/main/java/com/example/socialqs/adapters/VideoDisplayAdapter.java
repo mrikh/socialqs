@@ -77,8 +77,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoItemModel.getAuthorName());
 
-            // TODO NAVIGATE TO 'CREATE' TO REPLY TO VIDEO POST
-
             // TODO BOOKMARK
 
             //Prepare Video
@@ -98,7 +96,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                         videoView.pause();
                         playBtn.setVisibility(View.VISIBLE);
 
-                        // TODO Can this work if added to the res anim folder?
                         //Play Button Animation
                         playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
                             @Override
@@ -142,16 +139,15 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int item) {
-                    if (options[item].equals("Record Video"))
-                    {
+                    if (options[item].equals("Record Video")) {
                         Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent.putExtra("videoOption", "1");
                         context.startActivity(myIntent);
-                    }
-                    else if (options[item].equals("Choose from Gallery"))
-                    {
-                        //TODO Add Gallery Code
-                    }
-                    else {
+                    } else if (options[item].equals("Choose from Gallery")) {
+                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent.putExtra("videoOption", "2");
+                        context.startActivity(myIntent);
+                    } else {
                         dialog.dismiss();
                         videoView.start();
                     }

@@ -21,7 +21,8 @@ import com.example.socialqs.R;
 
 public class AnswerQuestionActivity extends AppCompatActivity{
 
-    private static int VIDEO_REQUEST = 101;
+    private static int VIDEO_RECORD = 1;
+    private static final int GET_FROM_GALLERY = 2;
     private Uri videoUri = null;
     private VideoView video;
     private ImageView backBtn, confirmBtn;
@@ -31,24 +32,28 @@ public class AnswerQuestionActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_question);
+        getSupportActionBar().hide();
+
         video = findViewById(R.id.video_recording);
         backBtn = findViewById(R.id.back_btn);
         confirmBtn = findViewById(R.id.confirm_btn);
+        String code = "1";
+        code = getIntent().getStringExtra("videoOption");
 
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, VIDEO_REQUEST);
+        if(Integer.parseInt(code) == VIDEO_RECORD){
+            startActivityForResult(new Intent(MediaStore.ACTION_VIDEO_CAPTURE), VIDEO_RECORD);
+        }else{
+            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("video/*");
+            startActivityForResult(galleryIntent, GET_FROM_GALLERY);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        getSupportActionBar().hide();
 
-        System.out.println("TESTING Result: " + resultCode);
-
-        if (resultCode == RESULT_OK && requestCode == VIDEO_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIDEO_RECORD || requestCode == GET_FROM_GALLERY) {
             MediaController mediaController = new MediaController(video.getContext()){
                 @Override
                 public void show(int timeout){
@@ -58,9 +63,15 @@ public class AnswerQuestionActivity extends AppCompatActivity{
             };
             mediaController.setAnchorView(video);
             video.setMediaController(mediaController);
-            videoUri = data.getData();
-            video.setVideoURI(videoUri);
-            video.start();
+
+            //If user cancels gallery upload
+            if(data != null){
+                videoUri = data.getData();
+                video.setVideoURI(videoUri);
+                video.start();
+            }else{
+                finish();
+            }
 
             mediaController.requestFocus();
             video.setOnPreparedListener(mp -> {mediaController.show();
@@ -69,10 +80,11 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                 int minutes = (duration / 60) - (hours * 60);
                 int seconds = duration - (hours * 3600) - (minutes * 60);
 
-                if(seconds == 1){
+                //if video is too short
+                if(seconds <= 2){
                     finish();
                     startActivity(getIntent());
-                    Toast.makeText(this, "Recording was not long enough", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Video must be longer than 2 seconds", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -80,13 +92,15 @@ public class AnswerQuestionActivity extends AppCompatActivity{
 
             backBtn.setOnClickListener(v -> {
                 finish();
-                startActivity(getIntent());
+                if(requestCode == VIDEO_RECORD) {
+                    startActivity(getIntent());
+                }
             });
 
             confirmBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO SAVE REPLY TO DATABASE
+                    // TODO SAVE ANSWER TO DATABASE
                     finish();
                 }
             });

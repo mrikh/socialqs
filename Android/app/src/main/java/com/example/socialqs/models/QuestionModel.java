@@ -1,12 +1,12 @@
 package com.example.socialqs.models;
 
-public class Question {
+public class QuestionModel {
 
     private String qId;
     private String qTitle;
     private String qCategory;
 
-    public Question() {
+    public QuestionModel() {
         qId = "";
         qTitle = "";
         qCategory = "";

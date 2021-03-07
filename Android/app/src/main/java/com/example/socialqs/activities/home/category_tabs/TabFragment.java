@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.home.tabs;
+package com.example.socialqs.activities.home.category_tabs;
 ;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A category tab fragment containing video list.

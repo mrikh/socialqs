@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.home.tabs;
+package com.example.socialqs.activities.home.category_tabs;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

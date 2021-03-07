@@ -91,7 +91,6 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                         videoView.pause();
                         playBtn.setVisibility(View.VISIBLE);
 
-                        // TODO Can this work if added to the res anim folder?
                         //Play Button Animation
                         playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
                             @Override
@@ -108,8 +107,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 return false;
             });
 
+            // TODO SAVE LIKE/DISLIKE TO DATABASE
             likesBtn.setOnClickListener(v -> setLikesBtn(videoReplies));
-
             dislikesBtn.setOnClickListener(v -> setDislikesBtn(videoReplies));
 
             authorImg.setOnClickListener(v -> {
