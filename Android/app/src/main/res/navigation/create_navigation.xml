@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/create_navigation"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/questionTitleFragment">
+    app:startDestination="@id/videoDescription">
 
     <fragment
         android:id="@+id/questionTitleFragment"
@@ -30,4 +30,51 @@
         android:name="com.example.socialqs.activities.create.fragments.CreateVideoFragment"
         android:label="fragment_final"
         tools:layout="@layout/fragment_create_video" />
+
+    <fragment
+        android:id="@+id/videoDescription"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDescription"
+        android:label="fragment_video_description"
+        tools:layout="@layout/fragment_video_description" >
+        <action
+            android:id="@+id/action_titleFragment_to_selectSourceFragment"
+            app:destination="@id/chooseSource" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseSource"
+        android:name="com.example.socialqs.activities.create.fragments.ChooseSource"
+        android:label="fragment_choose_source"
+        tools:layout="@layout/fragment_choose_source" >
+        <action
+            android:id="@+id/onRecord"
+            app:destination="@id/videoRecord" />
+        <action
+            android:id="@+id/onPick"
+            app:destination="@id/videoList" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoRecord"
+        android:name="com.example.socialqs.activities.create.fragments.VideoRecord"
+        android:label="fragment_video_record"
+        tools:layout="@layout/fragment_video_record" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoList"
+        android:name="com.example.socialqs.activities.create.fragments.VideoList"
+        android:label="fragment_video_list"
+        tools:layout="@layout/fragment_video_list" >
+        <action
+            android:id="@+id/onSelection"
+            app:destination="@id/videoDisplay" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoDisplay"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDisplay"
+        android:label="fragment_video_display"
+        tools:layout="@layout/fragment_video_display" />
+
 </navigation>

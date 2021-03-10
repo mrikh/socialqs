@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.create.fragments.SelectVideoSourceFragment">
+    tools:context=".activities.create.fragments.ChooseSource">
+
 
     <Button
         android:id="@+id/pickFromGallery"

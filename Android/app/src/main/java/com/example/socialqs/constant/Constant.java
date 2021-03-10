@@ -12,4 +12,7 @@ public class Constant {
 
     public static ArrayList<File> allMediaList = new ArrayList<>();
 
+    public static int CAMERA_PERMISSION = 101;
+
+    public static int FILE_ACCESS_PERMISSION = 102;
 }
