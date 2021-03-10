@@ -1,5 +1,7 @@
 package com.example.socialqs.activities.create;
 
+import com.example.socialqs.constant.Constant;
+
 import java.io.File;
 
 public class Method {
@@ -14,7 +16,7 @@ public class Method {
                     String name = fileList[i].getName().toLowerCase();
                     for(String extension : com.example.socialqs.constant.Constant.videoExtensions) {
                         if(name.endsWith(extension)) {
-                            com.example.socialqs.constant.Constant.allMediaList.add(fileList[i]);
+                            Constant.allMediaList.add(fileList[i]);
                             break;
                         }
                     }

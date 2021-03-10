@@ -3,31 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/create_navigation"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/titleFragment">
+    app:startDestination="@id/videoDescription">
 
     <fragment
-        android:id="@+id/titleFragment"
-        android:name="com.example.socialqs.activities.create.fragments.TitleFragment"
-        android:label="fragment_title"
-        tools:layout="@layout/fragment_title" >
+        android:id="@+id/videoDescription"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDescription"
+        android:label="fragment_video_description"
+        tools:layout="@layout/fragment_video_description" >
         <action
             android:id="@+id/action_titleFragment_to_selectSourceFragment"
-            app:destination="@id/selectSourceFragment" />
+            app:destination="@id/chooseSource" />
     </fragment>
 
     <fragment
-        android:id="@+id/selectSourceFragment"
-        android:name="com.example.socialqs.activities.create.fragments.SelectSourceFragment"
-        android:label="fragment_select_source"
-        tools:layout="@layout/fragment_select_source" >
+        android:id="@+id/chooseSource"
+        android:name="com.example.socialqs.activities.create.fragments.ChooseSource"
+        android:label="fragment_choose_source"
+        tools:layout="@layout/fragment_choose_source" >
         <action
-            android:id="@+id/action_selectSourceFragment_to_finalFragment"
-            app:destination="@id/finalFragment" />
+            android:id="@+id/onRecord"
+            app:destination="@id/videoRecord" />
+        <action
+            android:id="@+id/onPick"
+            app:destination="@id/videoList" />
     </fragment>
 
     <fragment
-        android:id="@+id/finalFragment"
-        android:name="com.example.socialqs.activities.create.fragments.FinalFragment"
-        android:label="fragment_final"
-        tools:layout="@layout/fragment_final" />
+        android:id="@+id/videoRecord"
+        android:name="com.example.socialqs.activities.create.fragments.VideoRecord"
+        android:label="fragment_video_record"
+        tools:layout="@layout/fragment_video_record" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoList"
+        android:name="com.example.socialqs.activities.create.fragments.VideoList"
+        android:label="fragment_video_list"
+        tools:layout="@layout/fragment_video_list" >
+        <action
+            android:id="@+id/onSelection"
+            app:destination="@id/videoDisplay" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoDisplay"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDisplay"
+        android:label="fragment_video_display"
+        tools:layout="@layout/fragment_video_display" />
+
 </navigation>
