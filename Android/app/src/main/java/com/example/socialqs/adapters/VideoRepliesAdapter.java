@@ -46,6 +46,13 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         holder.setData(replyList.get(position));
     }
 
+    public void autoUpdateVideoView(Boolean playing){
+
+        if (playing){
+            
+        }
+    }
+
     @Override
     public int getItemCount() {
         return replyList.size();
@@ -55,7 +62,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private VideoView videoView;
         private LinearLayout correctAnswer;
         private CardView likesBtn, dislikesBtn;
-        private TextView authorName, noOfLikes, noOfDislikes, answerQuestionBtn;
+        private TextView authorName, noOfLikes, noOfDislikes;
         private ImageView authorImg, playBtn;
         private String videoQuestionID;
         private boolean isCorrect;
@@ -71,8 +78,6 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn = itemView.findViewById(R.id.reply_dislikes_cardview);
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
-            answerQuestionBtn = itemView.findViewById(R.id.answer_question_img_view);
-
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -97,16 +102,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
                 if(action == MotionEvent.ACTION_UP) {
                     if (videoView.isPlaying()) {
-                        videoView.pause();
-                        playBtn.setVisibility(View.VISIBLE);
-
-                        //Play Button Animation
-                        playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                playBtn.animate().scaleX(1).scaleY(1).setDuration(300);
-                            }
-                        });
+                        playWithAnimation();
                     } else {
                         videoView.start();
                         playBtn.setVisibility(View.INVISIBLE);
@@ -126,37 +122,19 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             authorName.setOnClickListener(v -> {
                 // TODO GO TO OTHER USER PROFILE
             });
-
-            answerQuestionBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    videoView.pause();
-                    videoOptions();
-                }
-            });
         }
 
-        private void videoOptions(){
-            final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setItems(options, new DialogInterface.OnClickListener() {
+        private void playWithAnimation(){
+            videoView.pause();
+            playBtn.setVisibility(View.VISIBLE);
+
+            //Play Button Animation
+            playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {
                 @Override
-                public void onClick(DialogInterface dialog, int item) {
-                    if (options[item].equals("Record Video")) {
-                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
-                        myIntent.putExtra("videoOption", "1");
-                        context.startActivity(myIntent);
-                    } else if (options[item].equals("Choose from Gallery")) {
-                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
-                        myIntent.putExtra("videoOption", "2");
-                        context.startActivity(myIntent);
-                    } else {
-                        dialog.dismiss();
-                        videoView.start();
-                    }
+                public void run() {
+                    playBtn.animate().scaleX(1).scaleY(1).setDuration(300);
                 }
             });
-            builder.show();
         }
 
         @SuppressLint("SetTextI18n")

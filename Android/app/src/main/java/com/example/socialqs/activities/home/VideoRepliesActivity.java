@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,9 +10,11 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +44,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayout noRepliesLayout;
     private ProgressBar progressBar;
+    private ImageView answerQuestionBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.VISIBLE);
 
+        answerQuestionBtn = findViewById(R.id.answer_question_img_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -94,6 +99,39 @@ public class VideoRepliesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        answerQuestionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VideoRepliesAdapter adapter = (VideoRepliesAdapter) recyclerView.getAdapter();
+                adapter.autoUpdateVideoView(false);
+                videoOptions();
+            }
+        });
+    }
+
+    private void videoOptions(){
+        final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Record Video")) {
+                    Intent myIntent = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
+                    myIntent.putExtra("videoOption", "1");
+                    startActivity(myIntent);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent myIntent = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
+                    myIntent.putExtra("videoOption", "2");
+                    startActivity(myIntent);
+                } else {
+                    dialog.dismiss();
+                    VideoRepliesAdapter adapter = (VideoRepliesAdapter) recyclerView.getAdapter();
+                    adapter.autoUpdateVideoView(true);
+                }
+            }
+        });
+        builder.show();
     }
 
     @Override
