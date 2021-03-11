@@ -68,11 +68,8 @@
     <string name="no_questions">No questions yet</string>
     <string name="no_questions_extra">Start asking questions!</string>
 
-<!--    <string name="video_option_1">Record Video</string>-->
-<!--    <string name="video_option_2">Choose From Gallery</string>-->
-<!--    <string name="video_option_3">Cancel</string>-->
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="read_more"><u>Read More</u></string>
+    <string name="read_less"><u>Read Less</u></string>
 
     <string name="gallery_pick">Upload from Gallery</string>
     <string name="record">Record Video</string>
@@ -80,7 +77,7 @@
     <string name="title_heading">What would you like to know?</string>
     <string name="title_hint">Hint: Try keep the question as broad as possible so other members can help answer it</string>
     <string name="title_description">Question</string>
-    <string name="category_heading">What area does the question belong to?</string>
+    <string name="category_heading">What category does the question belong to?</string>
     <string name="category_hint">Hint: Choose as accurately as possible for other members the see your question</string>
     <string name="category_description">Category</string>
 
