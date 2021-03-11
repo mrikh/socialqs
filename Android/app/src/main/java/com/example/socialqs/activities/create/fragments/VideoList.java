@@ -76,7 +76,12 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
 
         recyclerViewAdapter = new RecyclerViewAdapter(context);
         recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.setClickListener(this);
+        recyclerViewAdapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Context context) {
+                System.out.println("yo");
+            }
+        });
 
         return view;
     }
