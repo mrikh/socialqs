@@ -10,9 +10,6 @@ public class Constant {
             ".bup", ".dv",".flv",".m1v",".m2ts",".mpeg4",".vlc",".3g2",
             ".avi",".mpeg",".mpg",".wmv",".asf"};
 
-    public static ArrayList<File> allMediaList = new ArrayList<>();
-
     public static int CAMERA_PERMISSION = 101;
-
     public static int FILE_ACCESS_PERMISSION = 102;
 }

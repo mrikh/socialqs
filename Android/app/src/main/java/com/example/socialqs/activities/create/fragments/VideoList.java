@@ -14,23 +14,23 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.socialqs.R;
-import com.example.socialqs.activities.create.Method;
 import com.example.socialqs.adapters.RecyclerViewAdapter;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.utils.StorageUtil;
+import com.example.socialqs.utils.helperInterfaces.VideoUploadCompletion;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClickListener {
 
@@ -38,7 +38,8 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     private RecyclerViewAdapter recyclerViewAdapter;
     private Uri fileUri;
 
-    private String path;
+    private ArrayList<File> allMediaList = new ArrayList<>();
+
     private File storage;
     private String[] storagePaths;
 
@@ -57,12 +58,12 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
 
         for (String path : storagePaths) {
             storage = new File(path);
-            Method.load_Directory_Files(storage);
+            load_Directory_Files(storage);
         }
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
         }
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -74,12 +75,15 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         recyclerView.setNestedScrollingEnabled(false);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(context);
+        recyclerViewAdapter = new RecyclerViewAdapter(context, allMediaList);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position, Context context) {
-                System.out.println("yo");
+                String path = Uri.fromFile(allMediaList.get(position)).getPath();
+
+                NavController navController = NavHostFragment.findNavController(VideoList.this);
+                navController.getPreviousBackStackEntry().getSavedStateHandle().set("videoPath", path);
             }
         });
 
@@ -90,7 +94,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constant.FILE_ACCESS_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 accessFile();
             } else {
                 //TODO: pop the current fragment and go back to previous fragment
@@ -105,7 +109,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
 
         for (String path : storagePaths) {
             storage = new File(path);
-            Method.load_Directory_Files(storage);
+            load_Directory_Files(storage);
         }
 
         recyclerViewAdapter.notifyDataSetChanged();
@@ -114,7 +118,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     @Override
     public void onStop() {
         super.onStop();
-        Constant.allMediaList.clear();
+        allMediaList.clear();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -123,8 +127,8 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constant.FILE_ACCESS_PERMISSION) {
-            if (resultCode == Activity.RESULT_OK){
-                fileUri  = data.getData();
+            if (resultCode == Activity.RESULT_OK) {
+                fileUri = data.getData();
                 getActivity().getContentResolver().takePersistableUriPermission(fileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                         | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
@@ -134,9 +138,26 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     @Override
     public void onItemClick(View view, int position, Context context) {
 
-        path = Uri.fromFile(Constant.allMediaList.get(position)).getPath();
+    }
 
-        Toast.makeText(context, "You clicked" + Constant.allMediaList.get(position).getPath(), Toast.LENGTH_SHORT).show();
+    public void load_Directory_Files(File directory) {
+        File[] fileList = directory.listFiles();
+        if(fileList != null && fileList.length > 0) {
+            for (int i = 0; i<fileList.length; i++) {
+                if(fileList[i].isDirectory()) {
+                    load_Directory_Files(fileList[i]);
+                }
+                else {
+                    String name = fileList[i].getName().toLowerCase();
+                    for(String extension : com.example.socialqs.constant.Constant.videoExtensions) {
+                        if(name.endsWith(extension)) {
+                            allMediaList.add(fileList[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

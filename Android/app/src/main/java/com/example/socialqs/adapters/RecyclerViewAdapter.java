@@ -17,12 +17,17 @@ import com.example.socialqs.R;
 import com.bumptech.glide.Glide;
 import com.example.socialqs.constant.Constant;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private ItemClickListener myItemClickListener;
+    private ArrayList<File> allMediaList;
 
-    public RecyclerViewAdapter(Context mContext) {
+    public RecyclerViewAdapter(Context mContext, ArrayList<File> media) {
+        this.allMediaList = media;
         this.mContext = mContext;
     }
 
@@ -35,16 +40,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((FileLayoutHolder) holder).videoTitle.setText(Constant.allMediaList.get(position).getName());
+        ((FileLayoutHolder) holder).videoTitle.setText(allMediaList.get(position).getName());
         //we will load thumbnail using glid library
-        Uri uri = Uri.fromFile(Constant.allMediaList.get(position));
+        Uri uri = Uri.fromFile(allMediaList.get(position));
 
         Glide.with(mContext).load(uri).thumbnail(0.1f).into(((FileLayoutHolder) holder).thumbnail);
     }
 
     @Override
     public int getItemCount() {
-        return Constant.allMediaList.size();
+        return allMediaList.size();
     }
 
     class FileLayoutHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,12 +62,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             thumbnail = itemView.findViewById(R.id.thumbnail);
             videoTitle = itemView.findViewById(R.id.videotitle);
+
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (myItemClickListener != null) {
-                myItemClickListener.onItemClick(v, getAdapterPosition(), mContext);
+                myItemClickListener.onItemClick(v, getLayoutPosition(), mContext);
             }
         }
     }
