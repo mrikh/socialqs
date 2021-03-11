@@ -50,7 +50,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
         updateActionBar();
 
         Intent intent = getIntent();
-        String videoID = intent.getStringExtra("Video ID");
+        String videoID = intent.getStringExtra("video_id");
 
         recyclerView = findViewById(R.id.video_replies_recycler);
         noRepliesLayout = findViewById(R.id.no_replies_layout);

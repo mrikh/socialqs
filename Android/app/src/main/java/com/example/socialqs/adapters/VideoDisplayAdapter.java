@@ -31,7 +31,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     public VideoDisplayAdapter(List<VideoItemModel> videoItemModels, Context context){
         this.videoItemModels = videoItemModels;
         this.context = context;
-
     }
 
     @NonNull
@@ -119,7 +118,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 @Override
                 public void onClick(View v) {
                     Intent myIntent = new Intent(context, VideoRepliesActivity.class);
-                    myIntent.putExtra("Video ID", videoID);
+                    myIntent.putExtra("video_id", videoID);
                     context.startActivity(myIntent);
                 }
             });
