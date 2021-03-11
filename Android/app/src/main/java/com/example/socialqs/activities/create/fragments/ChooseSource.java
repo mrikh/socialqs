@@ -103,9 +103,8 @@ public class ChooseSource extends Fragment {
 
         if(requestCode == Constant.CAMERA_PERMISSION) {
             Uri videoUri = data.getData();
-            String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
             String filePath = FilePath.getPath(getContext(), videoUri);
-            ((CreateActivity)getActivity()).uploadAction(filename, filePath);
+            ((CreateActivity)getActivity()).uploadAction(Utilities.getInstance().getFileName(), filePath);
         }
     }
 

@@ -17,6 +17,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.example.socialqs.models.UserModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -35,6 +36,10 @@ public class Utilities {
         }
 
         return shared;
+    }
+
+    public String getFileName(){
+        return UserModel.current.id + Long.toString(System.currentTimeMillis());
     }
 
     public String s3UrlString(String filename){

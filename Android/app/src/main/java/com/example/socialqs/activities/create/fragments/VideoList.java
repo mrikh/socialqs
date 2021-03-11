@@ -30,6 +30,7 @@ import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.StorageUtil;
+import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.VideoUploadCompletion;
 
 import java.io.File;
@@ -84,8 +85,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
             @Override
             public void onItemClick(View view, int position, Context context) {
                 String path = Uri.fromFile(allMediaList.get(position)).getPath();
-                String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
-                ((CreateActivity)getActivity()).uploadAction(filename, path);
+                ((CreateActivity)getActivity()).uploadAction(Utilities.getInstance().getFileName(), path);
             }
         });
 
