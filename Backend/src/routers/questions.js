@@ -115,7 +115,8 @@ router.get('/questions/list', auth, async (req, res, next) => {
                 }
             }, {$unwind : "$category"},{
                 $unset: ["createdAt", "updatedAt", "__v"]
-            }
+            },
+            { $sort : { createdAt : -1 } }
         ])
 
         var finalJson = results.map((question) => {
