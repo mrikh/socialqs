@@ -45,7 +45,6 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -77,6 +76,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
 
         recyclerViewAdapter = new RecyclerViewAdapter(context);
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.setClickListener(this);
 
         return view;
     }
@@ -131,11 +131,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
 
         path = Uri.fromFile(Constant.allMediaList.get(position)).getPath();
 
-        Toast.makeText(
-                context,
-                "You clicked" + Constant.allMediaList.get(position).getPath(),
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "You clicked" + Constant.allMediaList.get(position).getPath(), Toast.LENGTH_SHORT).show();
     }
-
 }
 

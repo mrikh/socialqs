@@ -3,7 +3,9 @@ package com.example.socialqs.activities.create.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,9 +31,12 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.Utilities;
 
 import java.net.URISyntaxException;
+
+import okhttp3.internal.Util;
 
 public class ChooseSource extends Fragment {
 
@@ -71,7 +76,6 @@ public class ChooseSource extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.onPick);
             }
         });
-
     }
 
     @Override
@@ -95,25 +99,32 @@ public class ChooseSource extends Fragment {
 
             Uri videoUri = data.getData();
             String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
+            String filePath = FilePath.getPath(getContext(), videoUri);
 
             try {
-                Utilities.getInstance().uploadFile(filename, videoUri.toString(), getContext(), new TransferListener() {
+                ((CreateActivity)getActivity()).updateProgress(View.VISIBLE);
+                Utilities.getInstance().uploadFile(filename, "file:" + filePath, getContext(), new TransferListener() {
                     @Override
                     public void onStateChanged(int id, TransferState state) {
-                        System.out.println("============= 1 ===========");
+                        if (state == TransferState.IN_PROGRESS){
+                            ((CreateActivity)getActivity()).updateProgress(View.VISIBLE);
+                        }else{
+                            ((CreateActivity)getActivity()).updateProgress(View.INVISIBLE);
+                        }
                     }
 
                     @Override
                     public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        System.out.println("============= 2 ===========");
+
                     }
 
                     @Override
                     public void onError(int id, Exception ex) {
-                        System.out.println("============= 3 ===========");
+                        ((CreateActivity)getActivity()).updateProgress(View.INVISIBLE);
+                        Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", getContext(), null).show();
                     }
                 });
-            } catch (URISyntaxException e) {
+            } catch (Exception e) {
                 Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
             }
         }

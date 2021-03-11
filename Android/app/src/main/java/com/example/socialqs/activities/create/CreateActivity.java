@@ -19,16 +19,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.socialqs.R;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.QuestionModel;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
 
 public class CreateActivity extends AppCompatActivity {
 
     public ArrayList<CategoryModel> categories;
+    private ProgressBar progressBar;
     public QuestionModel question = new QuestionModel();
 
     @Override
@@ -52,6 +56,11 @@ public class CreateActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        progressBar = findViewById(R.id.progress);
+        Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -77,5 +86,9 @@ public class CreateActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(show);
         }
+    }
+
+    public void updateProgress(int visibility){
+        progressBar.setVisibility(visibility);
     }
 }

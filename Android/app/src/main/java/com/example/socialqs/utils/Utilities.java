@@ -15,6 +15,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -36,7 +37,7 @@ public class Utilities {
     }
 
 //    https://grokonez.com/android/uploaddownload-files-images-amazon-s3-android
-    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws URISyntaxException {
+    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {
         CognitoCredentialsProvider cred = new CognitoCredentialsProvider("eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0", Regions.EU_WEST_1);
         AmazonS3Client client = new AmazonS3Client(cred);
 
@@ -47,7 +48,7 @@ public class Utilities {
                 .build();
 
         File file = new File(new URI(path));
-        TransferObserver observer = utility.upload(fileName, file);
+        TransferObserver observer = utility.upload("socialqs-bucket", fileName, file, CannedAccessControlList.PublicRead);
 
         observer.setTransferListener(listener);
     }
