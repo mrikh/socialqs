@@ -15,13 +15,13 @@ router.post('/answers/answer', auth, async (req, res, next) => {
         params.creator = req.user._id
 
         const answer = new Answer(params)
-        console.log("yo")
+        
         if(!answer){
             const error = new Error(constants.params_missing)
             error.statusCode = 400
             throw error
         }
-        console.log("yo1")
+        
         await answer.save()        
         await answer.populate({
             path: 'creator',
@@ -30,15 +30,23 @@ router.post('/answers/answer', auth, async (req, res, next) => {
             path: 'questionId',
             options: { select: { creator: 1, _id: 1, title: 1 } }
         }).execPopulate()
-        console.log("yo2")
+        
         if (!req.user._id.equals(answer.questionId.creator._id)){
             //create notification
-            console.log("yo4")
-            const creatorUser = await User.findById(req.creator._id)
+            const message = constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+            const title = constants.new_answer_title
+            const notification = new Notification({
+                users : [answer.questionId.creator], 
+                questionId : answer.questionId, 
+                title : title,
+                body: message
+            })
+
+            const creatorUser = await User.findById(answer.questionId.creator._id)
             const message = {
                 notification : {
-                    title : constants.new_answer_title,
-                    body : constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+                    title : title,
+                    body : message
                 },
                 token : creatorUser.pushToken
             }
