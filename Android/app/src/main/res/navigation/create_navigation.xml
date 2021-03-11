@@ -6,16 +6,6 @@
     app:startDestination="@id/videoDescription">
 
     <fragment
-        android:id="@+id/questionTitleFragment"
-        android:name="com.example.socialqs.activities.create.fragments.QuestionTitleFragment"
-        android:label="fragment_question_title"
-        tools:layout="@layout/fragment_question_title">
-        <action
-            android:id="@+id/action_questionTitleFragment_to_selectVideoSourceFragment"
-            app:destination="@id/selectVideoSourceFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/selectVideoSourceFragment"
         android:name="com.example.socialqs.activities.create.fragments.SelectVideoSourceFragment"
         android:label="fragment_select_source"

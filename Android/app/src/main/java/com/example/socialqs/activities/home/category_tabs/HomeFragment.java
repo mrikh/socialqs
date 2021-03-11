@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.VISIBLE);
 
-        List<CategoryModel> categoryList = new ArrayList<>();
+        ArrayList<CategoryModel> categoryList = new ArrayList<>();
 
         NetworkHandler.getInstance().categoryListing(new NetworkingClosure() {
             @Override
@@ -95,6 +95,8 @@ public class HomeFragment extends Fragment {
 
                     adapter = new TabSectionsAdapter(HomeFragment.this, categoryList);
                     viewPager.setAdapter(adapter);
+
+                    ((MainMenuActivity) getActivity()).categoryList = categoryList;
 
                     //Adding the category names to the tabs
                     new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab.setText(categoryList.get(position).name)).attach();

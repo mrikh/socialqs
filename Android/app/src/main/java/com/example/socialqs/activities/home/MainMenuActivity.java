@@ -13,7 +13,9 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.main.MainActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.Utilities;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -25,10 +27,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Main App Navigation Menu Controller
  */
 public class MainMenuActivity extends AppCompatActivity {
+
+    public ArrayList<CategoryModel> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,16 @@ public class MainMenuActivity extends AppCompatActivity {
             NavController navController1 = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
             switch (item.getItemId()){
                 case R.id.navigation_create:
+
+                    if (categoryList == null){
+                        Utilities.getInstance().createSingleActionAlert("Please wait while we fetch all the categories.", "Okay", MainMenuActivity.this, null).show();
+                        return false;
+                    }
+
                     Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                    Bundle arguments = new Bundle();
+                    arguments.putParcelableArrayList("categories", categoryList);
+                    myIntent.putExtras(arguments);
                     startActivity(myIntent);
                     return false;
                 default:

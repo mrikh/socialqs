@@ -25,6 +25,7 @@ import android.widget.Button;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
 
 public class SelectVideoSourceFragment extends Fragment {
 
@@ -105,14 +106,9 @@ public class SelectVideoSourceFragment extends Fragment {
     }
 
     private void updateActionBar(){
-        ((CreateActivity) getActivity()).getSupportActionBar().show();
-        ((CreateActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((CreateActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
-        ((CreateActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
 
-        Spannable text = new SpannableString(((CreateActivity) getActivity()).getSupportActionBar().getTitle());
-        text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        ((CreateActivity) getActivity()).getSupportActionBar().setTitle(text);
+        ((CreateActivity)getActivity()).updateActionBarBack(true);
+        ((CreateActivity)getActivity()).setActionBarTitle("Select Source", "#ffffff", R.color.black);
     }
 }
 

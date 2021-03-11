@@ -16,11 +16,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
+import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.QuestionModel;
+import com.example.socialqs.utils.Utilities;
+
+import java.util.ArrayList;
 
 public class VideoDescription extends Fragment {
+
     QuestionModel question = new QuestionModel();
 
+    private ArrayList<CategoryModel> categories;
     ImageView close, proceed;
     EditText title;
     Spinner spinner;
@@ -30,13 +37,22 @@ public class VideoDescription extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_video_description, container, false);
 
+        this.categories = ((CreateActivity) getActivity()).categories;
+
+        for (CategoryModel model : categories){
+            if (model.name.equalsIgnoreCase("all")){
+                categories.remove(model);
+                break;
+            }
+        }
+
         close = view.findViewById(R.id.close);
         proceed = view.findViewById(R.id.proceed);
 
         title = view.findViewById(R.id.title);
         spinner = view.findViewById(R.id.spinner);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.category_array, R.layout.spinner_item);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, categories);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -53,10 +69,12 @@ public class VideoDescription extends Fragment {
             @Override
             public void onClick(View v) {
                 question.setqTitle(title.getText().toString());
-                question.setqCategory(spinner.getSelectedItem().toString());
+                question.setqCategory((CategoryModel)spinner.getSelectedItem());
 
-                if (!question.getqTitle().isEmpty() && question.getqCategory().compareTo("Category") != 0) {
+                if (!question.getqTitle().isEmpty() && question.getqCategory() != null) {
                     Navigation.findNavController(v).navigate(R.id.action_titleFragment_to_selectSourceFragment);
+                }else{
+                    Utilities.getInstance().createSingleActionAlert("Please select the options", "Alert", getActivity(), null).show();
                 }
             }
         });

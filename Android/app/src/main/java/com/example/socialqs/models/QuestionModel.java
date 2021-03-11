@@ -4,12 +4,11 @@ public class QuestionModel {
 
     private String qId;
     private String qTitle;
-    private String qCategory;
+    private CategoryModel qCategory;
 
     public QuestionModel() {
         qId = "";
         qTitle = "";
-        qCategory = "";
     }
 
     public String getqId() {
@@ -28,11 +27,11 @@ public class QuestionModel {
         this.qTitle = qTitle;
     }
 
-    public String getqCategory() {
+    public CategoryModel getqCategory() {
         return qCategory;
     }
 
-    public void setqCategory(String qCategory) {
+    public void setqCategory(CategoryModel qCategory) {
         this.qCategory = qCategory;
     }
 }
