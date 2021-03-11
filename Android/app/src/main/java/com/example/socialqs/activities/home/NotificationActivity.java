@@ -1,8 +1,14 @@
 package com.example.socialqs.activities.home;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,18 +39,13 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
 
-    private final static String LONG_TEXT = "Lorem ipsum dolor sit amet, et" +
-            " alienum inciderint efficiantur nec, posse causae molestie" +
-            " eos in. Ea vero praesent vix, nam soleat recusabo id." +
-            " Qui ut exerci option laboramus. In habeo posse ridens quo," +
-            " eligendi volutpat interesset ut est, mel nibh accusamus no." +
-            " Te eam consulatu repudiare adipiscing, usu et choro quodsi euripidis.";
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        recyclerView = findViewById(R.id.video_replies_recycler);
+        updateActionBar();
+
+        recyclerView = findViewById(R.id.notification_recycler);
 
         progressBar = findViewById(R.id.progress);
         Sprite doubleBounce = new DoubleBounce();
@@ -57,34 +58,60 @@ public class NotificationActivity extends AppCompatActivity {
 
         List<NotificationModel> notificationList = new ArrayList<>();
 
-        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
-            @Override
-            public void completion(JSONObject object, String message) {
-                progressBar.setVisibility(View.INVISIBLE);
-                if (object == null) {
-                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
-                    return;
-                }
+        NotificationModel n1 = new NotificationModel();
+        n1.getNotificationTitle();
+        n1.getNotificationMessage();
+        notificationList.add(n1);
 
-                try {
-                    JSONArray arr = object.getJSONArray("result");
-                    for (int i = 0; i < arr.length(); i++) {
-                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
-                        notificationList.add(item);
-                    }
+        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
 
-                    if(notificationList.size() == 0){
-//                        noNotificationLayout.setVisibility(View.VISIBLE);
-                    }else {
-                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
-                    }
+//        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
+//            @Override
+//            public void completion(JSONObject object, String message) {
+//                progressBar.setVisibility(View.INVISIBLE);
+//                if (object == null) {
+//                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
+//                    return;
+//                }
+//
+//                try {
+//                    JSONArray arr = object.getJSONArray("result");
+//                    for (int i = 0; i < arr.length(); i++) {
+//                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
+//                        notificationList.add(item);
+//                    }
+//
+//                    if(notificationList.size() == 0){
+////                        noNotificationLayout.setVisibility(View.VISIBLE);
+//                    }else {
+//                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateActionBar(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
+
+        Spannable text = new SpannableString(getSupportActionBar().getTitle());
+        text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        getSupportActionBar().setTitle(text);
     }
 
 }
