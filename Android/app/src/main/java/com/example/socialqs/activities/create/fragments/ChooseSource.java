@@ -56,18 +56,6 @@ public class ChooseSource extends Fragment {
         pick = view.findViewById(R.id.pickFromGallery);
 
         NavController navController = NavHostFragment.findNavController(this);
-
-//        https://developer.android.com/guide/navigation/navigation-programmatic#returning_a_result
-        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry()
-                .getSavedStateHandle()
-                .getLiveData("videoPath");
-        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                System.out.println("yo");
-            }
-        });
-
         return view;
     }
 
@@ -115,7 +103,9 @@ public class ChooseSource extends Fragment {
 
         if(requestCode == Constant.CAMERA_PERMISSION) {
             Uri videoUri = data.getData();
-            uploadAction(videoUri);
+            String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
+            String filePath = FilePath.getPath(getContext(), videoUri);
+            ((CreateActivity)getActivity()).uploadAction(filename, filePath);
         }
     }
 
@@ -129,38 +119,6 @@ public class ChooseSource extends Fragment {
 
         ((CreateActivity)getActivity()).setActionBarTitle("Select Source", "#ffffff", R.color.black);
         ((CreateActivity)getActivity()).updateActionBarBack(true);
-    }
-
-    private void uploadAction(Uri videoUri){
-        String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
-        String filePath = FilePath.getPath(getContext(), videoUri);
-
-        try {
-            ((CreateActivity)getActivity()).updateProgress(View.VISIBLE);
-            Utilities.getInstance().uploadFile(filename, "file:" + filePath, getContext(), new TransferListener() {
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-                    if (state == TransferState.IN_PROGRESS){
-                        ((CreateActivity)getActivity()).updateProgress(View.VISIBLE);
-                    }else{
-                        ((CreateActivity)getActivity()).updateProgress(View.INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                }
-
-                @Override
-                public void onError(int id, Exception ex) {
-                    ((CreateActivity)getActivity()).updateProgress(View.INVISIBLE);
-                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", getContext(), null).show();
-                }
-            });
-        } catch (Exception e) {
-            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
-        }
     }
 }
 

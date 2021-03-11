@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.View;
 
@@ -34,6 +35,11 @@ public class Utilities {
         }
 
         return shared;
+    }
+
+    public String s3UrlString(String filename){
+
+        return "https://s3.eu-west-1.amazonaws.com/socialqs-bucket/" + filename;
     }
 
 //    https://grokonez.com/android/uploaddownload-files-images-amazon-s3-android

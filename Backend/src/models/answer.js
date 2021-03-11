@@ -24,7 +24,6 @@ const answerSchema = new mongoose.Schema({
     },
     thumbnailUrl : {
         type : String,
-        required : true,
         validate(value){
             if (!validator.isURL(value)){
                 throw new Error(constants.invalid_url)

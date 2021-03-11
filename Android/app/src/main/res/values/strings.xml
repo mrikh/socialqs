@@ -84,14 +84,4 @@
     <string name="category_hint">Hint: Choose as accurately as possible for other members the see your question</string>
     <string name="category_description">Category</string>
 
-    <string-array name="category_array">
-        <item>General</item>
-        <item>Music</item>
-        <item>Dance</item>
-        <item>Arts</item>
-        <item>Sports</item>
-        <item>Cooking</item>
-        <item>Entertainment</item>
-        <item>Health</item>
-    </string-array>
 </resources>

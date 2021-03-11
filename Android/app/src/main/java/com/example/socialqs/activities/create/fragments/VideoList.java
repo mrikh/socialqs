@@ -24,8 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.adapters.RecyclerViewAdapter;
 import com.example.socialqs.constant.Constant;
+import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.StorageUtil;
 import com.example.socialqs.utils.helperInterfaces.VideoUploadCompletion;
 
@@ -81,9 +84,8 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
             @Override
             public void onItemClick(View view, int position, Context context) {
                 String path = Uri.fromFile(allMediaList.get(position)).getPath();
-
-                NavController navController = NavHostFragment.findNavController(VideoList.this);
-                navController.getPreviousBackStackEntry().getSavedStateHandle().set("videoPath", path);
+                String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
+                ((CreateActivity)getActivity()).uploadAction(filename, path);
             }
         });
 
