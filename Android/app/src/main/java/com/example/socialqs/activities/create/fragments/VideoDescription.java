@@ -46,6 +46,8 @@ public class VideoDescription extends Fragment {
             }
         }
 
+        ((CreateActivity) getActivity()).getSupportActionBar().hide();
+
         close = view.findViewById(R.id.close);
         proceed = view.findViewById(R.id.proceed);
 
@@ -74,7 +76,7 @@ public class VideoDescription extends Fragment {
                 if (!question.getqTitle().isEmpty() && question.getqCategory() != null) {
                     Navigation.findNavController(v).navigate(R.id.action_titleFragment_to_selectSourceFragment);
                 }else{
-                    Utilities.getInstance().createSingleActionAlert("Please select the options", "Alert", getActivity(), null).show();
+                    Utilities.getInstance().createSingleActionAlert("Please select the options", "Okay", getActivity(), null).show();
                 }
             }
         });

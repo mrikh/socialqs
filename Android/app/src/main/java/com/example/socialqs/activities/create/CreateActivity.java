@@ -52,6 +52,12 @@ public class CreateActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     public void setActionBarTitle(String title, String color, int titleColorId) {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);

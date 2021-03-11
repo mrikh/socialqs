@@ -7,17 +7,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.constant.Constant;
 
 public class ChooseSource extends Fragment {
@@ -25,15 +28,20 @@ public class ChooseSource extends Fragment {
     Button record, pick;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        ((CreateActivity) getActivity()).getSupportActionBar().show();
         View view = inflater.inflate(R.layout.fragment_choose_source, container, false);
 
         record = view.findViewById(R.id.recordVideo);
         pick = view.findViewById(R.id.pickFromGallery);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -82,6 +90,18 @@ public class ChooseSource extends Fragment {
             //TODO: save the video recorded
             getActivity().finish();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateActionBar();
+    }
+
+    private void updateActionBar(){
+
+        ((CreateActivity)getActivity()).setActionBarTitle("Select Source", "#ffffff", R.color.black);
+        ((CreateActivity)getActivity()).updateActionBarBack(true);
     }
 }
 

@@ -6,22 +6,6 @@
     app:startDestination="@id/videoDescription">
 
     <fragment
-        android:id="@+id/selectVideoSourceFragment"
-        android:name="com.example.socialqs.activities.create.fragments.SelectVideoSourceFragment"
-        android:label="fragment_select_source"
-        tools:layout="@layout/fragment_select_video_source" >
-        <action
-            android:id="@+id/action_selectVideoSourceFragment_to_createVideoFragment"
-            app:destination="@id/createVideoFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/createVideoFragment"
-        android:name="com.example.socialqs.activities.create.fragments.CreateVideoFragment"
-        android:label="fragment_final"
-        tools:layout="@layout/fragment_create_video" />
-
-    <fragment
         android:id="@+id/videoDescription"
         android:name="com.example.socialqs.activities.create.fragments.VideoDescription"
         android:label="fragment_video_description"
@@ -42,6 +26,9 @@
         <action
             android:id="@+id/onPick"
             app:destination="@id/videoList" />
+        <action
+            android:id="@+id/backAction"
+            app:destination="@id/videoDescription" />
     </fragment>
 
     <fragment
