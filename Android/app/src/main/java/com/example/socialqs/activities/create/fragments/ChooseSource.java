@@ -3,6 +3,7 @@ package com.example.socialqs.activities.create.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +20,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.amazonaws.auth.CognitoCredentialsProvider;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.constant.Constant;
+import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.Utilities;
+
+import java.net.URISyntaxException;
 
 public class ChooseSource extends Fragment {
 
@@ -37,11 +47,6 @@ public class ChooseSource extends Fragment {
         pick = view.findViewById(R.id.pickFromGallery);
 
         return view;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -87,8 +92,30 @@ public class ChooseSource extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if(requestCode == Constant.CAMERA_PERMISSION) {
-            //TODO: save the video recorded
-            getActivity().finish();
+
+            Uri videoUri = data.getData();
+            String filename = UserModel.current.id + Long.toString(System.currentTimeMillis());
+
+            try {
+                Utilities.getInstance().uploadFile(filename, videoUri.toString(), getContext(), new TransferListener() {
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        System.out.println("============= 1 ===========");
+                    }
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        System.out.println("============= 2 ===========");
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        System.out.println("============= 3 ===========");
+                    }
+                });
+            } catch (URISyntaxException e) {
+                Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.androidnetworking.AndroidNetworking;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.home.MainMenuActivity;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AWSMobileClient.getInstance().initialize(this).execute();
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         AndroidNetworking.initialize(getApplicationContext());

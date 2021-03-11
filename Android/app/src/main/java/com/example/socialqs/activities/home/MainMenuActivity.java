@@ -57,6 +57,12 @@ public class MainMenuActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.navigation_create:
 
+                    if (UserModel.current == null){
+                        //just as a safety
+                        Utilities.getInstance().createSingleActionAlert("You need to login before using this feature.", "Okay", MainMenuActivity.this, null).show();
+                        return false;
+                    }
+
                     if (categoryList == null){
                         Utilities.getInstance().createSingleActionAlert("Please wait while we fetch all the categories.", "Okay", MainMenuActivity.this, null).show();
                         return false;

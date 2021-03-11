@@ -25,8 +25,6 @@ import java.util.ArrayList;
 
 public class VideoDescription extends Fragment {
 
-    QuestionModel question = new QuestionModel();
-
     private ArrayList<CategoryModel> categories;
     ImageView close, proceed;
     EditText title;
@@ -70,6 +68,9 @@ public class VideoDescription extends Fragment {
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                QuestionModel question = ((CreateActivity)getActivity()).question;
+
                 question.setqTitle(title.getText().toString());
                 question.setqCategory((CategoryModel)spinner.getSelectedItem());
 

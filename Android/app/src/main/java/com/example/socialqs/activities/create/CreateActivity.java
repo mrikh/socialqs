@@ -22,12 +22,14 @@ import android.widget.ImageView;
 
 import com.example.socialqs.R;
 import com.example.socialqs.models.CategoryModel;
+import com.example.socialqs.models.QuestionModel;
 
 import java.util.ArrayList;
 
 public class CreateActivity extends AppCompatActivity {
 
     public ArrayList<CategoryModel> categories;
+    public QuestionModel question = new QuestionModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
