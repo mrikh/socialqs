@@ -149,6 +149,10 @@ public class NetworkHandler {
         performGetRequest(EndPoints.repliesList, hashmap, completion);
     }
 
+    public void notificationListing(NetworkingClosure completion){
+        performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
+    }
+
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
         performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);

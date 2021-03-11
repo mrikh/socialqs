@@ -26,11 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.amazonaws.auth.CognitoCredentialsProvider;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.constant.Constant;

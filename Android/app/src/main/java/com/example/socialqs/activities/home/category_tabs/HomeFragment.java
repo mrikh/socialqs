@@ -1,9 +1,11 @@
 package com.example.socialqs.activities.home.category_tabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.socialqs.R;
 
 import com.example.socialqs.activities.home.MainMenuActivity;
+import com.example.socialqs.activities.home.NotificationActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -38,6 +41,7 @@ public class HomeFragment extends Fragment {
     private TabLayout tabs;
     private ViewPager2 viewPager;
     private ProgressBar progressBar;
+    private ImageView notifications;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -55,6 +59,15 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ((MainMenuActivity) getActivity()).getSupportActionBar().hide(); //Hide action bar at top
+
+        notifications = (ImageView) view.findViewById(R.id.notification_img);
+        notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);

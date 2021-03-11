@@ -19,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialqs.R;
 
+/**
+ * Answer Question Activity
+ * Option to record video or choose from gallery
+ */
 public class AnswerQuestionActivity extends AppCompatActivity{
 
     private static int VIDEO_RECORD = 1;
@@ -57,7 +61,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
             MediaController mediaController = new MediaController(video.getContext()){
                 @Override
                 public void show(int timeout){
-                    if(timeout == 3000) timeout = 200000; //Set to desired number
+                    if(timeout == 3000) timeout = 200000; //Length stays on screen(per second)
                     super.show(timeout);
                 }
             };
