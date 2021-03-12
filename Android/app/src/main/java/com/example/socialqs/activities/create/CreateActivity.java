@@ -3,6 +3,7 @@ package com.example.socialqs.activities.create;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,6 +28,7 @@ import android.widget.ProgressBar;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
+import com.example.socialqs.activities.main.MainActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.QuestionModel;
 import com.example.socialqs.models.UserModel;
@@ -124,6 +126,8 @@ public class CreateActivity extends AppCompatActivity {
                                     if (object == null){
                                         Utilities.getInstance().createSingleActionAlert(message, "Okay", CreateActivity.this, null).show();
                                     }else{
+                                        Intent newIntent = new Intent("CreatedQuestionIntent");
+                                        LocalBroadcastManager.getInstance(CreateActivity.this).sendBroadcast(newIntent);
                                         Utilities.getInstance().createSingleActionAlert("Successfully created the question", "Okay", CreateActivity.this, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

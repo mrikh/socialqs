@@ -96,9 +96,12 @@ public class ChooseSource extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if(requestCode == Constant.CAMERA_PERMISSION) {
-            Uri videoUri = data.getData();
-            String filePath = FilePath.getPath(getContext(), videoUri);
-            ((CreateActivity)getActivity()).uploadAction(Utilities.getInstance().getFileName(), filePath);
+
+            if (data != null) {
+                Uri videoUri = data.getData();
+                String filePath = FilePath.getPath(getContext(), videoUri);
+                ((CreateActivity) getActivity()).uploadAction(Utilities.getInstance().getFileName(), filePath);
+            }
         }
     }
 
