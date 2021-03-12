@@ -51,9 +51,9 @@ public class TabFragment extends Fragment {
     private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent != null && intent.getAction().equalsIgnoreCase("CreatedQuestionIntent")) {
-                fetchListing();
-            }
+        if (intent != null && intent.getAction().equalsIgnoreCase("CreatedQuestionIntent")) {
+            fetchListing();
+        }
         }
     };
 

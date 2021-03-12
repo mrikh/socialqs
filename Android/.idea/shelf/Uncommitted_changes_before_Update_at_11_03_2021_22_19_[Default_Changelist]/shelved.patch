@@ -1,0 +1,219 @@
+Index: app/src/main/java/com/example/socialqs/activities/home/NotificationActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.socialqs.activities.home;\r\n\r\nimport android.content.Context;\r\nimport android.os.Bundle;\r\nimport android.util.AttributeSet;\r\nimport android.view.View;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.socialqs.R;\r\nimport com.example.socialqs.adapters.NotificationAdapter;\r\nimport com.example.socialqs.adapters.VideoRepliesAdapter;\r\nimport com.example.socialqs.models.NotificationModel;\r\nimport com.example.socialqs.models.VideoRepliesModel;\r\nimport com.example.socialqs.utils.Utilities;\r\nimport com.example.socialqs.utils.helperInterfaces.NetworkingClosure;\r\nimport com.example.socialqs.utils.networking.NetworkHandler;\r\nimport com.github.ybq.android.spinkit.sprite.Sprite;\r\nimport com.github.ybq.android.spinkit.style.DoubleBounce;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class NotificationActivity extends AppCompatActivity {\r\n\r\n    private RecyclerView recyclerView;\r\n    private ProgressBar progressBar;\r\n\r\n    private final static String LONG_TEXT = \"Lorem ipsum dolor sit amet, et\" +\r\n            \" alienum inciderint efficiantur nec, posse causae molestie\" +\r\n            \" eos in. Ea vero praesent vix, nam soleat recusabo id.\" +\r\n            \" Qui ut exerci option laboramus. In habeo posse ridens quo,\" +\r\n            \" eligendi volutpat interesset ut est, mel nibh accusamus no.\" +\r\n            \" Te eam consulatu repudiare adipiscing, usu et choro quodsi euripidis.\";\r\n\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_notification);\r\n\r\n        recyclerView = findViewById(R.id.video_replies_recycler);\r\n\r\n        progressBar = findViewById(R.id.progress);\r\n        Sprite doubleBounce = new DoubleBounce();\r\n        progressBar.setIndeterminateDrawable(doubleBounce);\r\n        progressBar.setVisibility(View.VISIBLE);\r\n\r\n        LinearLayoutManager layoutManager = new LinearLayoutManager(this);\r\n        recyclerView.setLayoutManager(layoutManager);\r\n        recyclerView.setHasFixedSize(true);\r\n\r\n        List<NotificationModel> notificationList = new ArrayList<>();\r\n\r\n        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {\r\n            @Override\r\n            public void completion(JSONObject object, String message) {\r\n                progressBar.setVisibility(View.INVISIBLE);\r\n                if (object == null) {\r\n                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();\r\n                    return;\r\n                }\r\n\r\n                try {\r\n                    JSONArray arr = object.getJSONArray(\"result\");\r\n                    for (int i = 0; i < arr.length(); i++) {\r\n                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));\r\n                        notificationList.add(item);\r\n                    }\r\n\r\n                    if(notificationList.size() == 0){\r\n//                        noNotificationLayout.setVisibility(View.VISIBLE);\r\n                    }else {\r\n                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));\r\n                    }\r\n\r\n                } catch (Exception e) {\r\n                    e.printStackTrace();\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/socialqs/activities/home/NotificationActivity.java	(revision dd8961cb7f53d1755769bf6a007ee690f04bf7eb)
++++ app/src/main/java/com/example/socialqs/activities/home/NotificationActivity.java	(date 1615500336445)
+@@ -1,8 +1,14 @@
+ package com.example.socialqs.activities.home;
+ 
+ import android.content.Context;
++import android.graphics.Color;
++import android.graphics.drawable.ColorDrawable;
+ import android.os.Bundle;
++import android.text.Spannable;
++import android.text.SpannableString;
++import android.text.style.ForegroundColorSpan;
+ import android.util.AttributeSet;
++import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.ProgressBar;
+ import android.widget.TextView;
+@@ -33,18 +39,13 @@
+     private RecyclerView recyclerView;
+     private ProgressBar progressBar;
+ 
+-    private final static String LONG_TEXT = "Lorem ipsum dolor sit amet, et" +
+-            " alienum inciderint efficiantur nec, posse causae molestie" +
+-            " eos in. Ea vero praesent vix, nam soleat recusabo id." +
+-            " Qui ut exerci option laboramus. In habeo posse ridens quo," +
+-            " eligendi volutpat interesset ut est, mel nibh accusamus no." +
+-            " Te eam consulatu repudiare adipiscing, usu et choro quodsi euripidis.";
+-
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_notification);
+ 
+-        recyclerView = findViewById(R.id.video_replies_recycler);
++        updateActionBar();
++
++        recyclerView = findViewById(R.id.notification_recycler);
+ 
+         progressBar = findViewById(R.id.progress);
+         Sprite doubleBounce = new DoubleBounce();
+@@ -57,34 +58,60 @@
+ 
+         List<NotificationModel> notificationList = new ArrayList<>();
+ 
+-        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
+-            @Override
+-            public void completion(JSONObject object, String message) {
+-                progressBar.setVisibility(View.INVISIBLE);
+-                if (object == null) {
+-                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
+-                    return;
+-                }
++        NotificationModel n1 = new NotificationModel();
++        n1.getNotificationTitle();
++        n1.getNotificationMessage();
++        notificationList.add(n1);
+ 
+-                try {
+-                    JSONArray arr = object.getJSONArray("result");
+-                    for (int i = 0; i < arr.length(); i++) {
+-                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
+-                        notificationList.add(item);
+-                    }
+-
+-                    if(notificationList.size() == 0){
+-//                        noNotificationLayout.setVisibility(View.VISIBLE);
+-                    }else {
+-                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
+-                    }
++        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
++
++//        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
++//            @Override
++//            public void completion(JSONObject object, String message) {
++//                progressBar.setVisibility(View.INVISIBLE);
++//                if (object == null) {
++//                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
++//                    return;
++//                }
++//
++//                try {
++//                    JSONArray arr = object.getJSONArray("result");
++//                    for (int i = 0; i < arr.length(); i++) {
++//                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
++//                        notificationList.add(item);
++//                    }
++//
++//                    if(notificationList.size() == 0){
++////                        noNotificationLayout.setVisibility(View.VISIBLE);
++//                    }else {
++//                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
++//                    }
++//
++//                } catch (Exception e) {
++//                    e.printStackTrace();
++//                }
++//            }
++//        });
++
++    }
+ 
+-                } catch (Exception e) {
+-                    e.printStackTrace();
+-                }
+-            }
+-        });
++    @Override
++    public boolean onOptionsItemSelected(MenuItem item){
++        if (item.getItemId() == android.R.id.home) {
++            finish();
++            return true;
++        }
++        return super.onOptionsItemSelected(item);
++    }
+ 
++    private void updateActionBar(){
++        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
++        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
++        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
++
++        Spannable text = new SpannableString(getSupportActionBar().getTitle());
++        text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
++        getSupportActionBar().setTitle(text);
+     }
+ 
+ }
+Index: app/src/main/java/com/example/socialqs/models/NotificationModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.socialqs.models;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\npublic class NotificationModel {\r\n\r\n    private String notificationID, questionID, title, message, timeCreated;\r\n\r\n    public NotificationModel(JSONObject object) throws JSONException {\r\n        this.notificationID = object.getString(\"_id\");\r\n        this.questionID = object.getString(\"questionId\");\r\n        this.title = object.getString(\"title\");\r\n        this.message = object.getString(\"body\");\r\n        this.timeCreated = object.getString(\"createdAt\");\r\n    }\r\n\r\n    public String getNotificationID(){ return notificationID; }\r\n\r\n    public String getQuestionID(){ return questionID; }\r\n\r\n    public String getNotificationTitle(){ return title; }\r\n\r\n    public String getNotificationMessage(){ return message; }\r\n\r\n    public String getTimeCreated(){ return timeCreated; }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/socialqs/models/NotificationModel.java	(revision dd8961cb7f53d1755769bf6a007ee690f04bf7eb)
++++ app/src/main/java/com/example/socialqs/models/NotificationModel.java	(date 1615500336430)
+@@ -7,6 +7,19 @@
+ 
+     private String notificationID, questionID, title, message, timeCreated;
+ 
++    private final static String LONG_TEXT = "Lorem ipsum dolor sit amet, et" +
++            " alienum inciderint efficiantur nec, posse causae molestie" +
++            " eos in. Ea vero praesent vix, nam soleat recusabo id." +
++            " Qui ut exerci option laboramus. In habeo posse ridens quo," +
++            " eligendi volutpat interesset ut est, mel nibh accusamus no." +
++            " Te eam consulatu repudiare adipiscing, usu et choro quodsi euripidis.";
++
++    public NotificationModel() {
++        this.title = "Title";
++        this.message = LONG_TEXT;
++        this.timeCreated = "12:22";
++    }
++
+     public NotificationModel(JSONObject object) throws JSONException {
+         this.notificationID = object.getString("_id");
+         this.questionID = object.getString("questionId");
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n    id 'com.google.gms.google-services'\r\n}\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.socialqs\"\r\n        minSdkVersion 23\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        multiDexEnabled true\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation 'androidx.core:core:1.3.0'\r\n    implementation 'androidx.appcompat:appcompat:1.1.0'\r\n    implementation 'com.google.android.material:material:1.1.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    implementation 'org.jetbrains:annotations:15.0'\r\n    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'\r\n    implementation 'androidx.navigation:navigation-ui:2.3.3'\r\n    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'\r\n    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'\r\n    testImplementation 'junit:junit:4.+'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.1'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\r\n    implementation 'com.google.android.gms:play-services-auth:19.0.0'\r\n\r\n    implementation 'androidx.navigation:navigation-fragment:2.3.3'\r\n\r\n    implementation platform('com.google.firebase:firebase-bom:26.5.0')\r\n\r\n    implementation 'com.google.firebase:firebase-messaging'\r\n    implementation 'com.google.firebase:firebase-analytics'\r\n\r\n    implementation 'com.github.bumptech.glide:glide:4.11.0'\r\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'\r\n\r\n    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true }\r\n    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.+'\r\n    implementation 'com.amazonaws:aws-android-sdk-cognito:2.6.+'\r\n\r\n    def fragment_version = \"1.2.5\"\r\n    // Java language implementation\r\n    implementation \"androidx.fragment:fragment:$fragment_version\"\r\n\r\n    implementation 'com.github.ybq:Android-SpinKit:1.4.0'\r\n    implementation 'com.amitshekhar.android:android-networking:1.0.2'\r\n    implementation 'com.chaos.view:pinview:1.4.4'\r\n\r\n    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'\r\n    implementation 'com.facebook.android:facebook-login:[8.1)'\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision dd8961cb7f53d1755769bf6a007ee690f04bf7eb)
++++ app/build.gradle	(date 1615500996147)
+@@ -57,9 +57,9 @@
+     implementation 'com.github.bumptech.glide:glide:4.11.0'
+     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+ 
+-    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true }
+-    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.+'
+-    implementation 'com.amazonaws:aws-android-sdk-cognito:2.6.+'
++    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.22.2@aar') { transitive = true }
++    implementation 'com.amazonaws:aws-android-sdk-s3:2.22.2'
++    implementation 'com.amazonaws:aws-android-sdk-cognito:2.20.1'
+ 
+     def fragment_version = "1.2.5"
+     // Java language implementation
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <!--   App  Name   -->\r\n    <string name=\"app_name\">SocialQs</string>\r\n\r\n    <!--   KEYS   -->\r\n    <string name=\"facebook_app_id\">757408744896556</string>\r\n    <string name=\"fb_login_protocol_scheme\">fb757408744896556</string>\r\n\r\n    <!--   TAGS   -->\r\n    <string name=\"login_fragment\">login_fragment</string>\r\n\r\n    <!--   Titles   -->\r\n    <string name=\"title_home\">Home</string>\r\n    <string name=\"title_following\">Following</string>\r\n    <string name=\"title_create\">Create</string>\r\n    <string name=\"title_profile\">Profile</string>\r\n    <string name=\"title_answers\">Answers</string>\r\n    <string name=\"title_video_source\">Choose Video Source</string>\r\n\r\n    <!--   Strings   -->\r\n    <string name=\"invalid_email\">Email address is incorrect</string>\r\n    <string name=\"password_short\">Your password needs to be at least 8 characters</string>\r\n    <string name=\"something_wrong\">Something went wrong. Try again!</string>\r\n    <string name=\"login_cancelled\">Login Cancelled</string>\r\n    <string name=\"login_button\">LOGIN</string>\r\n    <string name=\"okay\">Okay</string>\r\n    <string name=\"dont_have_account\">Dont have an account?</string>\r\n    <string name=\"sign_up\"><u>Sign Up</u></string>\r\n    <string name=\"or\">or</string>\r\n    <string name=\"explore\"><u>Explore</u></string>\r\n    <string name=\"email\">Email</string>\r\n    <string name=\"password\">Password</string>\r\n    <string name=\"sign_up_button\">SIGN UP</string>\r\n    <string name=\"forgot_password\">Forgot Password?</string>\r\n    <string name=\"name\">Full Name</string>\r\n    <string name=\"note\">Note:</string>\r\n    <string name=\"agree_our_terms\">By creating an account, you agree to our</string>\r\n    <string name=\"terms\">Terms</string>\r\n    <string name=\"already_account\">Already have an account?</string>\r\n    <string name=\"login_small\">Login</string>\r\n    <string name=\"name_error\">Your name seems incorrect!</string>\r\n    <string name=\"fb_no_email\">Unable to fetch your email! Navigating to Sign up to manually verify email. Please use this email to login, unfortunately facebook login will not work by just tapping the button.</string>\r\n\r\n    <string name=\"verify_email\">Verify Your Email</string>\r\n    <string name=\"verify_forgot_pass_text\">We have sent you an email with the code. Please enter it to verify your email!</string>\r\n    <string name=\"code_sent\">We have sent you an email with the code. Please enter it to complete Sign Up!</string>\r\n    <string name=\"resend_code\">Resend Code</string>\r\n    <string name=\"confirm\">Confirm</string>\r\n    <string name=\"do_it\">or do it</string>\r\n    <string name=\"later\">later</string>\r\n\r\n    <string name=\"forgot_password_title\">Forgot Password</string>\r\n    <string name=\"forgot_password_info\">You will receive an email with more information on how to proceed</string>\r\n\r\n    <string name=\"update_password\">Update Password</string>\r\n    <string name=\"old_password\">Old Password</string>\r\n    <string name=\"new_password\">New Password</string>\r\n    <string name=\"confirm_password\">Confirm Password</string>\r\n    <string name=\"password_not_equal\">Both the passwords need to be equal</string>\r\n    <string name=\"password_updated\">Password has been changed.</string>\r\n\r\n    <string name=\"search\">Search SocialQ\\'s...</string>\r\n    <string name=\"likes\"> Like(s)</string>\r\n    <string name=\"dislikes\"> Dislike(s)</string>\r\n    <string name=\"no_answers\">No answers yet</string>\r\n    <string name=\"correct_answer\">Correct</string>\r\n    <string name=\"questionmark\">\\?</string>\r\n    <string name=\"no_questions\">No questions yet</string>\r\n    <string name=\"no_questions_extra\">Start asking questions!</string>\r\n\r\n    <string name=\"read_more\"><u>Read More</u></string>\r\n    <string name=\"read_less\"><u>Read Less</u></string>\r\n\r\n    <string name=\"gallery_pick\">Upload from Gallery</string>\r\n    <string name=\"record\">Record Video</string>\r\n\r\n    <string name=\"title_heading\">What would you like to know?</string>\r\n    <string name=\"title_hint\">Hint: Try keep the question as broad as possible so other members can help answer it</string>\r\n    <string name=\"title_description\">Question</string>\r\n    <string name=\"category_heading\">What category does the question belong to?</string>\r\n    <string name=\"category_hint\">Hint: Choose as accurately as possible for other members the see your question</string>\r\n    <string name=\"category_description\">Category</string>\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision dd8961cb7f53d1755769bf6a007ee690f04bf7eb)
++++ app/src/main/res/values/strings.xml	(date 1615500079641)
+@@ -15,6 +15,7 @@
+     <string name="title_create">Create</string>
+     <string name="title_profile">Profile</string>
+     <string name="title_answers">Answers</string>
++    <string name="title_notifications">Notifications</string>
+     <string name="title_video_source">Choose Video Source</string>
+ 
+     <!--   Strings   -->
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.example.socialqs\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.SocialQs\"\r\n        android:usesCleartextTraffic=\"true\"\r\n        tools:targetApi=\"m\">\r\n\r\n        <activity android:name=\".activities.prelogin.PreLoginActivity\" />\r\n        <activity android:name=\".activities.create.CreateActivity\"\r\n            android:label=\"@string/title_video_source\"/>\r\n\r\n        <activity android:name=\".activities.main.MainActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <activity\r\n            android:name=\".activities.home.MainMenuActivity\"\r\n            android:windowSoftInputMode=\"adjustPan\"\r\n            android:screenOrientation=\"portrait\"/>\r\n\r\n        <activity\r\n            android:name=\".activities.home.VideoRepliesActivity\"\r\n            android:label=\"@string/title_answers\"\r\n            android:screenOrientation=\"portrait\"/>\r\n\r\n        <activity android:name=\".activities.home.AnswerQuestionActivity\"/>\r\n\r\n        <activity android:name=\".activities.home.NotificationActivity\"/>\r\n\r\n        <activity\r\n            android:name=\"com.facebook.FacebookActivity\"\r\n            android:configChanges=\"keyboard|keyboardHidden|screenLayout|screenSize|orientation\"\r\n            android:label=\"@string/app_name\" />\r\n\r\n        <activity\r\n            android:name=\"com.facebook.CustomTabActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n                <category android:name=\"android.intent.category.DEFAULT\" />\r\n                <category android:name=\"android.intent.category.BROWSABLE\" />\r\n\r\n                <data android:scheme=\"@string/fb_login_protocol_scheme\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <meta-data\r\n            android:name=\"com.facebook.sdk.ApplicationId\"\r\n            android:value=\"@string/facebook_app_id\" />\r\n\r\n        <service android:name=\"com.google.firebase.messaging.FirebaseMessagingService\">\r\n            <intent-filter>\r\n                <action android:name=\"com.google.firebase.MESSAGING_EVENT\" />\r\n            </intent-filter>\r\n        </service>\r\n\r\n        <service android:name=\"com.amazonaws.mobileconnectors.s3.transferutility.TransferService\"\r\n            android:enabled=\"true\" />\r\n\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision dd8961cb7f53d1755769bf6a007ee690f04bf7eb)
++++ app/src/main/AndroidManifest.xml	(date 1615500079537)
+@@ -42,7 +42,8 @@
+ 
+         <activity android:name=".activities.home.AnswerQuestionActivity"/>
+ 
+-        <activity android:name=".activities.home.NotificationActivity"/>
++        <activity android:name=".activities.home.NotificationActivity"
++            android:label="@string/title_notifications"/>
+ 
+         <activity
+             android:name="com.facebook.FacebookActivity"

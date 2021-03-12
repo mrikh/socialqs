@@ -15,12 +15,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.NotificationModel;
 import com.example.socialqs.models.VideoRepliesModel;
+import com.example.socialqs.utils.Utilities;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -30,12 +38,14 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
-    private Context mContext;
     private List<NotificationModel> notificationList;
+    private NotificationModel deletedItem;
+    private int deletedItemPos;
+    private CoordinatorLayout coordinatorLayout;
 
-    public NotificationAdapter(Context mContext, List<NotificationModel> notificationList) {
+    public NotificationAdapter(List<NotificationModel> notificationList, CoordinatorLayout coordinatorLayout) {
         this.notificationList = notificationList;
-        this.mContext = mContext;
+        this.coordinatorLayout = coordinatorLayout;
     }
 
     @NonNull
@@ -55,6 +65,37 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notificationList.size();
     }
 
+    public void deleteNotification(int position){
+        deletedItem = notificationList.get(position);
+        deletedItemPos = position;
+        notificationList.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar();
+    }
+
+    private void showUndoSnackbar() {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text,
+                Snackbar.LENGTH_LONG);
+
+        snackbar.setAction(R.string.undo_delete, v -> {
+            notificationList.add(deletedItemPos, deletedItem);
+            notifyItemInserted(deletedItemPos);
+        });
+
+        snackbar.addCallback(new Snackbar.Callback(){
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+
+                String notificationID = deletedItem.getNotificationID();
+
+                //TODO DELETE NOTIFICATION COMPLETELY
+            }
+        });
+
+
+        snackbar.show();
+    }
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
@@ -97,8 +138,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     isCollapsed  = !isCollapsed;
                 }
             });
-
         }
+
     }
 
 }

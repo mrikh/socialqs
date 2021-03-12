@@ -157,6 +157,14 @@ public class NetworkHandler {
         performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
     }
 
+    //TODO FIX DELETE NOTIFICATION
+//    public void deleteNotification(String notificationID, NetworkingClosure completion){
+//        HashMap hashmap = new HashMap<>();
+//        hashmap.put("notificationId", notificationID);
+//
+//        performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
+//    }
+
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
         performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);

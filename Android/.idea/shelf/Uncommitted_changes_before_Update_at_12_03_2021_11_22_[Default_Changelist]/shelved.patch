@@ -1,0 +1,206 @@
+Index: app/src/main/java/com/example/socialqs/utils/Utilities.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.socialqs.utils;\r\n\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.content.DialogInterface;\r\nimport android.content.SharedPreferences;\r\nimport android.content.res.Resources;\r\nimport android.preference.PreferenceManager;\r\nimport android.view.View;\r\n\r\nimport com.amazonaws.auth.CognitoCredentialsProvider;\r\nimport com.amazonaws.mobile.client.AWSMobileClient;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferState;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;\r\nimport com.amazonaws.regions.Regions;\r\nimport com.amazonaws.services.s3.AmazonS3Client;\r\nimport com.amazonaws.services.s3.model.CannedAccessControlList;\r\nimport com.example.socialqs.models.UserModel;\r\n\r\nimport org.jetbrains.annotations.NotNull;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.File;\r\nimport java.net.URI;\r\nimport java.net.URISyntaxException;\r\n\r\npublic class Utilities {\r\n\r\n    private static Utilities shared = null;\r\n\r\n    public static Utilities getInstance(){\r\n        if (shared == null){\r\n            shared = new Utilities();\r\n        }\r\n\r\n        return shared;\r\n    }\r\n\r\n    public String getFileName(){\r\n        return UserModel.current.id + Long.toString(System.currentTimeMillis());\r\n    }\r\n\r\n    public String s3UrlString(String filename){\r\n\r\n        return \"https://s3.eu-west-1.amazonaws.com/socialqs-bucket/\" + filename;\r\n    }\r\n\r\n//    https://grokonez.com/android/uploaddownload-files-images-amazon-s3-android\r\n    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {\r\n        CognitoCredentialsProvider cred = new CognitoCredentialsProvider(\"eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0\", Regions.EU_WEST_1);\r\n        AmazonS3Client client = new AmazonS3Client(cred);\r\n\r\n        TransferUtility utility = TransferUtility.builder()\r\n                .context(c)\r\n                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())\r\n                .s3Client(client)\r\n                .build();\r\n\r\n        File file = new File(new URI(path));\r\n        TransferObserver observer = utility.upload(\"socialqs-bucket\", fileName, file, CannedAccessControlList.PublicRead);\r\n\r\n        observer.setTransferListener(listener);\r\n    }\r\n\r\n    public AlertDialog createSingleActionAlert(CharSequence body, CharSequence buttonTitle, Context context, DialogInterface.OnClickListener listener){\r\n        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);\r\n        builder1.setMessage(body);\r\n        builder1.setCancelable(true);\r\n\r\n        if (listener != null){\r\n            builder1.setPositiveButton(buttonTitle, listener);\r\n        }else{\r\n            builder1.setPositiveButton(buttonTitle, new DialogInterface.OnClickListener() {\r\n                @Override\r\n                public void onClick(DialogInterface dialog, int which) {\r\n                    dialog.cancel();\r\n                }\r\n            });\r\n        }\r\n        AlertDialog alert11 = builder1.create();\r\n        return alert11;\r\n    }\r\n\r\n    public void saveJsonObject(String key, @NotNull JSONObject json, Context c){\r\n        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);\r\n        SharedPreferences.Editor editor = pref.edit();\r\n        editor.putString(key, json.toString());\r\n        editor.commit();\r\n    }\r\n\r\n    public JSONObject fetchJsonObject(Context c, String key) throws Exception{\r\n\r\n        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);\r\n        try {\r\n            return new JSONObject(pref.getString(key, null));\r\n        }catch (Exception e){\r\n            throw e;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/socialqs/utils/Utilities.java	(revision 6db5d69295585fde6703961a4a53f13dfa8b3df2)
++++ app/src/main/java/com/example/socialqs/utils/Utilities.java	(date 1615503156079)
+@@ -8,15 +8,6 @@
+ import android.preference.PreferenceManager;
+ import android.view.View;
+ 
+-import com.amazonaws.auth.CognitoCredentialsProvider;
+-import com.amazonaws.mobile.client.AWSMobileClient;
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+-import com.amazonaws.regions.Regions;
+-import com.amazonaws.services.s3.AmazonS3Client;
+-import com.amazonaws.services.s3.model.CannedAccessControlList;
+ import com.example.socialqs.models.UserModel;
+ 
+ import org.jetbrains.annotations.NotNull;
+@@ -48,21 +39,21 @@
+     }
+ 
+ //    https://grokonez.com/android/uploaddownload-files-images-amazon-s3-android
+-    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {
+-        CognitoCredentialsProvider cred = new CognitoCredentialsProvider("eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0", Regions.EU_WEST_1);
+-        AmazonS3Client client = new AmazonS3Client(cred);
+-
+-        TransferUtility utility = TransferUtility.builder()
+-                .context(c)
+-                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+-                .s3Client(client)
+-                .build();
+-
+-        File file = new File(new URI(path));
+-        TransferObserver observer = utility.upload("socialqs-bucket", fileName, file, CannedAccessControlList.PublicRead);
+-
+-        observer.setTransferListener(listener);
+-    }
++//    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {
++//        CognitoCredentialsProvider cred = new CognitoCredentialsProvider("eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0", Regions.EU_WEST_1);
++//        AmazonS3Client client = new AmazonS3Client(cred);
++//
++//        TransferUtility utility = TransferUtility.builder()
++//                .context(c)
++//                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
++//                .s3Client(client)
++//                .build();
++//
++//        File file = new File(new URI(path));
++//        TransferObserver observer = utility.upload("socialqs-bucket", fileName, file, CannedAccessControlList.PublicRead);
++//
++//        observer.setTransferListener(listener);
++//    }
+ 
+     public AlertDialog createSingleActionAlert(CharSequence body, CharSequence buttonTitle, Context context, DialogInterface.OnClickListener listener){
+         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+Index: app/src/main/java/com/example/socialqs/activities/create/CreateActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.socialqs.activities.create;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.app.ActivityCompat;\r\nimport androidx.core.content.ContextCompat;\r\n\r\nimport android.Manifest;\r\nimport android.app.Activity;\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.content.pm.PackageManager;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.text.Spannable;\r\nimport android.text.SpannableString;\r\nimport android.text.style.ForegroundColorSpan;\r\nimport android.view.MenuItem;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.view.inputmethod.InputMethodManager;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.ProgressBar;\r\n\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferState;\r\nimport com.example.socialqs.R;\r\nimport com.example.socialqs.models.CategoryModel;\r\nimport com.example.socialqs.models.QuestionModel;\r\nimport com.example.socialqs.models.UserModel;\r\nimport com.example.socialqs.utils.FilePath;\r\nimport com.example.socialqs.utils.Utilities;\r\nimport com.example.socialqs.utils.helperInterfaces.NetworkingClosure;\r\nimport com.example.socialqs.utils.networking.NetworkHandler;\r\nimport com.github.ybq.android.spinkit.sprite.Sprite;\r\nimport com.github.ybq.android.spinkit.style.DoubleBounce;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class CreateActivity extends AppCompatActivity {\r\n\r\n    public ArrayList<CategoryModel> categories;\r\n    private ProgressBar progressBar;\r\n    public QuestionModel question = new QuestionModel();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_create);\r\n\r\n        getSupportActionBar().hide();\r\n        getSupportActionBar().setDisplayHomeAsUpEnabled(true);\r\n\r\n        Bundle bundle = getIntent().getExtras();\r\n        if (bundle != null){\r\n            this.categories = bundle.getParcelableArrayList(\"categories\");\r\n        }\r\n\r\n        findViewById(R.id.createBackground).setOnTouchListener(new View.OnTouchListener() {\r\n            @Override\r\n            public boolean onTouch(View v, MotionEvent event) {\r\n                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);\r\n                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);\r\n                return true;\r\n            }\r\n        });\r\n\r\n        progressBar = findViewById(R.id.progress);\r\n        Sprite doubleBounce = new DoubleBounce();\r\n        progressBar.setIndeterminateDrawable(doubleBounce);\r\n        progressBar.setVisibility(View.INVISIBLE);\r\n    }\r\n\r\n    @Override\r\n    public boolean onSupportNavigateUp() {\r\n        onBackPressed();\r\n        return true;\r\n    }\r\n\r\n    public void setActionBarTitle(String title, String color, int titleColorId) {\r\n        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));\r\n        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);\r\n\r\n        if (title == null) {\r\n            return;\r\n        }\r\n\r\n        Spannable text = new SpannableString(title);\r\n        text.setSpan(new ForegroundColorSpan(getResources().getColor(titleColorId)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);\r\n        getSupportActionBar().setTitle(text);\r\n    }\r\n\r\n    public void updateActionBarBack(boolean show){\r\n        if (getSupportActionBar() != null) {\r\n            getSupportActionBar().setDisplayHomeAsUpEnabled(show);\r\n        }\r\n    }\r\n\r\n    public void uploadAction(String filename, String filePath){\r\n\r\n        try {\r\n            updateProgress(View.VISIBLE);\r\n            Utilities.getInstance().uploadFile(filename, \"file:\" + filePath, this, new TransferListener() {\r\n                @Override\r\n                public void onStateChanged(int id, TransferState state) {\r\n                    if (state == TransferState.IN_PROGRESS){\r\n                        updateProgress(View.VISIBLE);\r\n                    }else if (state == TransferState.COMPLETED) {\r\n\r\n                        JSONObject params = new JSONObject();\r\n                        try {\r\n                            params.put(\"title\", question.getqTitle());\r\n                            params.put(\"category\", question.getqCategory().id);\r\n                            params.put(\"videoUrl\", Utilities.getInstance().s3UrlString(filename));\r\n                            NetworkHandler.getInstance().createQuestion(params, new NetworkingClosure() {\r\n                                @Override\r\n                                public void completion(JSONObject object, String message) {\r\n                                    updateProgress(View.INVISIBLE);\r\n                                    if (object == null){\r\n                                        Utilities.getInstance().createSingleActionAlert(message, \"Okay\", CreateActivity.this, null).show();\r\n                                    }else{\r\n                                        Utilities.getInstance().createSingleActionAlert(\"Successfully created the question\", \"Okay\", CreateActivity.this, new DialogInterface.OnClickListener() {\r\n                                            @Override\r\n                                            public void onClick(DialogInterface dialog, int which) {\r\n                                                CreateActivity.this.finish();\r\n                                            }\r\n                                        }).show();\r\n                                    }\r\n                                }\r\n                            });\r\n                        } catch (Exception e) {\r\n                            updateProgress(View.INVISIBLE);\r\n                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), \"Okay\", CreateActivity.this, null).show();\r\n                        }\r\n                    }else{\r\n                        updateProgress(View.INVISIBLE);\r\n                    }\r\n                }\r\n\r\n                @Override\r\n                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {\r\n\r\n                }\r\n\r\n                @Override\r\n                public void onError(int id, Exception ex) {\r\n                    updateProgress(View.INVISIBLE);\r\n                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), \"Okay\", CreateActivity.this, null).show();\r\n                }\r\n            });\r\n        } catch (Exception e) {\r\n            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), \"Okay\", this, null).show();\r\n        }\r\n    }\r\n\r\n    public void updateProgress(int visibility){\r\n        progressBar.setVisibility(visibility);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/socialqs/activities/create/CreateActivity.java	(revision 6db5d69295585fde6703961a4a53f13dfa8b3df2)
++++ app/src/main/java/com/example/socialqs/activities/create/CreateActivity.java	(date 1615503137905)
+@@ -24,8 +24,6 @@
+ import android.widget.ImageView;
+ import android.widget.ProgressBar;
+ 
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+ import com.example.socialqs.R;
+ import com.example.socialqs.models.CategoryModel;
+ import com.example.socialqs.models.QuestionModel;
+@@ -104,55 +102,55 @@
+     public void uploadAction(String filename, String filePath){
+ 
+         try {
+-            updateProgress(View.VISIBLE);
+-            Utilities.getInstance().uploadFile(filename, "file:" + filePath, this, new TransferListener() {
+-                @Override
+-                public void onStateChanged(int id, TransferState state) {
+-                    if (state == TransferState.IN_PROGRESS){
+-                        updateProgress(View.VISIBLE);
+-                    }else if (state == TransferState.COMPLETED) {
+-
+-                        JSONObject params = new JSONObject();
+-                        try {
+-                            params.put("title", question.getqTitle());
+-                            params.put("category", question.getqCategory().id);
+-                            params.put("videoUrl", Utilities.getInstance().s3UrlString(filename));
+-                            NetworkHandler.getInstance().createQuestion(params, new NetworkingClosure() {
+-                                @Override
+-                                public void completion(JSONObject object, String message) {
+-                                    updateProgress(View.INVISIBLE);
+-                                    if (object == null){
+-                                        Utilities.getInstance().createSingleActionAlert(message, "Okay", CreateActivity.this, null).show();
+-                                    }else{
+-                                        Utilities.getInstance().createSingleActionAlert("Successfully created the question", "Okay", CreateActivity.this, new DialogInterface.OnClickListener() {
+-                                            @Override
+-                                            public void onClick(DialogInterface dialog, int which) {
+-                                                CreateActivity.this.finish();
+-                                            }
+-                                        }).show();
+-                                    }
+-                                }
+-                            });
+-                        } catch (Exception e) {
+-                            updateProgress(View.INVISIBLE);
+-                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", CreateActivity.this, null).show();
+-                        }
+-                    }else{
+-                        updateProgress(View.INVISIBLE);
+-                    }
+-                }
+-
+-                @Override
+-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+-
+-                }
+-
+-                @Override
+-                public void onError(int id, Exception ex) {
+-                    updateProgress(View.INVISIBLE);
+-                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", CreateActivity.this, null).show();
+-                }
+-            });
++//            updateProgress(View.VISIBLE);
++//            Utilities.getInstance().uploadFile(filename, "file:" + filePath, this, new TransferListener() {
++//                @Override
++//                public void onStateChanged(int id, TransferState state) {
++//                    if (state == TransferState.IN_PROGRESS){
++//                        updateProgress(View.VISIBLE);
++//                    }else if (state == TransferState.COMPLETED) {
++//
++//                        JSONObject params = new JSONObject();
++//                        try {
++//                            params.put("title", question.getqTitle());
++//                            params.put("category", question.getqCategory().id);
++//                            params.put("videoUrl", Utilities.getInstance().s3UrlString(filename));
++//                            NetworkHandler.getInstance().createQuestion(params, new NetworkingClosure() {
++//                                @Override
++//                                public void completion(JSONObject object, String message) {
++//                                    updateProgress(View.INVISIBLE);
++//                                    if (object == null){
++//                                        Utilities.getInstance().createSingleActionAlert(message, "Okay", CreateActivity.this, null).show();
++//                                    }else{
++//                                        Utilities.getInstance().createSingleActionAlert("Successfully created the question", "Okay", CreateActivity.this, new DialogInterface.OnClickListener() {
++//                                            @Override
++//                                            public void onClick(DialogInterface dialog, int which) {
++//                                                CreateActivity.this.finish();
++//                                            }
++//                                        }).show();
++//                                    }
++//                                }
++//                            });
++//                        } catch (Exception e) {
++//                            updateProgress(View.INVISIBLE);
++//                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", CreateActivity.this, null).show();
++//                        }
++//                    }else{
++//                        updateProgress(View.INVISIBLE);
++//                    }
++//                }
++//
++//                @Override
++//                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
++//
++//                }
++//
++//                @Override
++//                public void onError(int id, Exception ex) {
++//                    updateProgress(View.INVISIBLE);
++//                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", CreateActivity.this, null).show();
++//                }
++//            });
+         } catch (Exception e) {
+             Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", this, null).show();
+         }
+Index: app/src/main/java/com/example/socialqs/activities/main/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.socialqs.activities.main;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.appcompat.app.AppCompatDelegate;\r\nimport androidx.localbroadcastmanager.content.LocalBroadcastManager;\r\n\r\nimport com.amazonaws.mobile.client.AWSMobileClient;\r\nimport com.amazonaws.mobile.client.Callback;\r\nimport com.amazonaws.mobile.client.UserStateDetails;\r\nimport com.androidnetworking.AndroidNetworking;\r\nimport com.example.socialqs.R;\r\nimport com.example.socialqs.activities.home.MainMenuActivity;\r\nimport com.example.socialqs.activities.prelogin.PreLoginActivity;\r\nimport com.example.socialqs.models.UserModel;\r\nimport com.example.socialqs.utils.Utilities;\r\nimport com.example.socialqs.utils.helperInterfaces.NetworkingClosure;\r\nimport com.example.socialqs.utils.networking.NetworkHandler;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.messaging.FirebaseMessaging;\r\n\r\nimport org.json.JSONObject;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        AWSMobileClient.getInstance().initialize(this, new Callback<UserStateDetails>() {\r\n            @Override\r\n            public void onResult(UserStateDetails result) {\r\n                System.out.println(\"Whyyyy\");\r\n            }\r\n\r\n            @Override\r\n            public void onError(Exception e) {\r\n                System.out.println(\"Whyyyy\");\r\n            }\r\n        });\r\n\r\n        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);\r\n        AndroidNetworking.initialize(getApplicationContext());\r\n\r\n        try{\r\n            JSONObject object = Utilities.getInstance().fetchJsonObject(getApplicationContext(), \"user\");\r\n            UserModel currentUser = new UserModel(object);\r\n            UserModel.current = currentUser;\r\n        }catch (Exception e){\r\n            System.out.print(e.getMessage());\r\n        }\r\n\r\n        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<String> task) {\r\n                if (!task.isSuccessful()) {\r\n                    System.out.println(task.getException());\r\n                    return;\r\n                }\r\n\r\n                // Get new FCM registration token\r\n                String token = task.getResult();\r\n                if (UserModel.current != null){\r\n                    NetworkHandler.getInstance().updateInfo(token, null, null, new NetworkingClosure() {\r\n                        @Override\r\n                        public void completion(JSONObject object, String message) {\r\n                            //update token on server if already logged in\r\n                        }\r\n                    });\r\n                }else{\r\n\r\n                    //store as instance variable and pass to prelogin flow\r\n                    Intent newIntent = new Intent(\"PushTokenIntent\");\r\n                    newIntent.putExtra(\"pushToken\", token);\r\n                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(newIntent);\r\n                }\r\n            }\r\n        });\r\n\r\n        Intent myIntent;\r\n        if(UserModel.current != null){\r\n            myIntent = new Intent(MainActivity.this, MainMenuActivity.class);\r\n        }else{\r\n            myIntent = new Intent(MainActivity.this, PreLoginActivity.class);\r\n        }\r\n\r\n        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);\r\n        startActivity(myIntent);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/socialqs/activities/main/MainActivity.java	(revision 6db5d69295585fde6703961a4a53f13dfa8b3df2)
++++ app/src/main/java/com/example/socialqs/activities/main/MainActivity.java	(date 1615548033024)
+@@ -9,8 +9,8 @@
+ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+ 
+ import com.amazonaws.mobile.client.AWSMobileClient;
+-import com.amazonaws.mobile.client.Callback;
+ import com.amazonaws.mobile.client.UserStateDetails;
++import com.amazonaws.mobile.client.Callback;
+ import com.androidnetworking.AndroidNetworking;
+ import com.example.socialqs.R;
+ import com.example.socialqs.activities.home.MainMenuActivity;
+diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2021_21_54__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_10_02_2021_21_54__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_11_03_2021_18_29__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_11_03_2021_18_29__Default_Changelist_.xml

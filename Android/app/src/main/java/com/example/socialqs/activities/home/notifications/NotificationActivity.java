@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private NotificationAdapter adapter;
+    private CoordinatorLayout coordinatorLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,26 +49,24 @@ public class NotificationActivity extends AppCompatActivity {
 
         updateActionBar();
 
+        coordinatorLayout = findViewById(R.id.notification_layout);
+
         recyclerView = findViewById(R.id.notification_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
 
         progressBar = findViewById(R.id.progress);
-        Sprite doubleBounce = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setIndeterminateDrawable( new DoubleBounce());
         progressBar.setVisibility(View.VISIBLE);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
 
         List<NotificationModel> notificationList = new ArrayList<>();
 
+        //TODO DELETE
         NotificationModel n1 = new NotificationModel();
         n1.getNotificationTitle();
         n1.getNotificationMessage();
         n1.getTime();
         notificationList.add(n1);
-
-//        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
 
         NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
             @Override
@@ -82,10 +84,14 @@ public class NotificationActivity extends AppCompatActivity {
                         notificationList.add(item);
                     }
 
+                    //TODO NO NOTIFICATION LAYOUT
                     if(notificationList.size() == 0){
 //                        noNotificationLayout.setVisibility(View.VISIBLE);
                     }else {
-                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
+                        adapter = new NotificationAdapter(notificationList, coordinatorLayout);
+                        recyclerView.setAdapter(adapter);
+                        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDelete(adapter, getApplicationContext()));
+                        itemTouchHelper.attachToRecyclerView(recyclerView);
                     }
 
                 } catch (Exception e) {
@@ -114,5 +120,6 @@ public class NotificationActivity extends AppCompatActivity {
         text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(text);
     }
+
 
 }

@@ -46,7 +46,7 @@ public class CategoryModel implements Parcelable {
         dest.writeString(id);
     }
 
-    //below method necessary to implement the model adatper for create
+    //below method necessary to implement the model adapter for create
     @Override
     public String toString() {
         return name;

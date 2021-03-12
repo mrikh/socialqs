@@ -71,6 +71,8 @@
 
     <string name="read_more"><u>Read More</u></string>
     <string name="read_less"><u>Read Less</u></string>
+    <string name="delete_notification_text">Notification was deleted!</string>
+    <string name="undo_delete">UNDO</string>
 
     <string name="gallery_pick">Upload from Gallery</string>
     <string name="record">Record Video</string>
