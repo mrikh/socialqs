@@ -91,7 +91,7 @@ public class VideoRepliesModel {
 
     private String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time * 1000);
+        cal.setTimeInMillis(time);
         String date = DateFormat.format("dd MMM yyyy, hh:mm a", cal).toString();
         return date;
     }
