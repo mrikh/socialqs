@@ -78,7 +78,7 @@ router.get('/answers/list', auth, async (req, res, next) => {
             throw error
         }
 
-        const results = await Answer.find({questionId : questionId}).populate({
+        const results = await Answer.find({questionId : questionId}).sort({updatedAt : -1}).populate({
             path: 'creator',
             options : { select : { _id : 1, name : 1, profilePhoto : 1 , blockedUsers : 1}}
         })

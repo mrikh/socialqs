@@ -1,14 +1,18 @@
 package com.example.socialqs.models;
 
+import android.text.format.DateFormat;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class VideoRepliesModel {
     private String replyID, videoQuestionID, videoURL, authorName, authorImg;
-    private int createdAt;
+    private long createdAt;
     private boolean isCorrect;
     private UserModel person;
     private ArrayList<String> likes, dislikes;
@@ -19,7 +23,7 @@ public class VideoRepliesModel {
         this.videoURL = object.getString("videoUrl");
         this.authorName = object.getJSONObject("creator").getString("name");
         this.authorImg = object.getJSONObject("creator").getString("profilePhoto");
-        this.createdAt = object.getInt("createdAt");
+        this.createdAt = object.getLong("createdAt");
         this.isCorrect = object.getBoolean("isCorrect");
 
         JSONArray likesJSONArray = object.getJSONArray("likes");
@@ -79,8 +83,16 @@ public class VideoRepliesModel {
         return dislikes.size();
     }
 
-    public int getCreatedAt(){ return createdAt; }
-
     public boolean isCorrect(){ return isCorrect; }
 
+    public String getTime(){
+        return getDate(createdAt);
+    }
+
+    private String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time * 1000);
+        String date = DateFormat.format("dd MMM yyyy, hh:mm a", cal).toString();
+        return date;
+    }
 }

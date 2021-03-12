@@ -68,9 +68,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private VideoView videoView;
         private LinearLayout correctAnswer;
         private CardView likesBtn, dislikesBtn;
-        private TextView authorName, noOfLikes, noOfDislikes;
+        private TextView authorName, noOfLikes, noOfDislikes, replyPostTime;
         private ImageView authorImg, playBtn;
-        private String videoQuestionID;
         private boolean isCorrect;
 
         public RepliesViewHolder(@NonNull View itemView) {
@@ -84,17 +83,18 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn = itemView.findViewById(R.id.reply_dislikes_cardview);
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
+            replyPostTime = itemView.findViewById(R.id.reply_post_time);
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
         void setData(VideoRepliesModel videoReplies, Boolean automaticPause) {
-            videoQuestionID = videoReplies.getVideoQuestionID();
             videoView.setVideoPath(videoReplies.getVideoURL());
             setLikesBtn(videoReplies);
             setDislikesBtn(videoReplies);
             //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
+            replyPostTime.setText(videoReplies.getTime());
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
@@ -121,7 +121,6 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 videoView.pause();
             }
 
-            // TODO SAVE LIKE/DISLIKE TO DATABASE
             likesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,8 +134,6 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                     dislikeAnswer(videoReplies);
                 }
             });
-
-
         }
 
         void play(){
