@@ -14,7 +14,6 @@ public class VideoRepliesModel {
     private String replyID, videoQuestionID, videoURL, authorName, authorImg;
     private long createdAt;
     private boolean isCorrect;
-    private UserModel person;
     private ArrayList<String> likes, dislikes;
 
     public VideoRepliesModel(JSONObject object) throws JSONException {
@@ -57,7 +56,6 @@ public class VideoRepliesModel {
     }
 
     public void updateLikes(){
-
         if (likes.contains(UserModel.current.id)) {return;}
         likes.add(UserModel.current.id);
     }

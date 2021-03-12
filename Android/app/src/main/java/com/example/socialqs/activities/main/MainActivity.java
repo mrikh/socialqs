@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobile.client.Callback;
 import com.androidnetworking.AndroidNetworking;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.home.MainMenuActivity;

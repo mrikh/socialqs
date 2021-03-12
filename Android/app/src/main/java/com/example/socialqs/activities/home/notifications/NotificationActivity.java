@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.home;
+package com.example.socialqs.activities.home.notifications;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -61,37 +61,38 @@ public class NotificationActivity extends AppCompatActivity {
         NotificationModel n1 = new NotificationModel();
         n1.getNotificationTitle();
         n1.getNotificationMessage();
+        n1.getTime();
         notificationList.add(n1);
 
-        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
+//        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
 
-//        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
-//            @Override
-//            public void completion(JSONObject object, String message) {
-//                progressBar.setVisibility(View.INVISIBLE);
-//                if (object == null) {
-//                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
-//                    return;
-//                }
-//
-//                try {
-//                    JSONArray arr = object.getJSONArray("result");
-//                    for (int i = 0; i < arr.length(); i++) {
-//                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
-//                        notificationList.add(item);
-//                    }
-//
-//                    if(notificationList.size() == 0){
-////                        noNotificationLayout.setVisibility(View.VISIBLE);
-//                    }else {
-//                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
+            @Override
+            public void completion(JSONObject object, String message) {
+                progressBar.setVisibility(View.INVISIBLE);
+                if (object == null) {
+                    Utilities.getInstance().createSingleActionAlert((message == null) ? getText(R.string.something_wrong) : message, getText(R.string.okay), getApplicationContext(), null).show();
+                    return;
+                }
+
+                try {
+                    JSONArray arr = object.getJSONArray("result");
+                    for (int i = 0; i < arr.length(); i++) {
+                        NotificationModel item = new NotificationModel(arr.getJSONObject(i));
+                        notificationList.add(item);
+                    }
+
+                    if(notificationList.size() == 0){
+//                        noNotificationLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(), notificationList));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 

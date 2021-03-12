@@ -17,29 +17,22 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
-import com.example.socialqs.activities.main.MainActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.QuestionModel;
-import com.example.socialqs.models.UserModel;
-import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

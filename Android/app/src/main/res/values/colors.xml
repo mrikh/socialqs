@@ -13,4 +13,5 @@
     <color name="google_red">#DB4437</color>
     <color name="like_btn">#33C83A</color>
     <color name="dislike_btn">#CD0F0F</color>
+    <color name="bookmark_btn">#ea1e63</color>
 </resources>

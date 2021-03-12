@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.socialqs.activities.home.NotificationActivity">
+    tools:context="com.example.socialqs.activities.home.notifications.NotificationActivity">
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/progress"
@@ -24,9 +24,9 @@
         tools:listitem="@layout/item_notification"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:overScrollMode="never"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

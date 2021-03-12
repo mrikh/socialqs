@@ -1,12 +1,19 @@
 package com.example.socialqs.models;
 
+import android.text.format.DateFormat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 public class NotificationModel {
 
-    private String notificationID, questionID, title, message, timeCreated;
+    private String notificationID, questionID, title, message;
+    private Long createdAt;
 
+    //TODO DELETE
     private final static String LONG_TEXT = "Lorem ipsum dolor sit amet, et" +
             " alienum inciderint efficiantur nec, posse causae molestie" +
             " eos in. Ea vero praesent vix, nam soleat recusabo id." +
@@ -18,7 +25,7 @@ public class NotificationModel {
     public NotificationModel() {
         this.title = "Title";
         this.message = LONG_TEXT;
-        this.timeCreated = "12:22";
+        this.createdAt = 1508484583259L;
     }
 
     public NotificationModel(JSONObject object) throws JSONException {
@@ -26,7 +33,7 @@ public class NotificationModel {
         this.questionID = object.getString("questionId");
         this.title = object.getString("title");
         this.message = object.getString("body");
-        this.timeCreated = object.getString("createdAt");
+        this.createdAt = object.getLong("createdAt");
     }
 
     public String getNotificationID(){ return notificationID; }
@@ -37,5 +44,14 @@ public class NotificationModel {
 
     public String getNotificationMessage(){ return message; }
 
-    public String getTimeCreated(){ return timeCreated; }
+    public String getTime(){
+        return getDate(createdAt);
+    }
+
+    private String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd MMM yyyy, hh:mm a", cal).toString();
+        return date;
+    }
 }

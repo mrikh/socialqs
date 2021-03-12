@@ -68,7 +68,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private VideoView videoView;
         private LinearLayout correctAnswer;
         private CardView likesBtn, dislikesBtn;
-        private TextView authorName, noOfLikes, noOfDislikes, replyPostTime;
+        private TextView authorName, noOfLikes, noOfDislikes, replyDate;
         private ImageView authorImg, playBtn;
         private boolean isCorrect;
 
@@ -83,7 +83,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn = itemView.findViewById(R.id.reply_dislikes_cardview);
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
-            replyPostTime = itemView.findViewById(R.id.reply_post_time);
+            replyDate = itemView.findViewById(R.id.reply_post_time);
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -94,7 +94,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
-            replyPostTime.setText(videoReplies.getTime());
+            replyDate.setText(videoReplies.getTime());
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 

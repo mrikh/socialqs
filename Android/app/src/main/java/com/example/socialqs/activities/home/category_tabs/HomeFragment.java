@@ -16,7 +16,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.socialqs.R;
 
 import com.example.socialqs.activities.home.MainMenuActivity;
-import com.example.socialqs.activities.home.NotificationActivity;
+import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -30,7 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Landing home screen fragment that displays the video category tabs

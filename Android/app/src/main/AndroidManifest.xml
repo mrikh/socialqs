@@ -42,7 +42,7 @@
 
         <activity android:name=".activities.home.AnswerQuestionActivity"/>
 
-        <activity android:name=".activities.home.NotificationActivity"
+        <activity android:name=".activities.home.notifications.NotificationActivity"
             android:label="@string/title_notifications"/>
 
         <activity
