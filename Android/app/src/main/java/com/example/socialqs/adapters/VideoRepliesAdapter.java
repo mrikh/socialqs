@@ -21,6 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.models.VideoRepliesModel;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -28,6 +33,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     private List<VideoRepliesModel> replyList;
     private Context context;
+
+    private Boolean automaticPause = false;
 
     public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
@@ -43,14 +50,13 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VideoRepliesAdapter.RepliesViewHolder holder, int position) {
-        holder.setData(replyList.get(position));
+        holder.setData(replyList.get(position), automaticPause);
     }
 
     public void autoUpdateVideoView(Boolean playing){
 
-        if (playing){
-            
-        }
+        automaticPause = !playing;
+        notifyAll();
     }
 
     @Override
@@ -81,11 +87,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-        void setData(VideoRepliesModel videoReplies) {
+        void setData(VideoRepliesModel videoReplies, Boolean automaticPause) {
             videoQuestionID = videoReplies.getVideoQuestionID();
             videoView.setVideoPath(videoReplies.getVideoURL());
-            noOfLikes.setText(videoReplies.getNoOfLikes() + " Likes");
-            noOfDislikes.setText(videoReplies.getNoOfDislikes()+ " Dislikes");
+            setLikesBtn(videoReplies);
+            setDislikesBtn(videoReplies);
             //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
@@ -102,29 +108,43 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
                 if(action == MotionEvent.ACTION_UP) {
                     if (videoView.isPlaying()) {
-                        playWithAnimation();
+                        pause();
                     } else {
-                        videoView.start();
-                        playBtn.setVisibility(View.INVISIBLE);
+                        play();
                     }
                     return true;
                 }
                 return false;
             });
 
-            // TODO SAVE LIKE/DISLIKE TO DATABASE
-            likesBtn.setOnClickListener(v -> setLikesBtn(videoReplies));
-            dislikesBtn.setOnClickListener(v -> setDislikesBtn(videoReplies));
+            if (automaticPause){
+                videoView.pause();
+            }
 
-            authorImg.setOnClickListener(v -> {
-                // TODO GO TO OTHER USER PROFILE
+            // TODO SAVE LIKE/DISLIKE TO DATABASE
+            likesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    likeAnswer(videoReplies);
+                }
             });
-            authorName.setOnClickListener(v -> {
-                // TODO GO TO OTHER USER PROFILE
+
+            dislikesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dislikeAnswer(videoReplies);
+                }
             });
+
+
         }
 
-        private void playWithAnimation(){
+        void play(){
+            videoView.start();
+            playBtn.setVisibility(View.INVISIBLE);
+        }
+
+        void pause(){
             videoView.pause();
             playBtn.setVisibility(View.VISIBLE);
 
@@ -137,38 +157,77 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             });
         }
 
+        private void likeAnswer(VideoRepliesModel videoReplies){
+
+            if (videoReplies.hasUserLiked()){
+                videoReplies.removeFromLike();
+            }else{
+                videoReplies.removeFromDisLike();
+                videoReplies.updateLikes();
+            }
+
+            commonButtonHandling(videoReplies);
+        }
+
+        private void dislikeAnswer(VideoRepliesModel videoReplies){
+
+            if (videoReplies.hasUserDisliked()){
+                videoReplies.removeFromDisLike();
+            }else{
+                videoReplies.removeFromLike();
+                videoReplies.updateDislikes();
+            }
+
+            commonButtonHandling(videoReplies);
+        }
+
+        private void commonButtonHandling(VideoRepliesModel videoReplies){
+
+            setLikesBtn(videoReplies);
+            setDislikesBtn(videoReplies);
+
+            try{
+                JSONObject params = new JSONObject();
+                params.put("answerId", videoReplies.getReplyID());
+                params.put("like", videoReplies.hasUserLiked());
+                params.put("dislike", videoReplies.hasUserDisliked());
+                NetworkHandler.getInstance().updateAnswer(params, new NetworkingClosure() {
+                    @Override
+                    public void completion(JSONObject object, String message) {
+
+                    }
+                });
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+        }
+
         @SuppressLint("SetTextI18n")
         private void setLikesBtn(VideoRepliesModel videoReplies){
-            if(likesBtn.getAlpha() < 1) {
-                if(dislikesBtn.getAlpha() == 1){
-                    dislikesBtn.setAlpha((float) 0.6);
-                    videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-                    noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislike(s)");
-                }
-                likesBtn.setAlpha(1);
-                videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()+1);
-            }else{
-                likesBtn.setAlpha((float) 0.6);
-                videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-            }
+
             noOfLikes.setText(videoReplies.getNoOfLikes() + " Like(s)");
+
+            if (videoReplies.hasUserLiked()){
+                likesBtn.setAlpha((float)1.0);
+                noOfLikes.setAlpha((float)1.0);
+            }else{
+                likesBtn.setAlpha((float)0.4);
+                noOfLikes.setAlpha((float)0.4);
+            }
         }
 
         @SuppressLint("SetTextI18n")
         private void setDislikesBtn(VideoRepliesModel videoReplies){
-            if(dislikesBtn.getAlpha() < 1) {
-                if(likesBtn.getAlpha() == 1){
-                    likesBtn.setAlpha((float) 0.6);
-                    videoReplies.setNoOfLikes(videoReplies.getNoOfLikes()-1);
-                    noOfLikes.setText(videoReplies.getNoOfLikes() + " Like(s)");
-                }
-                dislikesBtn.setAlpha(1);
-                videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()+1);
-            }else{
-                dislikesBtn.setAlpha((float) 0.6);
-                videoReplies.setNoOfDislikes(videoReplies.getNoOfDislikes()-1);
-            }
+
             noOfDislikes.setText(videoReplies.getNoOfDislikes() + " Dislike(s)");
+
+            if (videoReplies.hasUserDisliked()){
+                dislikesBtn.setAlpha((float)1.0);
+                noOfDislikes.setAlpha((float)1.0);
+            }else{
+                dislikesBtn.setAlpha((float)0.4);
+                noOfDislikes.setAlpha((float)0.4);
+            }
         }
     }
 }

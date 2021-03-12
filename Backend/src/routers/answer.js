@@ -147,6 +147,7 @@ router.patch('/answers/update', auth, async (req, res, next) => {
         if (like != null || like != undefined){
             if (like){
                 answer.likes.push(req.user._id)
+                answer.dislikes.pull(req.user._id)
             }else{
                 answer.likes.pull(req.user._id)
             }
@@ -154,6 +155,7 @@ router.patch('/answers/update', auth, async (req, res, next) => {
 
         if (dislike != null || dislike != undefined){
             if (dislike){
+                answer.likes.pull(req.user._id)
                 answer.dislikes.push(req.user._id)
             }else{
                 answer.dislikes.pull(req.user._id)

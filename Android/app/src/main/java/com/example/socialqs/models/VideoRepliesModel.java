@@ -1,13 +1,17 @@
 package com.example.socialqs.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class VideoRepliesModel {
-    private String replyID, videoQuestionID, videoURL, authorName, authorImg, noOfLikes, noOfDislikes;
+    private String replyID, videoQuestionID, videoURL, authorName, authorImg;
     private int createdAt;
     private boolean isCorrect;
     private UserModel person;
+    private ArrayList<String> likes, dislikes;
 
     public VideoRepliesModel(JSONObject object) throws JSONException {
         this.replyID = object.getString("_id");
@@ -15,11 +19,24 @@ public class VideoRepliesModel {
         this.videoURL = object.getString("videoUrl");
         this.authorName = object.getJSONObject("creator").getString("name");
         this.authorImg = object.getJSONObject("creator").getString("profilePhoto");
-        this.noOfLikes = object.getString("likes");
-        this.noOfDislikes = object.getString("dislikes");
         this.createdAt = object.getInt("createdAt");
         this.isCorrect = object.getBoolean("isCorrect");
+
+        JSONArray likesJSONArray = object.getJSONArray("likes");
+        JSONArray dislikesJSONArray = object.getJSONArray("dislikes");
+
+        likes = new ArrayList<>();
+        for(int i = 0; i < likesJSONArray.length(); i++) {
+            likes.add(likesJSONArray.getString(i));
+        }
+
+        dislikes = new ArrayList<>();
+        for(int i = 0; i < dislikesJSONArray.length(); i++) {
+            dislikes.add(dislikesJSONArray.getString(i));
+        }
     }
+
+    public String getReplyID(){return replyID;}
 
     public String getVideoQuestionID(){ return videoQuestionID; }
 
@@ -27,23 +44,40 @@ public class VideoRepliesModel {
 
     public String getAuthorName(){ return authorName; }
 
-//    public int getAuthorImg(){return authorImg; }
+    public boolean hasUserLiked(){
+        return likes.contains(UserModel.current.id);
+    }
 
-    public int getNoOfLikes(){
-        if(noOfLikes.equals("[]")){
-            return 0;
-        }
-        return Integer.parseInt(noOfLikes); }
+    public boolean hasUserDisliked(){
+        return dislikes.contains(UserModel.current.id);
+    }
 
-    public void setNoOfLikes(int value){ noOfLikes = String.valueOf(value); }
+    public void updateLikes(){
 
-    public int getNoOfDislikes(){
-        if(noOfDislikes.equals("[]")){
-            return 0;
-        }
-        return Integer.parseInt(noOfDislikes); }
+        if (likes.contains(UserModel.current.id)) {return;}
+        likes.add(UserModel.current.id);
+    }
 
-    public void setNoOfDislikes(int value){ noOfDislikes = String.valueOf(value); }
+    public void removeFromLike(){
+        likes.remove(UserModel.current.id);
+    }
+
+    public void removeFromDisLike(){
+        dislikes.remove(UserModel.current.id);
+    }
+
+    public void updateDislikes(){
+        if (dislikes.contains(UserModel.current.id)) {return;}
+        dislikes.add(UserModel.current.id);
+    }
+
+    public int getNoOfLikes() {
+        return likes.size();
+    }
+
+    public int getNoOfDislikes() {
+        return dislikes.size();
+    }
 
     public int getCreatedAt(){ return createdAt; }
 

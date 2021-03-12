@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Exception e) {
-                System.out.println("Whyyyy");
+                System.out.println("Whyyyy2");
             }
         });
 

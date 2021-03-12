@@ -30,6 +30,10 @@ public class NetworkHandler {
         return shared;
     }
 
+    public void updateAnswer(JSONObject params, NetworkingClosure completion){
+        performPatchRequest(EndPoints.updateAnswer, params, completion);
+    }
+
     public void createQuestion(JSONObject params, NetworkingClosure completion){
         performPostRequest(EndPoints.createQuestions, params, completion);
     }
