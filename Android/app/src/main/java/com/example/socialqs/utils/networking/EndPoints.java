@@ -14,5 +14,6 @@ public class EndPoints{
     public static String createQuestions = "questions/create";
     public static String repliesList = "answers/list";
     public static String notificationList = "notifications";
+    public static String deleteNotification = "notifications/id";
     public static String updateAnswer = "answers/update";
 }

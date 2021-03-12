@@ -170,9 +170,9 @@ public class NetworkHandler {
     private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
 
         if (params != null){
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addPathParameter(params), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint).addPathParameter(params), completion);
         }else{
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint), completion);
         }
     }
 
