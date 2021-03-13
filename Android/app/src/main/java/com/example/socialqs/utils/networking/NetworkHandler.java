@@ -30,6 +30,12 @@ public class NetworkHandler {
         return shared;
     }
 
+    public void deleteNotif(String id, NetworkingClosure completion){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", id);
+        performDeleteRequest(EndPoints.deleteNotification, params, completion);
+    }
+
     public void updateAnswer(JSONObject params, NetworkingClosure completion){
         performPatchRequest(EndPoints.updateAnswer, params, completion);
     }

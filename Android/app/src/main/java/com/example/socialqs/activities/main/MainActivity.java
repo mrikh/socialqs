@@ -32,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        NetworkHandler.getInstance().deleteNotif("604c009395912e400acd416a", new NetworkingClosure() {
+            @Override
+            public void completion(JSONObject object, String message) {
+
+            }
+        });
+
         AWSMobileClient.getInstance().initialize(this, new Callback<UserStateDetails>() {
             @Override
             public void onResult(UserStateDetails result) {
