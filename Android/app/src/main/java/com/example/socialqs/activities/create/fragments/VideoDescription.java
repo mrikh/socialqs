@@ -90,7 +90,7 @@ public class VideoDescription extends Fragment {
                     videoSource();
                     hideKeyboard();
                 }else{
-                    Utilities.getInstance().createSingleActionAlert("Please select the options", "Okay", getActivity(), null).show();
+                    Utilities.getInstance().createSingleActionAlert("Make sure all details have been filled in", "Okay", getActivity(), null).show();
                 }
             }
         });

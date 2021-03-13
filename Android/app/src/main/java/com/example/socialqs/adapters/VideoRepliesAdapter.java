@@ -37,12 +37,14 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     private List<VideoRepliesModel> replyList;
     private Context context;
+    private String questionID;
 
     private Boolean automaticPause = false;
 
-    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList) {
+    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList, String questionID) {
         this.replyList = replyList;
         this.context = context;
+        this.questionID = questionID;
     }
 
     @NonNull
@@ -100,18 +102,16 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             videoView.setVideoPath(videoReplies.getVideoURL());
             setLikesBtn(videoReplies);
             setDislikesBtn(videoReplies);
-            //TODO UPDATE IMAGE WHEN DATABASE IS ADDED
+            //TODO UPDATE PROFILE PIC
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
             replyDate.setText(videoReplies.getTime());
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
-            videoView.requestFocus();
             //Prepare Video
-            videoView.setOnPreparedListener(mp -> {
-                progressBar.setVisibility(View.INVISIBLE);
-            });
+            videoView.requestFocus();
+            videoView.setOnPreparedListener(mp -> progressBar.setVisibility(View.INVISIBLE));
 
             //Play / Pause Video
             videoView.setOnTouchListener((v, event) -> {
@@ -132,23 +132,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
             videoView.setOnCompletionListener(MediaPlayer::start);
 
-            if (automaticPause){
-                pause();
-            }
+            if (automaticPause){ pause(); }
 
-            likesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    likeAnswer(videoReplies);
-                }
-            });
+            likesBtn.setOnClickListener(v -> likeAnswer(videoReplies));
 
-            dislikesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dislikeAnswer(videoReplies);
-                }
-            });
+            dislikesBtn.setOnClickListener(v -> dislikeAnswer(videoReplies));
         }
 
         void play(){

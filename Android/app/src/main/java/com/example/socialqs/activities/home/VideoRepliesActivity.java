@@ -20,9 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
-import com.example.socialqs.adapters.VideoDisplayAdapter;
 import com.example.socialqs.adapters.VideoRepliesAdapter;
-import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -91,7 +89,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     if(videoReplies.size() == 0){
                         noRepliesLayout.setVisibility(View.VISIBLE);
                     }else {
-                        recyclerView.setAdapter(new VideoRepliesAdapter(getApplicationContext(), videoReplies));
+                        recyclerView.setAdapter(new VideoRepliesAdapter(getApplicationContext(), videoReplies, videoID));
                     }
 
                 } catch (Exception e) {
@@ -103,32 +101,33 @@ public class VideoRepliesActivity extends AppCompatActivity {
         answerQuestionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VideoRepliesAdapter adapter = (VideoRepliesAdapter) recyclerView.getAdapter();
-                adapter.autoUpdateVideoView(false);
-                videoOptions();
+                videoOptions(videoID);
             }
         });
     }
 
-    private void videoOptions(){
+    private void videoOptions(String videoID){
         final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(VideoRepliesActivity.this);
+
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
+                final Intent[] myIntent = {null};
+
                 if (options[item].equals("Record Video")) {
-                    Intent myIntent = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
-                    myIntent.putExtra("videoOption", "1");
-                    startActivity(myIntent);
+                    myIntent[0] = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
+                    myIntent[0].putExtra("videoOption", "1");
+
                 } else if (options[item].equals("Choose from Gallery")) {
-                    Intent myIntent = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
-                    myIntent.putExtra("videoOption", "2");
-                    startActivity(myIntent);
+                    myIntent[0] = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
+                    myIntent[0].putExtra("videoOption", "2");
                 } else {
                     dialog.dismiss();
-                    VideoRepliesAdapter adapter = (VideoRepliesAdapter) recyclerView.getAdapter();
-                    adapter.autoUpdateVideoView(true);
                 }
+
+                myIntent[0].putExtra("questionID", videoID);
+                startActivity(myIntent[0]);
             }
         });
         builder.show();
