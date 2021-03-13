@@ -81,9 +81,7 @@ public class CreateActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
 
-        if (title == null) {
-            return;
-        }
+        if (title == null) { return; }
 
         Spannable text = new SpannableString(title);
         text.setSpan(new ForegroundColorSpan(getResources().getColor(titleColorId)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);

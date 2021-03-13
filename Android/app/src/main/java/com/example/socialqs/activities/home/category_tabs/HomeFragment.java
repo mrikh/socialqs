@@ -1,10 +1,16 @@
 package com.example.socialqs.activities.home.category_tabs;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -41,6 +47,7 @@ public class HomeFragment extends Fragment {
     private ViewPager2 viewPager;
     private ProgressBar progressBar;
     private ImageView notifications;
+    private AutoCompleteTextView searchBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -49,15 +56,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainMenuActivity)getActivity()).updateActionBarBack(false);
-        ((MainMenuActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
+        ((MainMenuActivity) getActivity()).getSupportActionBar().hide(); //Hide action bar at top
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ((MainMenuActivity) getActivity()).getSupportActionBar().hide(); //Hide action bar at top
 
         notifications = (ImageView) view.findViewById(R.id.notification_img);
         notifications.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +71,8 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
 
         viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
@@ -119,4 +125,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }

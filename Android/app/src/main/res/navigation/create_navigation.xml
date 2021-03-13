@@ -11,24 +11,11 @@
         android:label="fragment_video_description"
         tools:layout="@layout/fragment_video_description" >
         <action
-            android:id="@+id/action_titleFragment_to_selectSourceFragment"
-            app:destination="@id/chooseSource" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/chooseSource"
-        android:name="com.example.socialqs.activities.create.fragments.ChooseSource"
-        android:label="fragment_choose_source"
-        tools:layout="@layout/fragment_choose_source" >
-        <action
-            android:id="@+id/onRecord"
-            app:destination="@id/videoRecord" />
-        <action
-            android:id="@+id/onPick"
+            android:id="@+id/action_videoDescription_to_videoList"
             app:destination="@id/videoList" />
         <action
-            android:id="@+id/backAction"
-            app:destination="@id/videoDescription" />
+            android:id="@+id/action_videoDescription_to_videoRecord"
+            app:destination="@id/videoRecord" />
     </fragment>
 
     <fragment

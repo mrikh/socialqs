@@ -53,11 +53,10 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video_list, container, false);
         Context context = getContext();
-
+        
         storagePaths = StorageUtil.getStorageDirectories(getContext());
 
         for (String path : storagePaths) {
@@ -160,6 +159,18 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
                 }
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateActionBar();
+    }
+
+    private void updateActionBar(){
+        ((CreateActivity) getActivity()).getSupportActionBar().show();
+        ((CreateActivity)getActivity()).setActionBarTitle("Select Source", "#ffffff", R.color.black);
+        ((CreateActivity)getActivity()).updateActionBarBack(true);
     }
 }
 
