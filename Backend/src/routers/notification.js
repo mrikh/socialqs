@@ -21,6 +21,7 @@ router.get('/notifications', auth, async (req, res, next) => {
 router.delete('/notifications/id/:id', auth, async (req, res, next) => {
 
     try{
+
         const notificationId = req.params.id
         const currentUserId = req.user._id
         

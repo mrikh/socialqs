@@ -30,6 +30,12 @@ public class NetworkHandler {
         return shared;
     }
 
+    public void deleteNotif(String id, NetworkingClosure completion){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", id);
+        performDeleteRequest(EndPoints.deleteNotification, params, completion);
+    }
+
     public void updateAnswer(JSONObject params, NetworkingClosure completion){
         performPatchRequest(EndPoints.updateAnswer, params, completion);
     }
@@ -178,9 +184,9 @@ public class NetworkHandler {
     private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
 
         if (params != null){
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addPathParameter(params), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint ).addPathParameter(params), completion);
         }else{
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint), completion);
         }
     }
 

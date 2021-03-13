@@ -16,6 +16,8 @@ import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,8 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
