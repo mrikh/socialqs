@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -23,6 +25,8 @@ import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +58,6 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
     }
 
     public void autoUpdateVideoView(Boolean playing){
-
         automaticPause = !playing;
         notifyAll();
     }
@@ -71,6 +74,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private TextView authorName, noOfLikes, noOfDislikes, replyDate;
         private ImageView authorImg, playBtn;
         private boolean isCorrect;
+        private ProgressBar progressBar;
 
         public RepliesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +88,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
             replyDate = itemView.findViewById(R.id.reply_post_time);
+
+            progressBar = itemView.findViewById(R.id.progress);
+            Sprite doubleBounce = new DoubleBounce();
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -98,7 +107,11 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
-            playBtn.setVisibility(View.VISIBLE);
+            videoView.requestFocus();
+            //Prepare Video
+            videoView.setOnPreparedListener(mp -> {
+                progressBar.setVisibility(View.INVISIBLE);
+            });
 
             //Play / Pause Video
             videoView.setOnTouchListener((v, event) -> {
@@ -117,8 +130,10 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 return false;
             });
 
+            videoView.setOnCompletionListener(MediaPlayer::start);
+
             if (automaticPause){
-                videoView.pause();
+                pause();
             }
 
             likesBtn.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +154,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         void play(){
             videoView.start();
             playBtn.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         void pause(){

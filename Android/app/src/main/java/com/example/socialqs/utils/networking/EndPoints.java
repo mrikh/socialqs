@@ -16,5 +16,5 @@ public class EndPoints{
     public static String notificationList = "notifications";
     public static String deleteNotification = "notifications/id/{id}";
     public static String updateAnswer = "answers/update";
-    public static String deleteNotification = "notifications/id";
+    public static String createAnswer = "answers/answer";
 }

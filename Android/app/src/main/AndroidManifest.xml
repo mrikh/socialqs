@@ -5,7 +5,7 @@
     package="com.example.socialqs">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
 
 
@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialQs"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="m">
 
         <activity android:name=".activities.prelogin.PreLoginActivity" />

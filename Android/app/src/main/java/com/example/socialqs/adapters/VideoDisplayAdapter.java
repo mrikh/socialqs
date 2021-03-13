@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -20,6 +23,8 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.models.VideoItemModel;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.List;
 
@@ -53,6 +58,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         private TextView authorName, videoQuestion, videoReplies;
         private ImageView authorImg, playBtn, bookmarkBtn, replyToVideoBtn;
         private String videoID;
+        private ProgressBar progressBar;
 
         public VideoViewHolder(@NonNull View itemView){
             super(itemView);
@@ -64,6 +70,11 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             playBtn = itemView.findViewById(R.id.play_btn);
             bookmarkBtn = itemView.findViewById(R.id.bookmark_img_view);
             replyToVideoBtn = itemView.findViewById(R.id.reply_to_video_img_view);
+
+            progressBar = itemView.findViewById(R.id.progress);
+            Sprite doubleBounce = new DoubleBounce();
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -78,8 +89,10 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
             // TODO BOOKMARK
 
+            videoView.requestFocus();
             //Prepare Video
             videoView.setOnPreparedListener(mp -> {
+                progressBar.setVisibility(View.INVISIBLE);
                 mp.start();
                 playBtn.setVisibility(View.INVISIBLE);
             });
@@ -112,7 +125,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             });
 
             //Loop Video When Finished
-            videoView.setOnCompletionListener(mp -> mp.start());
+            videoView.setOnCompletionListener(MediaPlayer::start);
 
             videoReplies.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,31 +140,37 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 @Override
                 public void onClick(View v) {
                     videoView.pause();
-                    videoOptions();
+                    videoOptions(videoID);
                 }
             });
         }
 
-        private void videoOptions(){
+        private void videoOptions(String videoID){
             final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int item) {
+                    final Intent[] myIntent = {null};
+
                     if (options[item].equals("Record Video")) {
-                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
-                        myIntent.putExtra("videoOption", "1");
-                        context.startActivity(myIntent);
+                        myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent[0].putExtra("videoOption", "1");
+
                     } else if (options[item].equals("Choose from Gallery")) {
-                        Intent myIntent = new Intent(context, AnswerQuestionActivity.class);
-                        myIntent.putExtra("videoOption", "2");
-                        context.startActivity(myIntent);
+                        myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent[0].putExtra("videoOption", "2");
                     } else {
                         dialog.dismiss();
                         videoView.start();
                     }
+
+                    myIntent[0].putExtra("questionID", videoID);
+                    context.startActivity(myIntent[0]);
                 }
             });
+
             builder.show();
         }
 

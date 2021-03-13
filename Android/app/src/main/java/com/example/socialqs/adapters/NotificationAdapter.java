@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.NotificationModel;
 import com.example.socialqs.models.VideoRepliesModel;
@@ -82,17 +83,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notifyItemInserted(deletedItemPos);
         });
 
-        snackbar.addCallback(new Snackbar.Callback(){
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                super.onDismissed(transientBottomBar, event);
+        snackbar.addCallback(new Snackbar.Callback() {
+             @Override
+             public void onDismissed(Snackbar transientBottomBar, int event) {
+                 super.onDismissed(transientBottomBar, event);
 
-                String notificationID = deletedItem.getNotificationID();
+                 String notificationID = deletedItem.getNotificationID();
 
-                //TODO DELETE NOTIFICATION COMPLETELY
-            }
-        });
+                 //TODO DELETE NOTIFICATION COMPLETELY
+                 NetworkHandler.getInstance().deleteNotification(notificationID, new NetworkingClosure() {
+                     @Override
+                     public void completion(JSONObject object, String message) {
 
+                     }
+                 });
+             }
+         });
 
         snackbar.show();
     }

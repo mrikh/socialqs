@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import com.amazonaws.auth.CognitoCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -42,7 +45,6 @@ public class Utilities {
     }
 
     public String s3UrlString(String filename){
-
         return "https://s3.eu-west-1.amazonaws.com/socialqs-bucket/" + filename;
     }
 
@@ -50,6 +52,8 @@ public class Utilities {
     public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {
         CognitoCredentialsProvider cred = new CognitoCredentialsProvider("eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0", Regions.EU_WEST_1);
         AmazonS3Client client = new AmazonS3Client(cred);
+
+        TransferNetworkLossHandler.getInstance(c);
 
         TransferUtility utility = TransferUtility.builder()
                 .context(c)

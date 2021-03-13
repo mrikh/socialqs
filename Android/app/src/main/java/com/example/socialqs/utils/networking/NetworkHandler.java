@@ -30,12 +30,6 @@ public class NetworkHandler {
         return shared;
     }
 
-    public void deleteNotif(String id, NetworkingClosure completion){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id", id);
-        performDeleteRequest(EndPoints.deleteNotification, params, completion);
-    }
-
     public void updateAnswer(JSONObject params, NetworkingClosure completion){
         performPatchRequest(EndPoints.updateAnswer, params, completion);
     }
@@ -163,13 +157,16 @@ public class NetworkHandler {
         performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
     }
 
-    //TODO FIX DELETE NOTIFICATION
-//    public void deleteNotification(String notificationID, NetworkingClosure completion){
-//        HashMap hashmap = new HashMap<>();
-//        hashmap.put("notificationId", notificationID);
-//
-//        performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
-//    }
+    public void deleteNotification(String notificationID, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("notificationId", notificationID);
+
+        performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
+    }
+
+    public void createAnswer(JSONObject params, NetworkingClosure completion) {
+        performPostRequest(EndPoints.createAnswer, params, completion);
+    }
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
