@@ -20,6 +20,7 @@ router.get('/notifications', auth, async (req, res, next) => {
 
 router.delete('/notifications/id/:id', auth, async (req, res, next) => {
 
+    console.log("___________")
     try{
 
         console.log("=========1==========")

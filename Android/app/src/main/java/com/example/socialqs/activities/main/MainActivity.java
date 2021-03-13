@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         AWSMobileClient.getInstance().initialize(this, new Callback<UserStateDetails>() {
             @Override
             public void onResult(UserStateDetails result) {
@@ -98,5 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(myIntent);
+        
+         */
     }
 }
