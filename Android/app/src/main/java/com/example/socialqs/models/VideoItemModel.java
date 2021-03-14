@@ -8,7 +8,6 @@ public class VideoItemModel {
     private String videoID, videoURL, videoQuestion, authorName, authorImg, category;
     private int replyAmount;
     private boolean isBookmarked;
-    private UserModel person;
 
     public VideoItemModel(JSONObject object) throws JSONException {
         this.videoID = object.getString("_id");
@@ -32,8 +31,6 @@ public class VideoItemModel {
     public String getAuthorName(){ return authorName; }
 
 //    public int getAuthorImg(){return authorImg; }
-
-    public int getReplyNumber(){ return replyAmount; }
 
     public String getVideoReplyAmount(){
         if(replyAmount == 1){

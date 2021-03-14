@@ -2,10 +2,13 @@ package com.example.socialqs.models;
 
 import android.text.format.DateFormat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class NotificationModel {
@@ -54,4 +57,5 @@ public class NotificationModel {
         String date = DateFormat.format("dd MMM yyyy, hh:mm a", cal).toString();
         return date;
     }
+
 }

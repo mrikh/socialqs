@@ -36,4 +36,27 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <LinearLayout
+        android:id="@+id/no_notifications_layout"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="228dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/no_notifications"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:text="@string/no_notifications"/>
+    </LinearLayout>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

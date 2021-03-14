@@ -8,13 +8,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class VideoRepliesModel {
     private String replyID, videoQuestionID, videoURL, authorName, authorImg;
     private long createdAt;
     private boolean isCorrect;
-    private ArrayList<String> likes, dislikes;
+    private List<String> likes, dislikes;
 
     public VideoRepliesModel(JSONObject object) throws JSONException {
         this.replyID = object.getString("_id");

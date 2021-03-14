@@ -29,6 +29,8 @@ import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -74,6 +76,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         showUndoSnackbar();
     }
 
+
+
     private void showUndoSnackbar() {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text,
                 Snackbar.LENGTH_LONG);
@@ -86,17 +90,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         snackbar.addCallback(new Snackbar.Callback() {
              @Override
              public void onDismissed(Snackbar transientBottomBar, int event) {
-                 super.onDismissed(transientBottomBar, event);
+             super.onDismissed(transientBottomBar, event);
 
-                 String notificationID = deletedItem.getNotificationID();
+             String notificationID = deletedItem.getNotificationID();
 
-                 //TODO DELETE NOTIFICATION COMPLETELY
-                 NetworkHandler.getInstance().deleteNotification(notificationID, new NetworkingClosure() {
-                     @Override
-                     public void completion(JSONObject object, String message) {
-
-                     }
-                 });
+             //TODO DELETE NOTIFICATION COMPLETELY
+             NetworkHandler.getInstance().deleteNotification(notificationID, new NetworkingClosure() {
+                 @Override
+                 public void completion(JSONObject object, String message) {
+//                     try {
+//
+//
+//                     } catch (JSONException e) {
+//                         e.printStackTrace();
+//                     }
+                 }
+             });
              }
          });
 

@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class NotificationActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private NotificationAdapter adapter;
     private CoordinatorLayout coordinatorLayout;
+    private LinearLayout noNotificationsLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class NotificationActivity extends AppCompatActivity {
         updateActionBar();
 
         coordinatorLayout = findViewById(R.id.notification_layout);
+        noNotificationsLayout = findViewById(R.id.no_notifications_layout);
 
         recyclerView = findViewById(R.id.notification_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -61,12 +64,12 @@ public class NotificationActivity extends AppCompatActivity {
 
         List<NotificationModel> notificationList = new ArrayList<>();
 
-        //TODO DELETE
-        NotificationModel n1 = new NotificationModel();
-        n1.getNotificationTitle();
-        n1.getNotificationMessage();
-        n1.getTime();
-        notificationList.add(n1);
+//        //TODO DELETE
+//        NotificationModel n1 = new NotificationModel();
+//        n1.getNotificationTitle();
+//        n1.getNotificationMessage();
+//        n1.getTime();
+//        notificationList.add(n1);
 
         NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
             @Override
@@ -84,9 +87,8 @@ public class NotificationActivity extends AppCompatActivity {
                         notificationList.add(item);
                     }
 
-                    //TODO NO NOTIFICATION LAYOUT
                     if(notificationList.size() == 0){
-//                        noNotificationLayout.setVisibility(View.VISIBLE);
+                        noNotificationsLayout.setVisibility(View.VISIBLE);
                     }else {
                         adapter = new NotificationAdapter(notificationList, coordinatorLayout);
                         recyclerView.setAdapter(adapter);
