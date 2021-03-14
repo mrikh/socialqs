@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -35,6 +37,8 @@ import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.Utilities;
 
 import java.util.ArrayList;
+
+import okhttp3.internal.Util;
 
 public class VideoDescription extends Fragment {
 
@@ -87,7 +91,7 @@ public class VideoDescription extends Fragment {
                 question.setqCategory((CategoryModel)spinner.getSelectedItem());
 
                 if (!question.getqTitle().isEmpty() && question.getqCategory() != null) {
-                    videoSource();
+                    checkStoragePermission();
                     hideKeyboard();
                 }else{
                     Utilities.getInstance().createSingleActionAlert("Make sure all details have been filled in", "Okay", getActivity(), null).show();
@@ -101,6 +105,25 @@ public class VideoDescription extends Fragment {
                 getActivity().finish();
             }
         });
+    }
+
+    static final Integer READ_STORAGE_PERMISSION_REQUEST_CODE=0x3;
+    private void checkStoragePermission(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int result = getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (result == PackageManager.PERMISSION_GRANTED){
+                videoSource();
+            }else{
+                Utilities.getInstance().createSingleActionAlert("Permission to read storage necessary", "Okay", getContext(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                READ_STORAGE_PERMISSION_REQUEST_CODE);
+                    }
+                }).show();
+            }
+        }
     }
 
     @Override

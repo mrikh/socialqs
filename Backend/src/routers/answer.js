@@ -42,6 +42,8 @@ router.post('/answers/answer', auth, async (req, res, next) => {
                 body: message
             })
 
+            await notification.save()   
+
             const creatorUser = await User.findById(answer.questionId.creator._id)
             const pushMessage = {
                 notification : {
@@ -56,8 +58,6 @@ router.post('/answers/answer', auth, async (req, res, next) => {
             }).catch( error => {
                 console.log(error);
             });   
-            
-            await notification.save()   
         }
         
         return res.status(200).send({code : 200, message : constants.success, data : answer})
