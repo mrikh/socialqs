@@ -159,7 +159,7 @@ public class NetworkHandler {
 
     public void deleteNotification(String notificationID, NetworkingClosure completion){
         HashMap hashmap = new HashMap<>();
-        hashmap.put("notificationId", notificationID);
+        hashmap.put("id", notificationID);
 
         performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
     }
