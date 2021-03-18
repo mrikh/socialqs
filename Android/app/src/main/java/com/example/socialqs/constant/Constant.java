@@ -15,4 +15,6 @@ public class Constant {
     public static int CAMERA_PERMISSION = 101;
 
     public static int FILE_ACCESS_PERMISSION = 102;
+
+    public static int CAPTURE_PROFILE_IMAGE = 103;
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_navigation"
+    app:startDestination="@id/profileView">
+
+    <fragment
+        android:id="@+id/profileView"
+        android:name="com.example.socialqs.activities.profile.fragments.ProfileView"
+        android:label="fragment_profile_view"
+        tools:layout="@layout/fragment_profile_view" >
+        <action
+            android:id="@+id/action_profileView_to_profileSettings"
+            app:destination="@id/profileSettings" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileSettings"
+        android:name="com.example.socialqs.activities.profile.fragments.ProfileSettings"
+        android:label="fragment_profile_settings"
+        tools:layout="@layout/fragment_profile_settings" />
+</navigation>

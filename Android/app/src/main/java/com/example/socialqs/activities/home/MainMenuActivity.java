@@ -11,16 +11,12 @@ import android.view.MenuItem;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.activities.main.MainActivity;
-import com.example.socialqs.activities.prelogin.PreLoginActivity;
-import com.example.socialqs.models.UserModel;
+import com.example.socialqs.activities.profile.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -50,9 +46,14 @@ public class MainMenuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 NavController navController = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
+                Intent myIntent;
                 switch (item.getItemId()){
                     case R.id.navigation_create:
-                        Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                        myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                        startActivity(myIntent);
+                        return false;
+                    case R.id.navigation_profile:
+                        myIntent = new Intent(MainMenuActivity.this, ProfileActivity.class);
                         startActivity(myIntent);
                         return false;
                     default:
