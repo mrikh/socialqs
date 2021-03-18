@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,21 +23,18 @@ import android.view.ViewGroup;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.adapters.RecyclerViewAdapter;
+import com.example.socialqs.adapters.VideoListAdapter;
 import com.example.socialqs.constant.Constant;
-import com.example.socialqs.models.UserModel;
-import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.StorageUtil;
 import com.example.socialqs.utils.Utilities;
-import com.example.socialqs.utils.helperInterfaces.VideoUploadCompletion;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClickListener {
+public class VideoList extends Fragment implements VideoListAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private VideoListAdapter videoListAdapter;
     private Uri fileUri;
 
     private ArrayList<File> allMediaList = new ArrayList<>();
@@ -78,9 +73,9 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         recyclerView.setNestedScrollingEnabled(false);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(context, allMediaList);
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
+        videoListAdapter = new VideoListAdapter(context, allMediaList);
+        recyclerView.setAdapter(videoListAdapter);
+        videoListAdapter.setClickListener(new VideoListAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position, Context context) {
                 String path = Uri.fromFile(allMediaList.get(position)).getPath();
@@ -113,7 +108,7 @@ public class VideoList extends Fragment implements RecyclerViewAdapter.ItemClick
             load_Directory_Files(storage);
         }
 
-        recyclerViewAdapter.notifyDataSetChanged();
+        videoListAdapter.notifyDataSetChanged();
     }
 
     @Override

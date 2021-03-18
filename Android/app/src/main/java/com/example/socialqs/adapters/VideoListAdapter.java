@@ -20,13 +20,13 @@ import com.example.socialqs.constant.Constant;
 import java.io.File;
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private ItemClickListener myItemClickListener;
     private ArrayList<File> allMediaList;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<File> media) {
+    public VideoListAdapter(Context mContext, ArrayList<File> media) {
         this.allMediaList = media;
         this.mContext = mContext;
     }
