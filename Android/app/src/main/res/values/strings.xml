@@ -74,6 +74,10 @@
     <string name="delete_notification_text">Notification was deleted!</string>
     <string name="undo_delete">UNDO</string>
     <string name="no_notifications">You currently have no notifications!</string>
+    <string name="title_delete">Delete</string>
+    <string name="delete_notifications">Delete All Notifications</string>
+    <string name="delete_all_notification_warning">Are you sure you want to permanently delete all your notifications?</string>
+    <string name="cancel">Cancel</string>
 
     <string name="gallery_pick">Upload from Gallery</string>
     <string name="record">Record Video</string>

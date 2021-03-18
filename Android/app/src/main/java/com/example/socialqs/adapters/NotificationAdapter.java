@@ -45,6 +45,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private NotificationModel deletedItem;
     private int deletedItemPos;
     private CoordinatorLayout coordinatorLayout;
+    private OnDataChangeListener onDataChangeListener;
 
     public NotificationAdapter(List<NotificationModel> notificationList, CoordinatorLayout coordinatorLayout) {
         this.notificationList = notificationList;
@@ -68,23 +69,28 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notificationList.size();
     }
 
+    public interface OnDataChangeListener{public void onDataChanged(int size);}
+
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
+        this. onDataChangeListener = onDataChangeListener;
+    }
+
     public void deleteNotification(int position){
         deletedItem = notificationList.get(position);
         deletedItemPos = position;
         notificationList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
+        updateActivityLayout();
     }
 
-
-
     private void showUndoSnackbar() {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text,
-                Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text, Snackbar.LENGTH_LONG);
 
         snackbar.setAction(R.string.undo_delete, v -> {
             notificationList.add(deletedItemPos, deletedItem);
             notifyItemInserted(deletedItemPos);
+            updateActivityLayout();
         });
 
         snackbar.addCallback(new Snackbar.Callback() {
@@ -92,25 +98,23 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
              public void onDismissed(Snackbar transientBottomBar, int event) {
              super.onDismissed(transientBottomBar, event);
 
-             String notificationID = deletedItem.getNotificationID();
-
-             //TODO DELETE NOTIFICATION COMPLETELY
-             NetworkHandler.getInstance().deleteNotification(notificationID, new NetworkingClosure() {
-                 @Override
-                 public void completion(JSONObject object, String message) {
-//                     try {
-//
-//
-//                     } catch (JSONException e) {
-//                         e.printStackTrace();
-//                     }
+                //if snackbar is ignored, delete completely
+                 if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                     String notificationID = deletedItem.getNotificationID();
+                     NetworkHandler.getInstance().deleteNotification(notificationID, (object, message) -> { });
                  }
-             });
              }
          });
 
         snackbar.show();
     }
+
+    private void updateActivityLayout(){
+        if(onDataChangeListener != null){
+            onDataChangeListener.onDataChanged(notificationList.size());
+        }
+    }
+
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
@@ -132,7 +136,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             message.setText(notificationItem.getNotificationMessage());
             date.setText(notificationItem.getTime());
 
-            //Hide read more option if all text is see
+            //Hide read more option if all text is seen
             message.post(() -> {
                 if(message.getLineCount() < MAX_LINES_COLLAPSED){
                     messageLength.setVisibility(View.INVISIBLE);

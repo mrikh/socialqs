@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/videoDescription"
-        android:name="com.example.socialqs.activities.create.fragments.VideoDescription"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDescriptionFragment"
         android:label="fragment_video_description"
         tools:layout="@layout/fragment_video_description" >
         <action
@@ -20,14 +20,14 @@
 
     <fragment
         android:id="@+id/videoRecord"
-        android:name="com.example.socialqs.activities.create.fragments.VideoRecord"
+        android:name="com.example.socialqs.activities.create.fragments.VideoRecordFragment"
         android:label="fragment_video_record"
         tools:layout="@layout/fragment_video_record" >
     </fragment>
 
     <fragment
         android:id="@+id/videoList"
-        android:name="com.example.socialqs.activities.create.fragments.VideoList"
+        android:name="com.example.socialqs.activities.create.fragments.VideoListFragment"
         android:label="fragment_video_list"
         tools:layout="@layout/fragment_video_list" >
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/videoDisplay"
-        android:name="com.example.socialqs.activities.create.fragments.VideoDisplay"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDisplayFragment"
         android:label="fragment_video_display"
         tools:layout="@layout/fragment_video_display" />
 

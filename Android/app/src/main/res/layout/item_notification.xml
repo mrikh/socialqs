@@ -45,7 +45,8 @@
             android:maxLines="3"
             android:textSize="18sp"
             android:paddingTop="10dp"
-            android:paddingLeft="16dp" />
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
 
         <TextView
             android:id="@+id/notification_message_length"

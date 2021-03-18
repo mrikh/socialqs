@@ -1,19 +1,26 @@
 package com.example.socialqs.activities.home.notifications;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -21,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.adapters.NotificationAdapter;
 import com.example.socialqs.adapters.VideoRepliesAdapter;
 import com.example.socialqs.models.NotificationModel;
@@ -44,12 +52,12 @@ public class NotificationActivity extends AppCompatActivity {
     private NotificationAdapter adapter;
     private CoordinatorLayout coordinatorLayout;
     private LinearLayout noNotificationsLayout;
+    private List<NotificationModel> notificationList;
+    private Menu menu;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-
-        updateActionBar();
 
         coordinatorLayout = findViewById(R.id.notification_layout);
         noNotificationsLayout = findViewById(R.id.no_notifications_layout);
@@ -62,14 +70,7 @@ public class NotificationActivity extends AppCompatActivity {
         progressBar.setIndeterminateDrawable( new DoubleBounce());
         progressBar.setVisibility(View.VISIBLE);
 
-        List<NotificationModel> notificationList = new ArrayList<>();
-
-//        //TODO DELETE
-//        NotificationModel n1 = new NotificationModel();
-//        n1.getNotificationTitle();
-//        n1.getNotificationMessage();
-//        n1.getTime();
-//        notificationList.add(n1);
+        notificationList = new ArrayList<>();
 
         NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
             @Override
@@ -89,8 +90,19 @@ public class NotificationActivity extends AppCompatActivity {
 
                     if(notificationList.size() == 0){
                         noNotificationsLayout.setVisibility(View.VISIBLE);
+                        menu.getItem(0).setVisible(false);
                     }else {
                         adapter = new NotificationAdapter(notificationList, coordinatorLayout);
+                        adapter.setOnDataChangeListener(size -> {
+                            if(size == 0){
+                                noNotificationsLayout.setVisibility(View.VISIBLE);
+                                menu.getItem(0).setVisible(false);
+                            }else{
+                                noNotificationsLayout.setVisibility(View.INVISIBLE);
+                                menu.getItem(0).setVisible(true);
+                            }
+                        });
+
                         recyclerView.setAdapter(adapter);
                         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDelete(adapter, getApplicationContext()));
                         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -105,11 +117,40 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.notification_menu, menu);
+        Drawable deleteAll = menu.getItem(0).getIcon();
+        deleteAll.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+        updateActionBar();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
+
+        if (item.getItemId() == R.id.btn_delete_all) {
+            //Delete Confirmation
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.delete_all_notification_warning).setTitle(R.string.delete_notifications)
+                    .setCancelable(false)
+                    //Delete
+                    .setPositiveButton(R.string.title_delete, (dialog, which) -> {
+                        NetworkHandler.getInstance().deleteAllNotifications((object, message) -> {
+                        });
+                        noNotificationsLayout.setVisibility(View.VISIBLE);
+                        item.getIcon().setAlpha(0);
+                    })
+                    //Cancel
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
+            builder.create().show();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -122,6 +163,5 @@ public class NotificationActivity extends AppCompatActivity {
         text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(text);
     }
-
 
 }

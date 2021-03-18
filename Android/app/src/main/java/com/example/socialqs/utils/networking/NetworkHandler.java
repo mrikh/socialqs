@@ -168,6 +168,10 @@ public class NetworkHandler {
         performPostRequest(EndPoints.createAnswer, params, completion);
     }
 
+    public void deleteAllNotifications(NetworkingClosure completion){
+        performDeleteRequest(EndPoints.deleteAllNotifications, new HashMap<>(), completion);
+    }
+
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
         performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);
