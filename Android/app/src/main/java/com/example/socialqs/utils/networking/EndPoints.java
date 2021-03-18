@@ -19,5 +19,6 @@ public class EndPoints{
     public static String repliesList = "answers/list";
     public static String updateAnswer = "answers/update";
     public static String createAnswer = "answers/answer";
+    public static String bookmarkQuestion = "questions/bookmark";
 
 }

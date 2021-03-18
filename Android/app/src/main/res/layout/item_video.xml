@@ -117,6 +117,7 @@
         android:layout_height="53dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
+        android:alpha="0.6"
         app:cardCornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

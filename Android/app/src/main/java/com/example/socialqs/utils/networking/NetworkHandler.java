@@ -34,6 +34,10 @@ public class NetworkHandler {
         performPatchRequest(EndPoints.updateAnswer, params, completion);
     }
 
+    public void bookmarkQuestion(JSONObject params, NetworkingClosure completion){
+        performPatchRequest(EndPoints.bookmarkQuestion, params, completion);
+    }
+
     public void createQuestion(JSONObject params, NetworkingClosure completion){
         performPostRequest(EndPoints.createQuestions, params, completion);
     }

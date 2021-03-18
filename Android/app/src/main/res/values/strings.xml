@@ -70,6 +70,8 @@
     <string name="no_questions_extra">Start asking questions!</string>
     <string name="delete_answer">Delete Answer</string>
     <string name="delete_answer_warning">Are you sure you want to delete your answer?</string>
+    <string name="bookmark_question">Question is bookmarked</string>
+    <string name="unbookmark_question">Bookmark has been removed</string>
 
     <string name="read_more"><u>Read More</u></string>
     <string name="read_less"><u>Read Less</u></string>

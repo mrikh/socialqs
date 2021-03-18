@@ -41,4 +41,6 @@ public class VideoItemModel {
     }
 
     public boolean isBookmarked(){ return isBookmarked; }
+
+    public boolean setBookmarked(boolean bookmarked){ return this.isBookmarked = bookmarked; }
 }
