@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -43,6 +44,7 @@ public class TabFragment extends Fragment {
     private ProgressBar progressBar;
     private LinearLayout noQuestionsLayout;
     private ViewPager2 videoViewPager;
+    private VideoDisplayAdapter adapter;
 
     public TabFragment(CategoryModel category) {
         this.category = category;
@@ -118,7 +120,8 @@ public class TabFragment extends Fragment {
                     if(videoList.size() == 0){
                         noQuestionsLayout.setVisibility(View.VISIBLE);
                     }else {
-                        videoViewPager.setAdapter(new VideoDisplayAdapter(videoList, getContext()));
+                        adapter = new VideoDisplayAdapter(videoList, getContext());
+                        videoViewPager.setAdapter(adapter);
                     }
 
                 } catch (Exception e) {

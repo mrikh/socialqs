@@ -170,9 +170,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                                         Utilities.getInstance().createSingleActionAlert("Successfully answered the question", "Okay", AnswerQuestionActivity.this, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Intent myIntent = new Intent(AnswerQuestionActivity.this, VideoRepliesActivity.class);
-                                                myIntent.putExtra("video_id", questionID);
-                                                startActivity(myIntent);
+                                                finish();
                                             }
                                         }).show();
                                     }

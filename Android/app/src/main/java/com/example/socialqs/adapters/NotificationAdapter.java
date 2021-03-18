@@ -98,11 +98,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
              public void onDismissed(Snackbar transientBottomBar, int event) {
              super.onDismissed(transientBottomBar, event);
 
-                //if snackbar is ignored, delete completely
-                 if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                     String notificationID = deletedItem.getNotificationID();
-                     NetworkHandler.getInstance().deleteNotification(notificationID, (object, message) -> { });
-                 }
+             //if snackbar is ignored, delete completely
+             if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                 String notificationID = deletedItem.getNotificationID();
+                 NetworkHandler.getInstance().deleteNotification(notificationID, (object, message) -> { });
+             }
              }
          });
 

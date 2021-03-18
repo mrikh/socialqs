@@ -153,6 +153,13 @@ public class NetworkHandler {
         performGetRequest(EndPoints.repliesList, hashmap, completion);
     }
 
+    public void deleteAnswer(String answerID, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("id", answerID);
+
+        performDeleteRequest(EndPoints.deleteAnswer, hashmap, completion);
+    }
+
     public void notificationListing(NetworkingClosure completion){
         performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
     }
@@ -164,13 +171,14 @@ public class NetworkHandler {
         performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
     }
 
+    public void deleteAllNotifications(NetworkingClosure completion){
+        performDeleteRequest(EndPoints.deleteAllNotifications, new HashMap<>(), completion);
+    }
+
     public void createAnswer(JSONObject params, NetworkingClosure completion) {
         performPostRequest(EndPoints.createAnswer, params, completion);
     }
 
-    public void deleteAllNotifications(NetworkingClosure completion){
-        performDeleteRequest(EndPoints.deleteAllNotifications, new HashMap<>(), completion);
-    }
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 

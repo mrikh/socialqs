@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -22,6 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.home.AnswerQuestionActivity;
+import com.example.socialqs.activities.home.VideoRepliesActivity;
+import com.example.socialqs.models.NotificationModel;
+import com.example.socialqs.models.UserModel;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -37,14 +45,25 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     private List<VideoRepliesModel> replyList;
     private Context context;
-    private String questionID;
+    private VideoRepliesAdapter.OnDataChangeListener onDataChangeListener;
 
     private Boolean automaticPause = false;
 
-    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList, String questionID) {
+    public VideoRepliesAdapter(Context context, List<VideoRepliesModel> replyList) {
         this.replyList = replyList;
         this.context = context;
-        this.questionID = questionID;
+    }
+
+    public interface OnDataChangeListener{void onDataChanged(int size);}
+
+    public void setOnDataChangeListener(VideoRepliesAdapter.OnDataChangeListener onDataChangeListener){
+        this.onDataChangeListener = onDataChangeListener;
+    }
+
+    private void updateActivityLayout(){
+        if(onDataChangeListener != null){
+            onDataChangeListener.onDataChanged(replyList.size());
+        }
     }
 
     @NonNull
@@ -56,7 +75,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VideoRepliesAdapter.RepliesViewHolder holder, int position) {
-        holder.setData(replyList.get(position), automaticPause);
+        holder.setData(replyList.get(position), automaticPause, position);
     }
 
     public void autoUpdateVideoView(Boolean playing){
@@ -77,6 +96,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private ImageView authorImg, playBtn;
         private boolean isCorrect;
         private ProgressBar progressBar;
+        private ImageButton menuBtn;
 
         public RepliesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +110,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             playBtn = itemView.findViewById(R.id.reply_play_btn);
             correctAnswer = itemView.findViewById(R.id.correct_answer);
             replyDate = itemView.findViewById(R.id.reply_post_time);
+            menuBtn = itemView.findViewById(R.id.reply_menu);
 
             progressBar = itemView.findViewById(R.id.progress);
             Sprite doubleBounce = new DoubleBounce();
@@ -98,7 +119,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         }
 
         @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-        void setData(VideoRepliesModel videoReplies, Boolean automaticPause) {
+        void setData(VideoRepliesModel videoReplies, Boolean automaticPause, int position) {
             videoView.setVideoPath(videoReplies.getVideoURL());
             setLikesBtn(videoReplies);
             setDislikesBtn(videoReplies);
@@ -106,6 +127,39 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
             replyDate.setText(videoReplies.getTime());
+
+            if(UserModel.current.id.equals(videoReplies.getAuthorID())){
+                menuBtn.setVisibility(View.VISIBLE);
+                menuBtn.setOnClickListener(v -> {
+                    PopupMenu menu = new PopupMenu(itemView.getContext(), menuBtn, Gravity.END);
+                    menu.getMenuInflater().inflate(R.menu.video_reply_menu, menu.getMenu());
+
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.delete_answer) {
+                                //Delete Confirmation
+                                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                                builder.setMessage(R.string.delete_answer_warning).setTitle(R.string.delete_answer)
+                                        .setCancelable(false)
+                                        //Delete
+                                        .setPositiveButton(R.string.title_delete, (dialog, which) -> {
+                                            replyList.remove(position);
+                                            notifyItemRemoved(position);
+                                            String answerID = videoReplies.getReplyID();
+                                            NetworkHandler.getInstance().deleteAnswer(answerID, (object, message) -> { });
+                                            updateActivityLayout();
+                                        })
+                                        //Cancel
+                                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
+                                builder.create().show();
+                            }
+                            return false;
+                        }
+                    });
+                    menu.show();
+                });
+            }
 
             if(videoReplies.isCorrect()){ correctAnswer.setVisibility(View.VISIBLE); }
 
@@ -139,13 +193,14 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn.setOnClickListener(v -> dislikeAnswer(videoReplies));
         }
 
-        void play(){
+
+        private void play(){
             videoView.start();
             playBtn.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         }
 
-        void pause(){
+        private void pause(){
             videoView.pause();
             playBtn.setVisibility(View.VISIBLE);
 
@@ -192,12 +247,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                 params.put("answerId", videoReplies.getReplyID());
                 params.put("like", videoReplies.hasUserLiked());
                 params.put("dislike", videoReplies.hasUserDisliked());
-                NetworkHandler.getInstance().updateAnswer(params, new NetworkingClosure() {
-                    @Override
-                    public void completion(JSONObject object, String message) {
+                NetworkHandler.getInstance().updateAnswer(params, (object, message) -> { });
 
-                    }
-                });
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
             }

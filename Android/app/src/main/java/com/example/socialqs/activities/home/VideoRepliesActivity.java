@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.home;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,13 +14,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
+import com.example.socialqs.adapters.NotificationAdapter;
 import com.example.socialqs.adapters.VideoRepliesAdapter;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.Utilities;
@@ -43,6 +48,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
     private LinearLayout noRepliesLayout;
     private ProgressBar progressBar;
     private ImageView answerQuestionBtn;
+    private VideoRepliesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +95,16 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     if(videoReplies.size() == 0){
                         noRepliesLayout.setVisibility(View.VISIBLE);
                     }else {
-                        recyclerView.setAdapter(new VideoRepliesAdapter(getApplicationContext(), videoReplies, videoID));
+                        adapter = new VideoRepliesAdapter(getApplicationContext(), videoReplies);
+                        adapter.setOnDataChangeListener(size -> {
+                            if(size == 0){
+                                noRepliesLayout.setVisibility(View.VISIBLE);
+                            }else{
+                                noRepliesLayout.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                        recyclerView.setAdapter(adapter);
+
                     }
 
                 } catch (Exception e) {

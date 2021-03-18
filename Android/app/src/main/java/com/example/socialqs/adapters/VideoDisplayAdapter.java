@@ -52,6 +52,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     @Override
     public int getItemCount() { return videoItemModels.size(); }
 
+
     public class VideoViewHolder extends RecyclerView.ViewHolder {
         private VideoView videoView;
         private TextView authorName, videoQuestion, videoReplies;
@@ -171,6 +172,5 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             });
             builder.show();
         }
-
     }
 }

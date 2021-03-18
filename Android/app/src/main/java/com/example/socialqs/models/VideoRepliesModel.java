@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class VideoRepliesModel {
-    private String replyID, videoQuestionID, videoURL, authorName, authorImg;
+    private String replyID, videoQuestionID, videoURL, authorName, authorImg, authorID;
     private long createdAt;
     private boolean isCorrect;
     private List<String> likes, dislikes;
@@ -21,6 +21,7 @@ public class VideoRepliesModel {
         this.replyID = object.getString("_id");
         this.videoQuestionID = object.getString("questionId");
         this.videoURL = object.getString("videoUrl");
+        this.authorID = object.getJSONObject("creator").getString("_id");
         this.authorName = object.getJSONObject("creator").getString("name");
         this.authorImg = object.getJSONObject("creator").getString("profilePhoto");
         this.createdAt = object.getLong("createdAt");
@@ -39,6 +40,8 @@ public class VideoRepliesModel {
             dislikes.add(dislikesJSONArray.getString(i));
         }
     }
+
+    public String getAuthorID(){ return authorID; }
 
     public String getReplyID(){return replyID;}
 
