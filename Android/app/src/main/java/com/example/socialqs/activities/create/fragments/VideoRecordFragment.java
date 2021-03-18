@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
 
-public class VideoRecord extends Fragment {
+public class VideoRecordFragment extends Fragment {
 
     Uri video;
 

@@ -31,7 +31,7 @@ import com.example.socialqs.utils.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoList extends Fragment implements VideoListAdapter.ItemClickListener {
+public class VideoListFragment extends Fragment implements VideoListAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
     private VideoListAdapter videoListAdapter;

@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import okhttp3.internal.Util;
 
-public class VideoDescription extends Fragment {
+public class VideoDescriptionFragment extends Fragment {
 
     private ArrayList<CategoryModel> categories;
     private ImageView close, proceed;

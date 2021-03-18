@@ -15,7 +15,7 @@ import android.widget.VideoView;
 
 import com.example.socialqs.R;
 
-public class VideoDisplay extends Fragment {
+public class VideoDisplayFragment extends Fragment {
 
     VideoView videoView;
 
@@ -25,8 +25,7 @@ public class VideoDisplay extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_video_display, container, false);
         videoView = view.findViewById(R.id.create_VideoView);
