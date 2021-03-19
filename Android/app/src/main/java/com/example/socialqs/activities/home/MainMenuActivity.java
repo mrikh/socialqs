@@ -40,6 +40,7 @@ import java.util.List;
 public class MainMenuActivity extends AppCompatActivity {
 
     public ArrayList<CategoryModel> categoryList;
+    public String searchString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

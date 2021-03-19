@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,10 +19,12 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
 
+import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.CategoryModel;
@@ -73,6 +77,24 @@ public class HomeFragment extends Fragment {
         });
 
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                ((MainMenuActivity)getActivity()).searchString = s.toString();
+                Intent newIntent = new Intent("Searched");
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
+            }
+        });
 
         viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);

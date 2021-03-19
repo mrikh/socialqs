@@ -53,14 +53,26 @@ public class TabFragment extends Fragment {
     private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        if (intent != null && intent.getAction().equalsIgnoreCase("CreatedQuestionIntent")) {
+        if (intent != null && (intent.getAction().equalsIgnoreCase("CreatedQuestionIntent"))){
             fetchListing();
         }
         }
     };
 
+    private BroadcastReceiver searchReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && (intent.getAction().equalsIgnoreCase("Searched"))) {
+                fetchListing();
+            }
+        }
+    };
+
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(searchReceiver, new IntentFilter("Searched"));
+    }
 
     @Override
     public void onResume() {
@@ -102,7 +114,8 @@ public class TabFragment extends Fragment {
             categoryId = this.category.id;
         }
 
-        NetworkHandler.getInstance().questionListing(categoryId, new NetworkingClosure() {
+        progressBar.setVisibility(View.VISIBLE);
+        NetworkHandler.getInstance().questionListing(((MainMenuActivity)getActivity()).searchString, categoryId, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
                 progressBar.setVisibility(View.INVISIBLE);

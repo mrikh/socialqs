@@ -141,12 +141,14 @@ public class NetworkHandler {
         performGetRequest(EndPoints.categoryList, new HashMap<>(), completion);
     }
 
-    public void questionListing(String categoryId, NetworkingClosure completion){
+    public void questionListing(String searchString, String categoryId, NetworkingClosure completion){
 
         HashMap hashmap = new HashMap<>();
         if (categoryId != null) {
             hashmap.put("categoryId", categoryId);
         }
+        hashmap.put("search", searchString);
+
         performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
