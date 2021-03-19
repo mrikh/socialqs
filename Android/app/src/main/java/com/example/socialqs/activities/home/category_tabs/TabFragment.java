@@ -53,9 +53,9 @@ public class TabFragment extends Fragment {
     private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        if (intent != null && (intent.getAction().equalsIgnoreCase("CreatedQuestionIntent"))){
-            fetchListing();
-        }
+            if (intent != null && (intent.getAction().equalsIgnoreCase("CreatedQuestionIntent"))){
+                fetchListing();
+            }
         }
     };
 
@@ -125,6 +125,7 @@ public class TabFragment extends Fragment {
                 }
 
                 try {
+                    videoList.clear();
                     JSONArray arr = object.getJSONArray("result");
                     for (int i = 0; i < arr.length(); i++) {
                         VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
@@ -132,10 +133,12 @@ public class TabFragment extends Fragment {
                     }
                     if(videoList.size() == 0){
                         noQuestionsLayout.setVisibility(View.VISIBLE);
-                    }else {
-                        adapter = new VideoDisplayAdapter(videoList, getContext());
-                        videoViewPager.setAdapter(adapter);
+                    }else{
+                        noQuestionsLayout.setVisibility(View.INVISIBLE);
                     }
+
+                    adapter = new VideoDisplayAdapter(videoList, getContext());
+                    videoViewPager.setAdapter(adapter);
 
                 } catch (Exception e) {
                     e.printStackTrace();

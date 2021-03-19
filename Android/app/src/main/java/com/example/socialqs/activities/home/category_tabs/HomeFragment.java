@@ -7,14 +7,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,22 +80,23 @@ public class HomeFragment extends Fragment {
         });
 
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
-        searchBar.addTextChangedListener(new TextWatcher() {
+        searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_GO){
+                    ((MainMenuActivity)getActivity()).searchString = v.getText().toString();
+                    Intent newIntent = new Intent("Searched");
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            }
+                    return false;
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                ((MainMenuActivity)getActivity()).searchString = s.toString();
-                Intent newIntent = new Intent("Searched");
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
+                return true;
             }
         });
 
