@@ -6,7 +6,7 @@
     android:id="@+id/profileBackground"
     android:background="@color/black"
     android:layout_height="match_parent"
-    tools:context=".ProfileView">
+    tools:context=".activities.profile.fragments.ProfileView">
 
     <ImageView
         android:id="@+id/profileImageView"
@@ -29,7 +29,8 @@
         android:textColorHint="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="34dp" />
 
     <EditText
         android:id="@+id/nameEdit"
@@ -44,7 +45,8 @@
         android:textColorHint="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="30dp" />
 
     <ImageView
         android:id="@+id/cameraButton"
