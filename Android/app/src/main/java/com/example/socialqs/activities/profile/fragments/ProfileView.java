@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -36,8 +37,9 @@ public class ProfileView extends Fragment {
 
     View background;
 
-    String name = "Surya";
-    int choice = 0;
+    String name = "Name";
+
+    int image = R.drawable.ic_empty_profile;
 
     String[] option = new String[]{"Open Camera", "Open Gallery"};
 
@@ -46,6 +48,8 @@ public class ProfileView extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_profile_view, container, false);
         profileImage = view.findViewById(R.id.profileImageView);
+
+        profileImage.setImageResource(image);
 
         cameraButton = view.findViewById(R.id.cameraButton);
         settingsButton = view.findViewById(R.id.settingsButton);

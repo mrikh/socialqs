@@ -92,4 +92,5 @@
         android:src="@drawable/ic_tick"
         app:layout_constraintStart_toEndOf="@+id/nameEdit"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

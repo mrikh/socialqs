@@ -18,5 +18,14 @@
         android:id="@+id/profileSettings"
         android:name="com.example.socialqs.activities.profile.fragments.ProfileSettings"
         android:label="fragment_profile_settings"
-        tools:layout="@layout/fragment_profile_settings" />
+        tools:layout="@layout/fragment_profile_settings" >
+        <action
+            android:id="@+id/action_profileSettings_to_updatePassword"
+            app:destination="@id/updatePassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/updatePassword"
+        android:name="com.example.socialqs.activities.profile.fragments.UpdatePassword"
+        android:label="fragment_update_password"
+        tools:layout="@layout/fragment_update_password" />
 </navigation>
