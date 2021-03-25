@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -21,6 +20,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -35,7 +36,13 @@ public class ProfileView extends Fragment {
     EditText nameEdit;
     ImageView tickButton, editButton;
 
+
+
+    //CardView collapsedCardView, expandedCardView;
+    //ImageView collapsedArrow, expandedArrow;
     View background;
+
+    //ConstraintLayout collapsedLayout, expandedLayout;
 
     String name = "Name";
 
@@ -48,7 +55,6 @@ public class ProfileView extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_profile_view, container, false);
         profileImage = view.findViewById(R.id.profileImageView);
-
         profileImage.setImageResource(image);
 
         cameraButton = view.findViewById(R.id.cameraButton);
@@ -66,6 +72,15 @@ public class ProfileView extends Fragment {
 
         background = view.findViewById(R.id.profileBackground);
 
+        //collapsedCardView = view.findViewById(R.id.collapsedCardView);
+        //collapsedLayout = view.findViewById(R.id.collapsedLayout);
+
+        //expandedCardView = view.findViewById(R.id.expandedCardView);
+        //expandedLayout = view.findViewById(R.id.expandedLayout);
+
+
+
+        //arrowToggle = view.findViewById(R.id.);
         return view;
     }
 
@@ -75,9 +90,9 @@ public class ProfileView extends Fragment {
         background.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
                 updateName();
 
                 return true;
@@ -87,13 +102,11 @@ public class ProfileView extends Fragment {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //openDialog();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Choose One");
                 builder.setSingleChoiceItems(option, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //choice = which;
                         dialog.dismiss();
                         if (which == 0) {
                             checkPermissionCamera();
@@ -102,6 +115,7 @@ public class ProfileView extends Fragment {
                         }
                     }
                 });
+
                 builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -124,11 +138,7 @@ public class ProfileView extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editButton.setVisibility(View.INVISIBLE);
-                nameView.setVisibility(View.INVISIBLE);
-                nameEdit.setText(name);
-                nameEdit.setVisibility(View.VISIBLE);
-                tickButton.setVisibility(View.VISIBLE);
+                editName();
             }
         });
 
@@ -138,6 +148,7 @@ public class ProfileView extends Fragment {
                 updateName();
             }
         });
+
     }
 
     public void checkPermissionCamera() {
@@ -172,7 +183,6 @@ public class ProfileView extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constant.CAPTURE_PROFILE_IMAGE) {
-
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             profileImage.setImageBitmap(captureImage);
         }
@@ -187,4 +197,11 @@ public class ProfileView extends Fragment {
         editButton.setVisibility(View.VISIBLE);
     }
 
+    public void editName() {
+        editButton.setVisibility(View.INVISIBLE);
+        nameView.setVisibility(View.INVISIBLE);
+        nameEdit.setText(name);
+        nameEdit.setVisibility(View.VISIBLE);
+        tickButton.setVisibility(View.VISIBLE);
+    }
 }

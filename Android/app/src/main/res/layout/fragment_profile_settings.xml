@@ -54,6 +54,7 @@
             android:id="@+id/notificationBell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             tools:src="@drawable/ic_bell" />
 
         <TextView
@@ -91,28 +92,29 @@
                 tools:src="@drawable/ic_disable" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/blockListLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal" >
+<!--    <LinearLayout-->
+<!--        android:id="@+id/blockListLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="10dp"-->
+<!--        android:orientation="horizontal" >-->
 
-        <ImageView
-            android:id="@+id/blockIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:src="@drawable/ic_block" />
+<!--        <ImageView-->
+<!--            android:id="@+id/blockIcon"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            tools:src="@drawable/ic_block" />-->
 
-        <TextView
-            android:id="@+id/blockText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="Block list"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/blockText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:text="Block list"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="15sp" />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/updatePasswordLayout"
@@ -125,6 +127,7 @@
             android:id="@+id/passwordIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             tools:src="@drawable/ic_lock" />
 
         <TextView
@@ -148,6 +151,7 @@
             android:id="@+id/logOutIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             tools:src="@drawable/ic_logout" />
 
         <TextView

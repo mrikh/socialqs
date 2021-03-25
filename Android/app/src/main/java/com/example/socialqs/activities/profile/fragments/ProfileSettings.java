@@ -1,8 +1,10 @@
 package com.example.socialqs.activities.profile.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -15,12 +17,15 @@ import android.widget.LinearLayout;
 
 import com.example.socialqs.R;
 
+import java.util.ArrayList;
+
 public class ProfileSettings extends Fragment {
 
     ImageView disable, enable, back;
     ConstraintLayout toggler;
-    LinearLayout blockList, updatePassword, logOut;
+    LinearLayout updatePassword, logOut;
 
+    ArrayList<String> blockedUsers = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,13 +37,15 @@ public class ProfileSettings extends Fragment {
         back = v.findViewById(R.id.previousFragment);
 
         toggler = v.findViewById(R.id.toggleButton);
-        blockList = v.findViewById(R.id.blockListLayout);
+        //blockList = v.findViewById(R.id.blockListLayout);
         updatePassword = v.findViewById(R.id.updatePasswordLayout);
         logOut = v.findViewById(R.id.logOutLayout);
 
         //default
         enable.setVisibility(View.INVISIBLE);
         disable.setVisibility(View.VISIBLE);
+
+        blockedUsers.add("Test User");
         return v;
     }
 
@@ -58,24 +65,46 @@ public class ProfileSettings extends Fragment {
             }
         });
 
-        blockList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        blockList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(blockedUsers.size() > 0) {
+//                    Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_blockList);
+//                } else {
+//                    Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_emptyBlockList);
+//                }
+//            }
+//        });
 
         updatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_updatePassword);
+                Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_resetPasswodFragment);
             }
         });
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Success!");
+                builder.setMessage("This will log you out of the application.");
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().finish();
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
 

@@ -20,12 +20,12 @@
         android:label="fragment_profile_settings"
         tools:layout="@layout/fragment_profile_settings" >
         <action
-            android:id="@+id/action_profileSettings_to_updatePassword"
-            app:destination="@id/updatePassword" />
+            android:id="@+id/action_profileSettings_to_resetPasswodFragment"
+            app:destination="@id/resetPasswodFragment" />
     </fragment>
     <fragment
-        android:id="@+id/updatePassword"
-        android:name="com.example.socialqs.activities.profile.fragments.UpdatePassword"
-        android:label="fragment_update_password"
-        tools:layout="@layout/fragment_update_password" />
+        android:id="@+id/resetPasswodFragment"
+        android:name="com.example.socialqs.activities.prelogin.fragments.ResetPasswodFragment"
+        android:label="fragment_reset_passwod"
+        tools:layout="@layout/fragment_reset_passwod" />
 </navigation>
