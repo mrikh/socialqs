@@ -25,7 +25,7 @@ public class ProfileSettings extends Fragment {
     ConstraintLayout toggler;
     LinearLayout updatePassword, logOut;
 
-    ArrayList<String> blockedUsers = new ArrayList<>();
+    //ArrayList<String> blockedUsers = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,16 +45,25 @@ public class ProfileSettings extends Fragment {
         enable.setVisibility(View.INVISIBLE);
         disable.setVisibility(View.VISIBLE);
 
-        blockedUsers.add("Test User");
+        //blockedUsers.add("Test User");
         return v;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: pop this fragment and go to previous fragment
+            }
+        });
+
+
         toggler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Toggle Notification
                 if (disable.getVisibility() == View.VISIBLE) {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
@@ -80,6 +89,7 @@ public class ProfileSettings extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_resetPasswodFragment);
+                //TODO: update password
             }
         });
 
@@ -98,13 +108,13 @@ public class ProfileSettings extends Fragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //TODO: Log out of the application
                         getActivity().finish();
                     }
                 });
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
             }
         });
 

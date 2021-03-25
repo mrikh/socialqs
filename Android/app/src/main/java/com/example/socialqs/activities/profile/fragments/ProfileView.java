@@ -36,12 +36,10 @@ public class ProfileView extends Fragment {
     EditText nameEdit;
     ImageView tickButton, editButton;
 
-
+    View background;
 
     //CardView collapsedCardView, expandedCardView;
     //ImageView collapsedArrow, expandedArrow;
-    View background;
-
     //ConstraintLayout collapsedLayout, expandedLayout;
 
     String name = "Name";
@@ -54,6 +52,7 @@ public class ProfileView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_profile_view, container, false);
+        //TODO: Get profile image from the server
         profileImage = view.findViewById(R.id.profileImageView);
         profileImage.setImageResource(image);
 
@@ -64,6 +63,7 @@ public class ProfileView extends Fragment {
         nameEdit.setVisibility(View.INVISIBLE);
         nameView = (TextView) view.findViewById(R.id.nameView);
 
+        //TODO: Get name of the user from the server
         nameView.setText(name);
 
         tickButton = view.findViewById(R.id.tickButton);
@@ -77,8 +77,6 @@ public class ProfileView extends Fragment {
 
         //expandedCardView = view.findViewById(R.id.expandedCardView);
         //expandedLayout = view.findViewById(R.id.expandedLayout);
-
-
 
         //arrowToggle = view.findViewById(R.id.);
         return view;
@@ -145,6 +143,7 @@ public class ProfileView extends Fragment {
         tickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Upload new name to the server
                 updateName();
             }
         });
@@ -175,7 +174,8 @@ public class ProfileView extends Fragment {
     }
 
     public void openGallery() {
-
+        //TODO: Display all images in the gallery in a recyclerview or card view
+        //TODO: Allow user to select an image
     }
 
     @Override
@@ -185,6 +185,7 @@ public class ProfileView extends Fragment {
         if(requestCode == Constant.CAPTURE_PROFILE_IMAGE) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             profileImage.setImageBitmap(captureImage);
+            //TODO: upload the image to the server
         }
     }
 
