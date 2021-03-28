@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -16,7 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -28,6 +31,8 @@ import androidx.navigation.Navigation;
 
 import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileView extends Fragment {
 
@@ -155,7 +160,8 @@ public class ProfileView extends Fragment {
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.CAMERA}, Constant.CAMERA_PERMISSION);
         } else {
-            captureImage();
+            Intent intent = new Intent (MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, Constant.CAPTURE_PROFILE_IMAGE);
         }
     }
 
@@ -164,28 +170,47 @@ public class ProfileView extends Fragment {
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
         } else {
-            openGallery();
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(intent, Constant.CHOOSE_PROFILE_IMAGE);
         }
-    }
-
-    public void captureImage() {
-        Intent intent = new Intent (MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, Constant.CAPTURE_PROFILE_IMAGE);
-    }
-
-    public void openGallery() {
-        //TODO: Display all images in the gallery in a recyclerview or card view
-        //TODO: Allow user to select an image
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constant.CAPTURE_PROFILE_IMAGE) {
+        //TODO: upload the image to the server
+        if(requestCode == Constant.CAPTURE_PROFILE_IMAGE  && resultCode == RESULT_OK
+                && data != null) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             profileImage.setImageBitmap(captureImage);
-            //TODO: upload the image to the server
+        }
+        try {
+            if(requestCode == Constant.CHOOSE_PROFILE_IMAGE  && resultCode == RESULT_OK
+                    && data != null) {
+                Uri URI = data.getData();
+                String[] FILE = { MediaStore.Images.Media.DATA };
+
+
+                Cursor cursor = getActivity().getContentResolver().query(URI,
+                        FILE, null, null, null);
+
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(FILE[0]);
+                String ImageDecode = cursor.getString(columnIndex);
+                cursor.close();
+
+                //TODO: No image shown
+                profileImage.setImageBitmap(BitmapFactory
+                        .decodeFile(ImageDecode));
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
+                    .show();
         }
     }
 

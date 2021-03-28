@@ -17,4 +17,6 @@ public class Constant {
     public static int FILE_ACCESS_PERMISSION = 102;
 
     public static int CAPTURE_PROFILE_IMAGE = 103;
+
+    public static int  CHOOSE_PROFILE_IMAGE = 104;
 }

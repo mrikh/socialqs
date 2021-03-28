@@ -33,5 +33,4 @@ public class VideoDisplay extends Fragment {
 
         return view;
     }
-
 }
