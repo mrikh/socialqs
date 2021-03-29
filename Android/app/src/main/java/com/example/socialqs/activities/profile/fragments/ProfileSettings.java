@@ -17,15 +17,11 @@ import android.widget.LinearLayout;
 
 import com.example.socialqs.R;
 
-import java.util.ArrayList;
-
 public class ProfileSettings extends Fragment {
 
     ImageView disable, enable, back;
     ConstraintLayout toggler;
     LinearLayout updatePassword, logOut;
-
-    //ArrayList<String> blockedUsers = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +51,9 @@ public class ProfileSettings extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: pop this fragment and go to previous fragment
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
 
         toggler.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +112,5 @@ public class ProfileSettings extends Fragment {
                 alertDialog.show();
             }
         });
-
-
     }
 }

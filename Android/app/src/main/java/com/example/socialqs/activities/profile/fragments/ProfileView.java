@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import androidx.navigation.Navigation;
 
 import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
+import com.example.socialqs.models.UserModel;
+import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -42,14 +45,11 @@ public class ProfileView extends Fragment {
     ImageView tickButton, editButton;
 
     View background;
+    String url = "https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1-300x300.png";
 
     //CardView collapsedCardView, expandedCardView;
     //ImageView collapsedArrow, expandedArrow;
     //ConstraintLayout collapsedLayout, expandedLayout;
-
-    String name = "Name";
-
-    int image = R.drawable.ic_empty_profile;
 
     String[] option = new String[]{"Open Camera", "Open Gallery"};
 
@@ -57,9 +57,13 @@ public class ProfileView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_profile_view, container, false);
-        //TODO: Get profile image from the server
+
         profileImage = view.findViewById(R.id.profileImageView);
-        profileImage.setImageResource(image);
+
+        if (!UserModel.current.profilePhoto.isEmpty()) {
+            url = UserModel.current.profilePhoto;
+        }
+        Picasso.with(getContext()).load(url).into(profileImage);
 
         cameraButton = view.findViewById(R.id.cameraButton);
         settingsButton = view.findViewById(R.id.settingsButton);
@@ -68,8 +72,8 @@ public class ProfileView extends Fragment {
         nameEdit.setVisibility(View.INVISIBLE);
         nameView = (TextView) view.findViewById(R.id.nameView);
 
-        //TODO: Get name of the user from the server
-        nameView.setText(name);
+        nameView.setText(UserModel.current.name);
+        nameEdit.setText(UserModel.current.name);
 
         tickButton = view.findViewById(R.id.tickButton);
         tickButton.setVisibility(View.INVISIBLE);
@@ -148,11 +152,9 @@ public class ProfileView extends Fragment {
         tickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Upload new name to the server
                 updateName();
             }
         });
-
     }
 
     public void checkPermissionCamera() {
@@ -170,8 +172,7 @@ public class ProfileView extends Fragment {
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
         } else {
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
             startActivityForResult(intent, Constant.CHOOSE_PROFILE_IMAGE);
         }
@@ -193,7 +194,6 @@ public class ProfileView extends Fragment {
                 Uri URI = data.getData();
                 String[] FILE = { MediaStore.Images.Media.DATA };
 
-
                 Cursor cursor = getActivity().getContentResolver().query(URI,
                         FILE, null, null, null);
 
@@ -203,9 +203,7 @@ public class ProfileView extends Fragment {
                 String ImageDecode = cursor.getString(columnIndex);
                 cursor.close();
 
-                //TODO: No image shown
-                profileImage.setImageBitmap(BitmapFactory
-                        .decodeFile(ImageDecode));
+                profileImage.setImageBitmap(BitmapFactory.decodeFile(ImageDecode));
             }
         } catch (Exception e) {
 
@@ -215,10 +213,10 @@ public class ProfileView extends Fragment {
     }
 
     public void updateName() {
-        name = nameEdit.getText().toString();
+        UserModel.current.name = nameEdit.getText().toString();
         nameEdit.setVisibility(View.INVISIBLE);
         tickButton.setVisibility(View.INVISIBLE);
-        nameView.setText(name);
+        nameView.setText(UserModel.current.name);
         nameView.setVisibility(View.VISIBLE);
         editButton.setVisibility(View.VISIBLE);
     }
@@ -226,7 +224,7 @@ public class ProfileView extends Fragment {
     public void editName() {
         editButton.setVisibility(View.INVISIBLE);
         nameView.setVisibility(View.INVISIBLE);
-        nameEdit.setText(name);
+        nameEdit.setText(UserModel.current.name);
         nameEdit.setVisibility(View.VISIBLE);
         tickButton.setVisibility(View.VISIBLE);
     }
