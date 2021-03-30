@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -157,8 +158,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((PreLoginActivity)getActivity()).updateActionBarBack(false);
-        ((PreLoginActivity)getActivity()).setActionBarTitle(getString(R.string.app_name), "#000000", R.color.white);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
