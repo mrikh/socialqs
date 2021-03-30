@@ -12,6 +12,13 @@ import android.view.MenuItem;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.profile.ProfileActivity;
+import com.example.socialqs.activities.main.MainActivity;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.models.CategoryModel;
+import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.Utilities;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -21,10 +28,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Main App Navigation Menu Controller
  */
 public class MainMenuActivity extends AppCompatActivity {
+
+    public ArrayList<CategoryModel> categoryList;
+    public String searchString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +56,38 @@ public class MainMenuActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        navView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.navigation_create:
 
-                NavController navController = Navigation.findNavController(MainMenuActivity.this, R.id.nav_host_fragment);
-                Intent myIntent;
-                switch (item.getItemId()){
-                    case R.id.navigation_create:
-                        myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
-                        startActivity(myIntent);
+                    if (UserModel.current == null){
+                        //just as a safety
+                        Utilities.getInstance().createSingleActionAlert("You need to login before using this feature.", "Okay", MainMenuActivity.this, null).show();
                         return false;
-                    case R.id.navigation_profile:
-                        myIntent = new Intent(MainMenuActivity.this, ProfileActivity.class);
-                        startActivity(myIntent);
+                    }
+
+                    if (categoryList == null){
+                        Utilities.getInstance().createSingleActionAlert("Please wait while we fetch all the categories.", "Okay", MainMenuActivity.this, null).show();
                         return false;
-                    default:
-                        NavigationUI.onNavDestinationSelected(item, navController);
-                        break;
-                }
-                
-                return true;
+                    }
+
+                    Intent myIntent = new Intent(MainMenuActivity.this, CreateActivity.class);
+                    Bundle arguments = new Bundle();
+                    arguments.putParcelableArrayList("categories", categoryList);
+                    myIntent.putExtras(arguments);
+                    startActivity(myIntent);
+                    return false;
+                case R.id.navigation_profile:
+                    myIntent = new Intent(MainMenuActivity.this, ProfileActivity.class);
+                    startActivity(myIntent);
+                    return false;
+                default:
+                    NavigationUI.onNavDestinationSelected(item, navController);
+                    break;
             }
+
+
+            return true;
         });
     }
 
@@ -80,7 +105,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title, String color, int titleColorId) {
-
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
 

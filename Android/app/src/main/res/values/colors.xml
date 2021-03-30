@@ -3,6 +3,7 @@
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
+    <color name="blue">#0C93FF</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
@@ -12,4 +13,5 @@
     <color name="google_red">#DB4437</color>
     <color name="like_btn">#33C83A</color>
     <color name="dislike_btn">#CD0F0F</color>
+    <color name="bookmark_btn">#ea1e63</color>
 </resources>

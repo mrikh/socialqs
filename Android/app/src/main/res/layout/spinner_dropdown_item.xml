@@ -7,5 +7,4 @@
     android:gravity="left"
     android:background="@color/white"
     android:textColor="@color/black"
-    android:padding="5dip"
-    />
+    android:padding="5dip" />

@@ -7,37 +7,27 @@
 
     <fragment
         android:id="@+id/videoDescription"
-        android:name="com.example.socialqs.activities.create.fragments.VideoDescription"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDescriptionFragment"
         android:label="fragment_video_description"
         tools:layout="@layout/fragment_video_description" >
         <action
-            android:id="@+id/action_titleFragment_to_selectSourceFragment"
-            app:destination="@id/chooseSource" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/chooseSource"
-        android:name="com.example.socialqs.activities.create.fragments.ChooseSource"
-        android:label="fragment_choose_source"
-        tools:layout="@layout/fragment_choose_source" >
-        <action
-            android:id="@+id/onRecord"
-            app:destination="@id/videoRecord" />
-        <action
-            android:id="@+id/onPick"
+            android:id="@+id/action_videoDescription_to_videoList"
             app:destination="@id/videoList" />
+        <action
+            android:id="@+id/action_videoDescription_to_videoRecord"
+            app:destination="@id/videoRecord" />
     </fragment>
 
     <fragment
         android:id="@+id/videoRecord"
-        android:name="com.example.socialqs.activities.create.fragments.VideoRecord"
+        android:name="com.example.socialqs.activities.create.fragments.VideoRecordFragment"
         android:label="fragment_video_record"
         tools:layout="@layout/fragment_video_record" >
     </fragment>
 
     <fragment
         android:id="@+id/videoList"
-        android:name="com.example.socialqs.activities.create.fragments.VideoList"
+        android:name="com.example.socialqs.activities.create.fragments.VideoListFragment"
         android:label="fragment_video_list"
         tools:layout="@layout/fragment_video_list" >
         <action
@@ -47,7 +37,7 @@
 
     <fragment
         android:id="@+id/videoDisplay"
-        android:name="com.example.socialqs.activities.create.fragments.VideoDisplay"
+        android:name="com.example.socialqs.activities.create.fragments.VideoDisplayFragment"
         android:label="fragment_video_display"
         tools:layout="@layout/fragment_video_display" />
 

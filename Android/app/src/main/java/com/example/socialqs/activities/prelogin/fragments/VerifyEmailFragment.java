@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.prelogin.fragments;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.chaos.view.PinView;
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
@@ -80,7 +82,8 @@ public class VerifyEmailFragment extends Fragment {
         laterTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //TODO: Go to landing screen
+                Intent intent = new Intent(getContext(), MainMenuActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -151,7 +154,8 @@ public class VerifyEmailFragment extends Fragment {
                                     UserModel.current.emailVerified = true;
                                     UserModel.current.saveToDefaults(getActivity());
                                     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                                    //TODO: Go to landing screen
+                                    Intent intent = new Intent(getContext(), MainMenuActivity.class);
+                                    startActivity(intent);
                                 }
 
                             }catch(Exception e){

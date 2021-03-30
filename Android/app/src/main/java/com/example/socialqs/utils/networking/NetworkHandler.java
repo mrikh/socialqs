@@ -30,6 +30,18 @@ public class NetworkHandler {
         return shared;
     }
 
+    public void updateAnswer(JSONObject params, NetworkingClosure completion){
+        performPatchRequest(EndPoints.updateAnswer, params, completion);
+    }
+
+    public void bookmarkQuestion(JSONObject params, NetworkingClosure completion){
+        performPatchRequest(EndPoints.bookmarkQuestion, params, completion);
+    }
+
+    public void createQuestion(JSONObject params, NetworkingClosure completion){
+        performPostRequest(EndPoints.createQuestions, params, completion);
+    }
+
     public void updateInfo(String pushToken, String name, String profilePhoto, NetworkingClosure completion){
 
         try {
@@ -129,12 +141,14 @@ public class NetworkHandler {
         performGetRequest(EndPoints.categoryList, new HashMap<>(), completion);
     }
 
-    public void questionListing(String categoryId, NetworkingClosure completion){
+    public void questionListing(String searchString, String categoryId, NetworkingClosure completion){
 
         HashMap hashmap = new HashMap<>();
         if (categoryId != null) {
             hashmap.put("categoryId", categoryId);
         }
+        hashmap.put("search", searchString);
+
         performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
@@ -144,6 +158,33 @@ public class NetworkHandler {
 
         performGetRequest(EndPoints.repliesList, hashmap, completion);
     }
+
+    public void deleteAnswer(String answerID, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("id", answerID);
+
+        performDeleteRequest(EndPoints.deleteAnswer, hashmap, completion);
+    }
+
+    public void notificationListing(NetworkingClosure completion){
+        performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
+    }
+
+    public void deleteNotification(String notificationID, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("id", notificationID);
+
+        performDeleteRequest(EndPoints.deleteNotification, hashmap, completion);
+    }
+
+    public void deleteAllNotifications(NetworkingClosure completion){
+        performDeleteRequest(EndPoints.deleteAllNotifications, new HashMap<>(), completion);
+    }
+
+    public void createAnswer(JSONObject params, NetworkingClosure completion) {
+        performPostRequest(EndPoints.createAnswer, params, completion);
+    }
+
 
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
@@ -158,9 +199,9 @@ public class NetworkHandler {
     private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){
 
         if (params != null){
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addPathParameter(params), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint ).addPathParameter(params), completion);
         }else{
-            performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint), completion);
+            performBodyRequest(AndroidNetworking.delete(httpUrl + endpoint), completion);
         }
     }
 

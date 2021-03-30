@@ -15,13 +15,13 @@ router.post('/answers/answer', auth, async (req, res, next) => {
         params.creator = req.user._id
 
         const answer = new Answer(params)
-
+        
         if(!answer){
             const error = new Error(constants.params_missing)
             error.statusCode = 400
             throw error
         }
-
+        
         await answer.save()        
         await answer.populate({
             path: 'creator',
@@ -30,27 +30,36 @@ router.post('/answers/answer', auth, async (req, res, next) => {
             path: 'questionId',
             options: { select: { creator: 1, _id: 1, title: 1 } }
         }).execPopulate()
-
+        
         if (!req.user._id.equals(answer.questionId.creator._id)){
             //create notification
-            const creatorUser = await User.findById(req.creator._id)
-            const message = {
+            const message = constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+            const title = constants.new_answer_title
+            const notification = new Notification({
+                users : [answer.questionId.creator], 
+                questionId : answer.questionId, 
+                title : title,
+                body: message
+            })
+
+            await notification.save()   
+
+            const creatorUser = await User.findById(answer.questionId.creator._id)
+            const pushMessage = {
                 notification : {
-                    title : constants.new_answer_title,
-                    body : constants.new_answer_body + " " + answer.questionId.title + " " + constants.by + " " + req.user.name
+                    title : title,
+                    body : message
                 },
                 token : creatorUser.pushToken
             }
         
-            admin.messaging().send(message).then( response => {
+            admin.messaging().send(pushMessage).then( response => {
                 console.log("Notification sent successfully")
             }).catch( error => {
                 console.log(error);
             });   
-            
-            await notification.save()   
         }
-
+        
         return res.status(200).send({code : 200, message : constants.success, data : answer})
 
     }catch(error){
@@ -69,7 +78,7 @@ router.get('/answers/list', auth, async (req, res, next) => {
             throw error
         }
 
-        const results = await Answer.find({questionId : questionId}).populate({
+        const results = await Answer.find({questionId : questionId}).sort({updatedAt : -1}).populate({
             path: 'creator',
             options : { select : { _id : 1, name : 1, profilePhoto : 1 , blockedUsers : 1}}
         })
@@ -138,6 +147,7 @@ router.patch('/answers/update', auth, async (req, res, next) => {
         if (like != null || like != undefined){
             if (like){
                 answer.likes.push(req.user._id)
+                answer.dislikes.pull(req.user._id)
             }else{
                 answer.likes.pull(req.user._id)
             }
@@ -145,6 +155,7 @@ router.patch('/answers/update', auth, async (req, res, next) => {
 
         if (dislike != null || dislike != undefined){
             if (dislike){
+                answer.likes.pull(req.user._id)
                 answer.dislikes.push(req.user._id)
             }else{
                 answer.dislikes.pull(req.user._id)
