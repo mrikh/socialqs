@@ -57,4 +57,11 @@ public class Utilities {
             throw e;
         }
     }
+
+    public void logout(Context c) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.apply();
+    }
 }

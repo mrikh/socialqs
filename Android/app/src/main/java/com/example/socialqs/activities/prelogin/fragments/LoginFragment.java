@@ -358,4 +358,6 @@ public class LoginFragment extends Fragment {
     private void updateProgress(int visibility){
         ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
+
+
 }

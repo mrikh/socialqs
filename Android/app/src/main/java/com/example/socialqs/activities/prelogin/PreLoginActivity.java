@@ -128,4 +128,10 @@ public class PreLoginActivity extends AppCompatActivity {
     public void updateProgress(int visibility){
         progressBar.setVisibility(visibility);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
+    }
 }

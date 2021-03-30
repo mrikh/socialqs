@@ -1,6 +1,8 @@
 package com.example.socialqs.activities.profile.fragments;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
+import com.example.socialqs.utils.Utilities;
 
 public class ProfileSettings extends Fragment {
 
@@ -103,8 +108,16 @@ public class ProfileSettings extends Fragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Log out of the application
-                        getActivity().finish();
+                        Utilities.getInstance().logout(getActivity().getApplicationContext());
+                        Intent login = new Intent(getContext(), PreLoginActivity.class);
+                        login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(login);
+                        /*  1. Log out (Takes you to login page)
+                            2. Press back (Exits app)
+                            3. Open app again (Opens main menu)
+                            4. Clear task manager (Exits app)
+                            5. Open app again (Opens login page)
+                            */
                     }
                 });
 
