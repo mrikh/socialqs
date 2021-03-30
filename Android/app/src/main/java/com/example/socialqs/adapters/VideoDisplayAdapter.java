@@ -18,6 +18,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 
@@ -53,6 +54,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
         holder.setVideoData(videoItemModels.get(position));
     }
+
 
     @Override
     public int getItemCount() { return videoItemModels.size(); }
@@ -185,17 +187,19 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                     if (options[item].equals("Record Video")) {
                         myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                         myIntent[0].putExtra("videoOption", "1");
+                        myIntent[0].putExtra("questionID", videoID);
+                        context.startActivity(myIntent[0]);
 
                     } else if (options[item].equals("Choose from Gallery")) {
                         myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                         myIntent[0].putExtra("videoOption", "2");
+                        myIntent[0].putExtra("questionID", videoID);
+                        context.startActivity(myIntent[0]);
                     } else {
                         dialog.dismiss();
                         videoView.start();
                     }
 
-                    myIntent[0].putExtra("questionID", videoID);
-                    context.startActivity(myIntent[0]);
                 }
             });
             builder.show();

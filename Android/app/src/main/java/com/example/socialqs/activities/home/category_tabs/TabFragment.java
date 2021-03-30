@@ -45,6 +45,7 @@ public class TabFragment extends Fragment {
     private LinearLayout noQuestionsLayout;
     private ViewPager2 videoViewPager;
     private VideoDisplayAdapter adapter;
+    private List<VideoItemModel> videoList;
 
     public TabFragment(CategoryModel category) {
         this.category = category;
@@ -105,7 +106,7 @@ public class TabFragment extends Fragment {
 
     private void fetchListing(){
 
-        List<VideoItemModel> videoList = new ArrayList<>();
+        videoList = new ArrayList<>();
 
         String categoryId = null;
         if (!this.category.name.equalsIgnoreCase("all")){
