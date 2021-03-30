@@ -77,8 +77,6 @@ public class TabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainMenuActivity)getActivity()).updateActionBarBack(false);
-        ((MainMenuActivity)getActivity()).setActionBarTitle(null, "#ffffff", R.color.black);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(messagesReceiver);
     }
 

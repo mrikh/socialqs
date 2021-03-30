@@ -17,7 +17,6 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,15 +28,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.socialqs.R;
-import com.example.socialqs.activities.friends.FollowingViewModel;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
 import com.squareup.picasso.Picasso;
@@ -47,10 +40,9 @@ import java.io.ByteArrayOutputStream;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-    private ImageView profileImage, settingsButton, cameraButton;
+    private ImageView profileImage, settingsBtn, cameraBtn;
     private EditText profileName;
     private ImageView setNameBtn, editNameBtn;
-    private View background;
 
     // TODO DELETE
     String url = "https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1-300x300.png";
@@ -59,7 +51,7 @@ public class ProfileFragment extends Fragment {
     //ImageView collapsedArrow, expandedArrow;
     //ConstraintLayout collapsedLayout, expandedLayout;
 
-    String[] option = new String[]{"Open Camera", "Open Gallery"};
+    String[] option = new String[]{"Open Camera", "Choose from Gallery"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,17 +63,15 @@ public class ProfileFragment extends Fragment {
         } else {
             try {
                 byte[] encodeByte = Base64.decode(UserModel.current.profilePhoto, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
-                        encodeByte.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
                 profileImage.setImageBitmap(bitmap);
             } catch (Exception e) {
-                Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
-                        .show();
+                Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
             }
         }
 
-        cameraButton = view.findViewById(R.id.cameraButton);
-        settingsButton = view.findViewById(R.id.settingsButton);
+        cameraBtn = view.findViewById(R.id.cameraButton);
+        settingsBtn = view.findViewById(R.id.settingsButton);
 
         profileName = (EditText) view.findViewById(R.id.profile_name);
         profileName.setText(UserModel.current.name);
@@ -99,16 +89,22 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
     @SuppressLint("ResourceAsColor")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //Change Profile Picture
-        cameraButton.setOnClickListener(new View.OnClickListener() {
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Choose One");
+                builder.setTitle("Change Profile Picture");
                 builder.setSingleChoiceItems(option, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -129,7 +125,7 @@ public class ProfileFragment extends Fragment {
         });
 
         //Open Settings Screen
-        settingsButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_settings));
+        settingsBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_settings));
 
         //Edit User Name
         editNameBtn.setOnClickListener(v -> {
