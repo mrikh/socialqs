@@ -1,42 +1,23 @@
 package com.example.socialqs.adapters;
 
-import android.animation.LayoutTransition;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.socialqs.R;
-import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.activities.home.notifications.NotificationActivity;
+import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.models.NotificationModel;
-import com.example.socialqs.models.VideoRepliesModel;
-import com.example.socialqs.utils.Utilities;
-import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
@@ -46,10 +27,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private int deletedItemPos;
     private CoordinatorLayout coordinatorLayout;
     private OnDataChangeListener onDataChangeListener;
+    private Context context;
 
-    public NotificationAdapter(List<NotificationModel> notificationList, CoordinatorLayout coordinatorLayout) {
+    public NotificationAdapter(List<NotificationModel> notificationList, CoordinatorLayout coordinatorLayout, Context context) {
         this.notificationList = notificationList;
         this.coordinatorLayout = coordinatorLayout;
+        this.context = context;
     }
 
     @NonNull
@@ -61,7 +44,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        holder.setData(notificationList.get(position));
+        holder.setData(notificationList.get(position), position);
     }
 
     @Override
@@ -69,7 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notificationList.size();
     }
 
-    public interface OnDataChangeListener{public void onDataChanged(int size);}
+    public interface OnDataChangeListener{ void onDataChanged(int size);}
 
     public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
         this. onDataChangeListener = onDataChangeListener;
@@ -119,6 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title, message, messageLength, date;
+        private LinearLayout notification;
 
         private final static int MAX_LINES_COLLAPSED = 3;
         private boolean isCollapsed = true;
@@ -129,9 +113,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             message = v.findViewById(R.id.notification_message);
             messageLength = v.findViewById(R.id.notification_message_length);
             date = v.findViewById(R.id.notification_time);
+            notification = v.findViewById(R.id.notification_section);
         }
 
-        void setData(NotificationModel notificationItem) {
+        void setData(NotificationModel notificationItem, int position) {
+            String notificationID = notificationItem.getNotificationID();
+            String questionID = notificationItem.getQuestionID();
             title.setText(notificationItem.getNotificationTitle());
             message.setText(notificationItem.getNotificationMessage());
             date.setText(notificationItem.getTime());
@@ -144,17 +131,28 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             });
 
             //Read More/Read Less On Click
-            messageLength.setOnClickListener(new View.OnClickListener() {
+            messageLength.setOnClickListener(v -> {
+                if(isCollapsed){
+                    message.setMaxLines(Integer.MAX_VALUE);
+                    messageLength.setText(R.string.read_less);
+                }else{
+                    message.setMaxLines(MAX_LINES_COLLAPSED);
+                    messageLength.setText(R.string.read_more);
+                }
+                isCollapsed  = !isCollapsed;
+            });
+
+            //Show answer
+            notification.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(isCollapsed){
-                        message.setMaxLines(Integer.MAX_VALUE);
-                        messageLength.setText(R.string.read_less);
-                    }else{
-                        message.setMaxLines(MAX_LINES_COLLAPSED);
-                        messageLength.setText(R.string.read_more);
-                    }
-                    isCollapsed  = !isCollapsed;
+                    Intent myIntent = new Intent(context, VideoRepliesActivity.class);
+                    myIntent.putExtra("video_id", questionID);
+
+                    //remove notification
+                    NetworkHandler.getInstance().deleteNotification(notificationID, (object, message) -> { });
+
+                    context.startActivity(myIntent);
                 }
             });
         }

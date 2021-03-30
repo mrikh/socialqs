@@ -8,6 +8,7 @@
     tools:cardElevation="0dp">
 
     <LinearLayout
+        android:id="@+id/notification_section"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">

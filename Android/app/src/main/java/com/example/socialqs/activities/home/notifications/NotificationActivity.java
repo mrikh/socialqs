@@ -70,6 +70,11 @@ public class NotificationActivity extends AppCompatActivity {
         progressBar.setIndeterminateDrawable( new DoubleBounce());
         progressBar.setVisibility(View.VISIBLE);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         notificationList = new ArrayList<>();
 
         NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
@@ -92,7 +97,7 @@ public class NotificationActivity extends AppCompatActivity {
                         noNotificationsLayout.setVisibility(View.VISIBLE);
                         menu.getItem(0).setVisible(false);
                     }else {
-                        adapter = new NotificationAdapter(notificationList, coordinatorLayout);
+                        adapter = new NotificationAdapter(notificationList, coordinatorLayout, NotificationActivity.this);
                         adapter.setOnDataChangeListener(size -> {
                             if(size == 0){
                                 noNotificationsLayout.setVisibility(View.VISIBLE);
@@ -113,7 +118,6 @@ public class NotificationActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
