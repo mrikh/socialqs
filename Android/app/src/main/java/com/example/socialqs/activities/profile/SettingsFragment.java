@@ -1,8 +1,7 @@
-package com.example.socialqs.activities.profile.fragments;
+package com.example.socialqs.activities.profile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,7 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,23 +20,21 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.utils.Utilities;
 
-public class ProfileSettings extends Fragment {
+public class SettingsFragment extends Fragment {
 
     ImageView disable, enable, back;
     ConstraintLayout toggler;
     LinearLayout updatePassword, logOut;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_profile_settings, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v =  inflater.inflate(R.layout.fragment_settings, container, false);
 
         disable = v.findViewById(R.id.notificationDisabled);
         enable = v.findViewById(R.id.notificationEnabled);
         back = v.findViewById(R.id.previousFragment);
 
         toggler = v.findViewById(R.id.toggleButton);
-        //blockList = v.findViewById(R.id.blockListLayout);
         updatePassword = v.findViewById(R.id.updatePasswordLayout);
         logOut = v.findViewById(R.id.logOutLayout);
 
@@ -46,7 +42,6 @@ public class ProfileSettings extends Fragment {
         enable.setVisibility(View.INVISIBLE);
         disable.setVisibility(View.VISIBLE);
 
-        //blockedUsers.add("Test User");
         return v;
     }
 
@@ -74,21 +69,10 @@ public class ProfileSettings extends Fragment {
             }
         });
 
-//        blockList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(blockedUsers.size() > 0) {
-//                    Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_blockList);
-//                } else {
-//                    Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_emptyBlockList);
-//                }
-//            }
-//        });
-
         updatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_resetPasswodFragment);
+                Navigation.findNavController(v).navigate(R.id.action_settingsFragment_to_resetPasswordFragment);
                 //TODO: update password
             }
         });

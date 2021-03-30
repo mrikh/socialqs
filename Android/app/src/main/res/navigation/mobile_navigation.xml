@@ -11,33 +11,35 @@
         android:name="com.example.socialqs.activities.home.category_tabs.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_homeFragment_to_followingFragment"
-            app:destination="@id/navigation_following" />
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/navigation_profile" />
-        <action
-            android:id="@+id/action_homeFragment_to_notificationFragment"
-            app:destination="@id/notificationFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/notificationFragment"
-        android:name="com.example.socialqs.activities.home.notifications.NotificationsFragment"
-        android:label="change"
-        tools:layout="@layout/fragment_notifications" />
-
-    <fragment
-        android:id="@+id/navigation_following"
-        android:name="com.example.socialqs.activities.friends.FollowingFragment"
-        android:label="@string/title_following"
-        tools:layout="@layout/fragment_following" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.socialqs.activities.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_settingsFragment"
+            app:destination="@id/navigation_settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.socialqs.activities.profile.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_resetPasswordFragment"
+            app:destination="@id/navigation_resetPassword" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_resetPassword"
+        android:name="com.example.socialqs.activities.prelogin.fragments.ResetPasswordFragment"
+        android:label="@string/title_reset_password"
+        tools:layout="@layout/fragment_reset_password" />
 
 </navigation>

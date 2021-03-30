@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +25,6 @@ import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import org.json.JSONObject;
 
@@ -146,7 +143,7 @@ public class VerifyEmailFragment extends Fragment {
                                     FragmentManager manager = getActivity().getSupportFragmentManager();
                                     manager.beginTransaction()
                                             .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
-                                            .replace(R.id.preLoginFragmentContainer, ResetPasswodFragment.class, arguments)
+                                            .replace(R.id.preLoginFragmentContainer, ResetPasswordFragment.class, arguments)
                                             .setReorderingAllowed(true)
                                             .addToBackStack(null)
                                             .commit();

@@ -11,27 +11,19 @@ import android.view.MenuItem;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.activities.profile.ProfileActivity;
-import com.example.socialqs.activities.main.MainActivity;
-import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
-import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
-import com.example.socialqs.utils.networking.NetworkHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Main App Navigation Menu Controller
@@ -49,7 +41,7 @@ public class MainMenuActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_following, R.id.navigation_create, R.id.navigation_profile)
+                R.id.navigation_home, R.id.navigation_create, R.id.navigation_profile)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -75,10 +67,6 @@ public class MainMenuActivity extends AppCompatActivity {
                     Bundle arguments = new Bundle();
                     arguments.putParcelableArrayList("categories", categoryList);
                     myIntent.putExtras(arguments);
-                    startActivity(myIntent);
-                    return false;
-                case R.id.navigation_profile:
-                    myIntent = new Intent(MainMenuActivity.this, ProfileActivity.class);
                     startActivity(myIntent);
                     return false;
                 default:

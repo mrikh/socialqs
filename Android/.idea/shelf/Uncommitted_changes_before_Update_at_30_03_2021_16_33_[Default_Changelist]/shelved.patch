@@ -1,0 +1,105 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45__Default_Changelist_.xml	(revision f6b4096afa47bde7482aee01e491f23098a49264)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45__Default_Changelist_.xml	(revision f6b4096afa47bde7482aee01e491f23098a49264)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_13_03_2021_14_45_[Default_Changelist]" date="1615646734510" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 13/03/2021 14:45 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45_[Default_Changelist]/shelved.patch	(revision f6b4096afa47bde7482aee01e491f23098a49264)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_13_03_2021_14_45_[Default_Changelist]/shelved.patch	(revision f6b4096afa47bde7482aee01e491f23098a49264)
+@@ -1,90 +0,0 @@
+-Index: app/src/main/java/com/example/socialqs/utils/Utilities.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.socialqs.utils;\r\n\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.content.DialogInterface;\r\nimport android.content.SharedPreferences;\r\nimport android.content.res.Resources;\r\nimport android.preference.PreferenceManager;\r\nimport android.view.View;\r\n\r\nimport com.amazonaws.auth.CognitoCredentialsProvider;\r\nimport com.amazonaws.mobile.client.AWSMobileClient;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;\r\nimport com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;\r\nimport com.amazonaws.regions.Regions;\r\nimport com.amazonaws.services.s3.AmazonS3Client;\r\nimport com.amazonaws.services.s3.model.CannedAccessControlList;\r\nimport com.example.socialqs.models.UserModel;\r\n\r\nimport org.jetbrains.annotations.NotNull;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.File;\r\nimport java.net.URI;\r\nimport java.net.URISyntaxException;\r\n\r\npublic class Utilities {\r\n\r\n    private static Utilities shared = null;\r\n\r\n    public static Utilities getInstance(){\r\n        if (shared == null){\r\n            shared = new Utilities();\r\n        }\r\n\r\n        return shared;\r\n    }\r\n\r\n    public String getFileName(){\r\n        return UserModel.current.id + Long.toString(System.currentTimeMillis());\r\n    }\r\n\r\n    public String s3UrlString(String filename){\r\n\r\n        return \"https://s3.eu-west-1.amazonaws.com/socialqs-bucket/\" + filename;\r\n    }\r\n\r\n//    https://grokonez.com/android/uploaddownload-files-images-amazon-s3-android\r\n    public void uploadFile(String fileName, String path, Context c, TransferListener listener) throws Exception {\r\n        CognitoCredentialsProvider cred = new CognitoCredentialsProvider(\"eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0\", Regions.EU_WEST_1);\r\n        AmazonS3Client client = new AmazonS3Client(cred);\r\n\r\n        TransferUtility utility = TransferUtility.builder()\r\n                .context(c)\r\n                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())\r\n                .s3Client(client)\r\n                .build();\r\n\r\n        File file = new File(new URI(path));\r\n        TransferObserver observer = utility.upload(\"socialqs-bucket\", fileName, file, CannedAccessControlList.PublicRead);\r\n\r\n        observer.setTransferListener(listener);\r\n    }\r\n\r\n    public AlertDialog createSingleActionAlert(CharSequence body, CharSequence buttonTitle, Context context, DialogInterface.OnClickListener listener){\r\n        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);\r\n        builder1.setMessage(body);\r\n        builder1.setCancelable(true);\r\n\r\n        if (listener != null){\r\n            builder1.setPositiveButton(buttonTitle, listener);\r\n        }else{\r\n            builder1.setPositiveButton(buttonTitle, new DialogInterface.OnClickListener() {\r\n                @Override\r\n                public void onClick(DialogInterface dialog, int which) {\r\n                    dialog.cancel();\r\n                }\r\n            });\r\n        }\r\n        AlertDialog alert11 = builder1.create();\r\n        return alert11;\r\n    }\r\n\r\n    public void saveJsonObject(String key, @NotNull JSONObject json, Context c){\r\n        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);\r\n        SharedPreferences.Editor editor = pref.edit();\r\n        editor.putString(key, json.toString());\r\n        editor.commit();\r\n    }\r\n\r\n    public JSONObject fetchJsonObject(Context c, String key) throws Exception{\r\n\r\n        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);\r\n        try {\r\n            return new JSONObject(pref.getString(key, null));\r\n        }catch (Exception e){\r\n            throw e;\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/socialqs/utils/Utilities.java	(revision 8cc573dc1bfad2667922ad590a743229213cba81)
+-+++ app/src/main/java/com/example/socialqs/utils/Utilities.java	(date 1615588466161)
+-@@ -6,12 +6,15 @@
+- import android.content.SharedPreferences;
+- import android.content.res.Resources;
+- import android.preference.PreferenceManager;
+-+import android.util.Log;
+- import android.view.View;
+- 
+- import com.amazonaws.auth.CognitoCredentialsProvider;
+- import com.amazonaws.mobile.client.AWSMobileClient;
+- import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+-+import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler;
+- import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+-+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+- import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+- import com.amazonaws.regions.Regions;
+- import com.amazonaws.services.s3.AmazonS3Client;
+-@@ -42,7 +45,6 @@
+-     }
+- 
+-     public String s3UrlString(String filename){
+--
+-         return "https://s3.eu-west-1.amazonaws.com/socialqs-bucket/" + filename;
+-     }
+- 
+-@@ -51,6 +53,8 @@
+-         CognitoCredentialsProvider cred = new CognitoCredentialsProvider("eu-west-1:af8a10f1-f5e8-429d-bd5e-cce8d49845d0", Regions.EU_WEST_1);
+-         AmazonS3Client client = new AmazonS3Client(cred);
+- 
+-+        TransferNetworkLossHandler.getInstance(c);
+-+
+-         TransferUtility utility = TransferUtility.builder()
+-                 .context(c)
+-                 .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+-Index: app/src/main/res/layout/activity_answer_question.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:gravity=\"center\"\r\n    tools:context=\".activities.home.AnswerQuestionActivity\">\r\n\r\n    <VideoView\r\n        android:id=\"@+id/video_recording\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n\r\n    <ImageView\r\n        android:id=\"@+id/back_btn\"\r\n        android:layout_width=\"40dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:layout_marginStart=\"16dp\"\r\n        android:layout_marginLeft=\"16dp\"\r\n        android:src=\"@drawable/ic_arrow_back_white\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/confirm_btn\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.022\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/confirm_btn\"\r\n        android:layout_width=\"40dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:layout_marginEnd=\"16dp\"\r\n        android:layout_marginRight=\"16dp\"\r\n        android:src=\"@drawable/ic_check_24\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.017\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/res/layout/activity_answer_question.xml	(revision 8cc573dc1bfad2667922ad590a743229213cba81)
+-+++ app/src/main/res/layout/activity_answer_question.xml	(date 1615581986702)
+-@@ -21,8 +21,8 @@
+- 
+-     <ImageView
+-         android:id="@+id/back_btn"
+--        android:layout_width="40dp"
+--        android:layout_height="40dp"
+-+        android:layout_width="38dp"
+-+        android:layout_height="38dp"
+-         android:layout_marginStart="16dp"
+-         android:layout_marginLeft="16dp"
+-         android:src="@drawable/ic_arrow_back_white"
+-@@ -35,8 +35,8 @@
+- 
+-     <ImageView
+-         android:id="@+id/confirm_btn"
+--        android:layout_width="40dp"
+--        android:layout_height="40dp"
+-+        android:layout_width="38dp"
+-+        android:layout_height="38dp"
+-         android:layout_marginEnd="16dp"
+-         android:layout_marginRight="16dp"
+-         android:src="@drawable/ic_check_24"
+-Index: app/src/main/res/layout/item_video_reply.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    xmlns:cardView=\"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"530dp\"\r\n    cardView:cardElevation=\"10dp\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n        <androidx.cardview.widget.CardView\r\n            android:id=\"@+id/reply_user_imgCardView\"\r\n            android:layout_width=\"30dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_marginStart=\"14dp\"\r\n            android:layout_marginTop=\"8dp\"\r\n            cardView:cardCornerRadius=\"50dp\"\r\n            cardView:layout_constraintStart_toStartOf=\"parent\"\r\n            cardView:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/reply_user_img\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:scaleType=\"centerCrop\"\r\n                tools:background=\"@tools:sample/avatars\" />\r\n        </androidx.cardview.widget.CardView>\r\n\r\n        <TextView\r\n            android:id=\"@+id/reply_user_name\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Name\"\r\n            android:textColor=\"@color/black\"\r\n            android:textSize=\"16sp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/reply_user_imgCardView\"\r\n            cardView:layout_constraintEnd_toEndOf=\"parent\"\r\n            cardView:layout_constraintHorizontal_bias=\"0.026\"\r\n            cardView:layout_constraintStart_toEndOf=\"@+id/reply_user_imgCardView\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/reply_user_imgCardView\" />\r\n\r\n        <RelativeLayout\r\n            android:id=\"@+id/video_view_layout\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"400dp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"parent\"\r\n            cardView:layout_constraintEnd_toEndOf=\"parent\"\r\n            cardView:layout_constraintHorizontal_bias=\"0.0\"\r\n            cardView:layout_constraintStart_toStartOf=\"parent\"\r\n            cardView:layout_constraintTop_toBottomOf=\"@+id/reply_user_name\"\r\n            cardView:layout_constraintVertical_bias=\"0.18\">\r\n\r\n            <VideoView\r\n                android:id=\"@+id/reply_video_view\"\r\n                android:layout_width=\"fill_parent\"\r\n                android:layout_height=\"fill_parent\"\r\n                android:layout_alignParentLeft=\"true\"\r\n                android:layout_alignParentTop=\"true\"\r\n                android:layout_alignParentRight=\"true\"\r\n                android:layout_alignParentBottom=\"true\" />\r\n        </RelativeLayout>\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/correct_answer\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"10dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:visibility=\"invisible\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/reply_likes_cardview\"\r\n            cardView:layout_constraintStart_toStartOf=\"parent\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/reply_likes_cardview\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/imageView2\"\r\n                android:layout_width=\"40dp\"\r\n                android:layout_height=\"40dp\"\r\n                android:layout_marginStart=\"12dp\"\r\n                android:layout_marginLeft=\"12dp\"\r\n                android:src=\"@drawable/correct_answer\"\r\n                tools:layout_editor_absoluteY=\"411dp\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/text\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"40dp\"\r\n                android:gravity=\"center\"\r\n                android:text=\"@string/correct_answer\"\r\n                android:textColor=\"@color/black\"\r\n                android:textSize=\"20sp\" />\r\n        </LinearLayout>\r\n\r\n        <androidx.cardview.widget.CardView\r\n            android:id=\"@+id/reply_likes_cardview\"\r\n            android:layout_width=\"35dp\"\r\n            android:layout_height=\"35dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:alpha=\"0.6\"\r\n            cardView:cardBackgroundColor=\"@color/like_btn\"\r\n            cardView:cardCornerRadius=\"50dp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/reply_like_textview\"\r\n            cardView:layout_constraintEnd_toStartOf=\"@+id/reply_like_textview\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/reply_like_textview\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/reply_likes_img\"\r\n                android:layout_width=\"26dp\"\r\n                android:layout_height=\"26dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:scaleType=\"centerCrop\"\r\n                android:src=\"@drawable/ic_thumb_up_24\" />\r\n        </androidx.cardview.widget.CardView>\r\n\r\n        <TextView\r\n            android:id=\"@+id/reply_like_textview\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:gravity=\"center_vertical\"\r\n            android:text=\"@string/likes\"\r\n            android:textColor=\"@color/black\"\r\n            android:textSize=\"15sp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/reply_dislikes_cardview\"\r\n            cardView:layout_constraintEnd_toStartOf=\"@+id/reply_dislikes_cardview\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/reply_dislikes_cardview\" />\r\n\r\n        <androidx.cardview.widget.CardView\r\n            android:id=\"@+id/reply_dislikes_cardview\"\r\n            android:layout_width=\"35dp\"\r\n            android:layout_height=\"35dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:alpha=\"0.6\"\r\n            cardView:cardBackgroundColor=\"@color/dislike_btn\"\r\n            cardView:cardCornerRadius=\"50dp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/reply_dislike_textview\"\r\n            cardView:layout_constraintEnd_toStartOf=\"@+id/reply_dislike_textview\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/reply_dislike_textview\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/reply_dislikes_img\"\r\n                android:layout_width=\"26dp\"\r\n                android:layout_height=\"26dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:scaleType=\"centerCrop\"\r\n                android:src=\"@drawable/ic_thumb_down_24\" />\r\n        </androidx.cardview.widget.CardView>\r\n\r\n        <TextView\r\n            android:id=\"@+id/reply_dislike_textview\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:layout_marginEnd=\"10dp\"\r\n            android:gravity=\"center_vertical\"\r\n            android:text=\"@string/dislikes\"\r\n            android:textColor=\"@color/black\"\r\n            android:textSize=\"15sp\"\r\n            cardView:layout_constraintEnd_toEndOf=\"parent\"\r\n            cardView:layout_constraintTop_toBottomOf=\"@+id/video_view_layout\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/reply_post_time\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"20dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:layout_marginBottom=\"10dp\"\r\n            android:text=\"Post Time\"\r\n            android:textSize=\"12sp\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"parent\"\r\n            cardView:layout_constraintEnd_toEndOf=\"@+id/reply_dislike_textview\"\r\n            cardView:layout_constraintTop_toBottomOf=\"@+id/reply_dislikes_cardview\" />\r\n\r\n        <ImageView\r\n            android:id=\"@+id/reply_play_btn\"\r\n            android:layout_width=\"70dp\"\r\n            android:layout_height=\"70dp\"\r\n            android:src=\"@drawable/play_arrow_24\"\r\n            android:visibility=\"visible\"\r\n            cardView:layout_constraintBottom_toBottomOf=\"@+id/video_view_layout\"\r\n            cardView:layout_constraintEnd_toEndOf=\"parent\"\r\n            cardView:layout_constraintStart_toStartOf=\"parent\"\r\n            cardView:layout_constraintTop_toTopOf=\"@+id/video_view_layout\" />\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</androidx.cardview.widget.CardView>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/res/layout/item_video_reply.xml	(revision 8cc573dc1bfad2667922ad590a743229213cba81)
+-+++ app/src/main/res/layout/item_video_reply.xml	(date 1615581748039)
+-@@ -150,6 +150,7 @@
+- 
+-         <TextView
+-             android:id="@+id/reply_dislike_textview"
+-+            android:layout_height="wrap_content"
+-             android:layout_width="wrap_content"
+-             android:layout_marginTop="20dp"
+-             android:layout_marginEnd="10dp"

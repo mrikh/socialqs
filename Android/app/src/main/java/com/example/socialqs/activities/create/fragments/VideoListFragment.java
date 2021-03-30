@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.adapters.VideoListAdapter;
+import com.example.socialqs.adapters.VideoMyListAdapter;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.utils.StorageUtil;
 import com.example.socialqs.utils.Utilities;
@@ -31,10 +31,10 @@ import com.example.socialqs.utils.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoListFragment extends Fragment implements VideoListAdapter.ItemClickListener {
+public class VideoListFragment extends Fragment implements VideoMyListAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
-    private VideoListAdapter videoListAdapter;
+    private VideoMyListAdapter videoMyListAdapter;
     private Uri fileUri;
 
     private ArrayList<File> allMediaList = new ArrayList<>();
@@ -73,9 +73,9 @@ public class VideoListFragment extends Fragment implements VideoListAdapter.Item
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         recyclerView.setNestedScrollingEnabled(false);
 
-        videoListAdapter = new VideoListAdapter(context, allMediaList);
-        recyclerView.setAdapter(videoListAdapter);
-        videoListAdapter.setClickListener(new VideoListAdapter.ItemClickListener() {
+        videoMyListAdapter = new VideoMyListAdapter(context, allMediaList);
+        recyclerView.setAdapter(videoMyListAdapter);
+        videoMyListAdapter.setClickListener(new VideoMyListAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position, Context context) {
                 String path = Uri.fromFile(allMediaList.get(position)).getPath();
@@ -108,7 +108,7 @@ public class VideoListFragment extends Fragment implements VideoListAdapter.Item
             load_Directory_Files(storage);
         }
 
-        videoListAdapter.notifyDataSetChanged();
+        videoMyListAdapter.notifyDataSetChanged();
     }
 
     @Override

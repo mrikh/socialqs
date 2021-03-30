@@ -7,11 +7,6 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_following"
-        android:icon="@drawable/following_black_24dp"
-        android:title="@string/title_following" />
-
-    <item
         android:id="@+id/navigation_create"
         android:icon="@drawable/create_black_24dp"
         android:title="@string/title_create" />

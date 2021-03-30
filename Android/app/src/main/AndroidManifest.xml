@@ -18,19 +18,21 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="m">
-        <activity android:name=".activities.profile.ProfileActivity"></activity>
+
         <activity android:name=".activities.prelogin.PreLoginActivity" />
-        <activity android:name=".activities.create.CreateActivity" />
+
         <activity android:name=".activities.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.home.MainMenuActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activities.home.VideoRepliesActivity"
             android:label="@string/title_answers"
@@ -40,6 +42,8 @@
 
         <activity android:name=".activities.home.notifications.NotificationActivity"
             android:label="@string/title_notifications"/>
+
+        <activity android:name=".activities.create.CreateActivity" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
