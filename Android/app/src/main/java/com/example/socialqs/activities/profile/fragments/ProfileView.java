@@ -229,7 +229,7 @@ public class ProfileView extends Fragment {
 
     public void updateName() {
         UserModel.current.name = nameEdit.getText().toString();
-        refreshDb();
+        refreshCache();
         nameEdit.setVisibility(View.INVISIBLE);
         tickButton.setVisibility(View.INVISIBLE);
         nameView.setText(UserModel.current.name);
@@ -250,10 +250,10 @@ public class ProfileView extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray  = byteArrayOutputStream .toByteArray();
         UserModel.current.profilePhoto = Base64.encodeToString(byteArray , Base64.DEFAULT);
-        refreshDb();
+        refreshCache();
     }
 
-    public void refreshDb() {
+    public void refreshCache() {
         try {
             UserModel.current.saveToDefaults(getActivity().getApplicationContext());
         } catch (Exception e) {

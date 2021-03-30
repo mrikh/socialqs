@@ -131,7 +131,12 @@ public class PreLoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
-        System.exit(0);
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            System.exit(0);
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 }

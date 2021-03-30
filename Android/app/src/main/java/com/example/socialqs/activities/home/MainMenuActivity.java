@@ -78,6 +78,13 @@ public class MainMenuActivity extends AppCompatActivity {
                     startActivity(myIntent);
                     return false;
                 case R.id.navigation_profile:
+
+                    if (UserModel.current == null){
+                        //just as a safety
+                        Utilities.getInstance().createSingleActionAlert("You need to login before using this feature.", "Okay", MainMenuActivity.this, null).show();
+                        return false;
+                    }
+                    
                     myIntent = new Intent(MainMenuActivity.this, ProfileActivity.class);
                     startActivity(myIntent);
                     return false;

@@ -85,13 +85,13 @@ public class ProfileSettings extends Fragment {
 //            }
 //        });
 
-        updatePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_resetPasswodFragment);
-                //TODO: update password
-            }
-        });
+//        updatePassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.action_profileSettings_to_resetPasswodFragment);
+//                //TODO: update password
+//            }
+//        });
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +112,6 @@ public class ProfileSettings extends Fragment {
                         Intent login = new Intent(getContext(), PreLoginActivity.class);
                         login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(login);
-                        /*  1. Log out (Takes you to login page)
-                            2. Press back (Exits app)
-                            3. Open app again (Opens main menu)
-                            4. Clear task manager (Exits app)
-                            5. Open app again (Opens login page)
-                            */
                     }
                 });
 
