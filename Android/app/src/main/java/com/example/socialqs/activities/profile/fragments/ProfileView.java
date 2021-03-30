@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,10 @@ import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -60,10 +65,19 @@ public class ProfileView extends Fragment {
 
         profileImage = view.findViewById(R.id.profileImageView);
 
-        if (!UserModel.current.profilePhoto.isEmpty()) {
-            url = UserModel.current.profilePhoto;
+        if (UserModel.current.profilePhoto.isEmpty()) {
+            Picasso.with(getContext()).load(url).into(profileImage);
+        } else {
+            try {
+                byte[] encodeByte = Base64.decode(UserModel.current.profilePhoto, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
+                        encodeByte.length);
+                profileImage.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
+                        .show();
+            }
         }
-        Picasso.with(getContext()).load(url).into(profileImage);
 
         cameraButton = view.findViewById(R.id.cameraButton);
         settingsButton = view.findViewById(R.id.settingsButton);
@@ -173,7 +187,6 @@ public class ProfileView extends Fragment {
             requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
             startActivityForResult(intent, Constant.CHOOSE_PROFILE_IMAGE);
         }
     }
@@ -182,10 +195,11 @@ public class ProfileView extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //TODO: upload the image to the server
+        Bitmap imageBitMap = null;
         if(requestCode == Constant.CAPTURE_PROFILE_IMAGE  && resultCode == RESULT_OK
                 && data != null) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
+            imageBitMap = captureImage;
             profileImage.setImageBitmap(captureImage);
         }
         try {
@@ -203,17 +217,19 @@ public class ProfileView extends Fragment {
                 String ImageDecode = cursor.getString(columnIndex);
                 cursor.close();
 
-                profileImage.setImageBitmap(BitmapFactory.decodeFile(ImageDecode));
+                imageBitMap = BitmapFactory.decodeFile(ImageDecode);
+                profileImage.setImageBitmap(imageBitMap);
             }
         } catch (Exception e) {
-
             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
                     .show();
         }
+        uploadImage(imageBitMap);
     }
 
     public void updateName() {
         UserModel.current.name = nameEdit.getText().toString();
+        refreshDb();
         nameEdit.setVisibility(View.INVISIBLE);
         tickButton.setVisibility(View.INVISIBLE);
         nameView.setText(UserModel.current.name);
@@ -227,5 +243,22 @@ public class ProfileView extends Fragment {
         nameEdit.setText(UserModel.current.name);
         nameEdit.setVisibility(View.VISIBLE);
         tickButton.setVisibility(View.VISIBLE);
+    }
+
+    public void uploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream  = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray  = byteArrayOutputStream .toByteArray();
+        UserModel.current.profilePhoto = Base64.encodeToString(byteArray , Base64.DEFAULT);
+        refreshDb();
+    }
+
+    public void refreshDb() {
+        try {
+            UserModel.current.saveToDefaults(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }
