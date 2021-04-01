@@ -45,22 +45,19 @@ router.post('/answers/answer', auth, async (req, res, next) => {
             await notification.save()   
 
             const creatorUser = await User.findById(answer.questionId.creator._id)
-            console.log(creatorUser.token)
-            if (creatorUser.token && creatorUser.token != ''){
-                const pushMessage = {
-                    notification : {
-                        title : title,
-                        body : message
-                    },
-                    token : creatorUser.pushToken
-                }
-        
-                admin.messaging().send(pushMessage).then( response => {
-                    console.log("Notification sent successfully")
-                }).catch( error => {
-                    console.log(error);
-                });   
+            const pushMessage = {
+                notification : {
+                    title : title,
+                    body : message
+                },
+                token : creatorUser.pushToken
             }
+        
+            admin.messaging().send(pushMessage).then( response => {
+                console.log("Notification sent successfully")
+            }).catch( error => {
+                console.log(error);
+            });   
         }
         
         return res.status(200).send({code : 200, message : constants.success, data : answer})
