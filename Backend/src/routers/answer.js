@@ -44,8 +44,8 @@ router.post('/answers/answer', auth, async (req, res, next) => {
 
             await notification.save()   
 
+            const creatorUser = await User.findById(answer.questionId.creator._id)
             if (creatorUser.token && creatorUser.token != ''){
-                const creatorUser = await User.findById(answer.questionId.creator._id)
                 const pushMessage = {
                     notification : {
                         title : title,
