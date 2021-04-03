@@ -20,6 +20,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+/**
+ *  List of notification items
+ */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     private List<NotificationModel> notificationList;
@@ -70,12 +73,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private void showUndoSnackbar() {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text, Snackbar.LENGTH_LONG);
 
+        //Undo delete
         snackbar.setAction(R.string.undo_delete, v -> {
             notificationList.add(deletedItemPos, deletedItem);
             notifyItemInserted(deletedItemPos);
             updateActivityLayout();
         });
 
+        //Ignore snackbar = delete notification permanently
         snackbar.addCallback(new Snackbar.Callback() {
              @Override
              public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -92,6 +97,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         snackbar.show();
     }
 
+    //Update layout list
     private void updateActivityLayout(){
         if(onDataChangeListener != null){
             onDataChangeListener.onDataChanged(notificationList.size());
@@ -99,6 +105,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
 
+    /**
+     *  Set up individual notification item data
+     */
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title, message, messageLength, date;

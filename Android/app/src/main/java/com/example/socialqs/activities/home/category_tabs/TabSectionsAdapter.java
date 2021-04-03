@@ -1,6 +1,9 @@
 package com.example.socialqs.activities.home.category_tabs;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 

@@ -16,4 +16,10 @@
         android:icon="@drawable/profile_black_24dp"
         android:title="@string/title_profile" />
 
+    <item
+        android:visible="false"
+        android:id="@+id/navigation_login"
+        android:icon="@drawable/ic_login"
+        android:title="@string/title_login" />
+
 </menu>

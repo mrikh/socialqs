@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -23,6 +27,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
@@ -30,6 +35,7 @@ import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.models.NotificationModel;
 import com.example.socialqs.models.UserModel;
+import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -40,7 +46,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
+/**
+ * List of video replies
+ */
 public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapter.RepliesViewHolder> {
 
     private List<VideoRepliesModel> replyList;
@@ -88,13 +99,16 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         return replyList.size();
     }
 
+    /**
+     *  Set up individual replies data
+     */
     public class RepliesViewHolder extends RecyclerView.ViewHolder {
         private VideoView videoView;
         private LinearLayout correctAnswer;
         private CardView likesBtn, dislikesBtn;
         private TextView authorName, noOfLikes, noOfDislikes, replyDate;
         private ImageView authorImg, playBtn;
-        private boolean isCorrect;
+        private boolean showProgressBar;
         private ProgressBar progressBar;
         private ImageButton menuBtn;
 
@@ -112,6 +126,8 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             replyDate = itemView.findViewById(R.id.reply_post_time);
             menuBtn = itemView.findViewById(R.id.reply_menu);
 
+            showProgressBar = true;
+
             progressBar = itemView.findViewById(R.id.progress);
             Sprite doubleBounce = new DoubleBounce();
             progressBar.setIndeterminateDrawable(doubleBounce);
@@ -123,11 +139,26 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             videoView.setVideoPath(videoReplies.getVideoURL());
             setLikesBtn(videoReplies);
             setDislikesBtn(videoReplies);
-            //TODO UPDATE PROFILE PIC
-            authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             authorName.setText(videoReplies.getAuthorName());
+
+            //This code snippet will be updated/changed when profile photo is uploaded to database
+            //For now it adds the users profile image and other users have a 'no image' icon
+            if(videoReplies.getAuthorName().equals(UserModel.current.name)){
+                String img = UserModel.current.profilePhoto;
+                if(img.equals("")) {
+                    authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+                }else{
+                    byte[] data = Base64.decode(img, Base64.DEFAULT);
+                    Bitmap bm = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    authorImg.setImageBitmap(bm);
+                }
+            }else{
+                authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+            }
+
             replyDate.setText(videoReplies.getTime());
 
+            //Show Menu if reply is from current user
             if(UserModel.current.id.equals(videoReplies.getAuthorID())){
                 menuBtn.setVisibility(View.VISIBLE);
                 menuBtn.setOnClickListener(v -> {
@@ -144,7 +175,13 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                                         .setCancelable(false)
                                         //Delete
                                         .setPositiveButton(R.string.title_delete, (dialog, which) -> {
-                                            replyList.remove(position);
+                                            //error if when size = 1 (position = 1 instead of 0)
+                                            if(replyList.size() == position){
+                                                replyList.remove(0);
+                                            }else{
+                                                replyList.remove(position);
+                                            }
+
                                             notifyItemRemoved(position);
                                             String answerID = videoReplies.getReplyID();
                                             NetworkHandler.getInstance().deleteAnswer(answerID, (object, message) -> { });
@@ -197,12 +234,22 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         private void play(){
             videoView.start();
             playBtn.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
+            if(showProgressBar) {
+                progressBar.setVisibility(View.VISIBLE);
+
+                progressBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }, 1000 * 3);
+            }
         }
 
         private void pause(){
             videoView.pause();
             playBtn.setVisibility(View.VISIBLE);
+            showProgressBar = false;
 
             //Play Button Animation
             playBtn.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).withEndAction(new Runnable() {

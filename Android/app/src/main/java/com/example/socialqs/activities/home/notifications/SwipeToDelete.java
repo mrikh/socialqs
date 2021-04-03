@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
 import com.example.socialqs.adapters.NotificationAdapter;
 
+/**
+ *  Swipe to delete notification class implementation
+ */
 public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
 
     private NotificationAdapter adapter;

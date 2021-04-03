@@ -10,14 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
+import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.adapters.VideoDisplayAdapter;
@@ -104,8 +107,8 @@ public class TabFragment extends Fragment {
         return root;
     }
 
+    //Get category question list
     private void fetchListing(){
-
         videoList = new ArrayList<>();
 
         String categoryId = null;
@@ -145,4 +148,5 @@ public class TabFragment extends Fragment {
             }
         });
     }
+
 }

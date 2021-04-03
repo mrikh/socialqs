@@ -18,6 +18,7 @@
     <string name="title_answers">Answers</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_video_source">Choose Video Source</string>
+    <string name="title_login">Login</string>
 
     <!--   Strings   -->
     <string name="invalid_email">Email address is incorrect</string>

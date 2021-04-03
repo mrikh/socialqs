@@ -35,6 +35,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays list of notifications
+ */
 public class NotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;

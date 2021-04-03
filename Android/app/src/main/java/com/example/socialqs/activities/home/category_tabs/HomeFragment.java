@@ -1,15 +1,10 @@
 package com.example.socialqs.activities.home.category_tabs;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -27,7 +22,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
 
-import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.CategoryModel;
@@ -133,7 +127,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
-                    //put model with all as text to the front
+                    //put 'All' category at beginning
                     CategoryModel allModel = categoryList.remove(allCategoryIndex);
                     categoryList.add(0, allModel);
 

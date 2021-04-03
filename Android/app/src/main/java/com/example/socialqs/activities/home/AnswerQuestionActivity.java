@@ -25,6 +25,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
 import com.example.socialqs.models.QuestionModel;
+import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
 import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.Utilities;
@@ -83,6 +84,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == VIDEO_RECORD || requestCode == GET_FROM_GALLERY) {
+           //keep media controller on screen for longer
             MediaController mediaController = new MediaController(video.getContext()){
                 @Override
                 public void show(int timeout){
@@ -93,12 +95,12 @@ public class AnswerQuestionActivity extends AppCompatActivity{
             mediaController.setAnchorView(video);
             video.setMediaController(mediaController);
 
-            //If user cancels gallery upload
             if(data != null){
                 videoUri = data.getData();
                 video.setVideoURI(videoUri);
                 video.start();
             }else{
+                //If user cancels gallery upload
                 finish();
             }
 
@@ -113,7 +115,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                 if(seconds <= 2){
                     finish();
                     startActivity(getIntent());
-                    Toast.makeText(this, "Video is too short", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Video must be longer than 2 seconds", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -131,6 +133,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                 public void onClick(View v) {
                     String filePath = FilePath.getPath(getApplicationContext(), videoUri);
                     uploadVideo(Utilities.getInstance().getFileName(), filePath);
+                    //stops user interrupting upload
                     confirmBtn.setClickable(false);
                     backBtn.setClickable(false);
                 }

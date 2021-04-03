@@ -11,6 +11,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Information for each video question reply item
+ */
 public class VideoRepliesModel {
     private String replyID, videoQuestionID, videoURL, authorName, authorImg, authorID;
     private long createdAt;

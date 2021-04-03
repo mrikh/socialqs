@@ -28,12 +28,24 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.Navigation;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
+import com.example.socialqs.activities.create.CreateActivity;
+import com.example.socialqs.activities.home.AnswerQuestionActivity;
+import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
+import com.example.socialqs.utils.FilePath;
+import com.example.socialqs.utils.Utilities;
+import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
+import com.example.socialqs.utils.networking.NetworkHandler;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,6 +55,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileImage, settingsBtn, cameraBtn;
     private EditText profileName;
     private ImageView setNameBtn, editNameBtn;
+    private Uri imageUri = null;
 
     // TODO DELETE
     String url = "https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1-300x300.png";
@@ -187,10 +200,10 @@ public class ProfileFragment extends Fragment {
         try {
             if(requestCode == Constant.CHOOSE_PROFILE_IMAGE  && resultCode == RESULT_OK
                     && data != null) {
-                Uri URI = data.getData();
+                imageUri = data.getData();
                 String[] FILE = { MediaStore.Images.Media.DATA };
 
-                Cursor cursor = getActivity().getContentResolver().query(URI,
+                Cursor cursor = getActivity().getContentResolver().query(imageUri,
                         FILE, null, null, null);
 
                 cursor.moveToFirst();
@@ -203,10 +216,12 @@ public class ProfileFragment extends Fragment {
                 profileImage.setImageBitmap(imageBitMap);
             }
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
         }
-        uploadImage(imageBitMap);
+
+        if(data != null) {
+            uploadImage(imageBitMap);
+        }
     }
 
 
@@ -215,6 +230,56 @@ public class ProfileFragment extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray  = byteArrayOutputStream .toByteArray();
         UserModel.current.profilePhoto = Base64.encodeToString(byteArray , Base64.DEFAULT);
+
+        /**
+         * Code below doesn't work
+         */
+//        String filePath = FilePath.getPath(getContext(), imageUri);
+//        String filename = Utilities.getInstance().getFileName();
+//
+//        try {
+//            Utilities.getInstance().uploadFile(filename, "file:" + filePath, getContext(), new TransferListener() {
+//                @Override
+//                public void onStateChanged(int id, TransferState state) {
+//                    if (state == TransferState.IN_PROGRESS){
+//                        System.out.println("1111111111111111111111111111111111111111111111111");
+//                    }else if (state == TransferState.COMPLETED) {
+//                        System.out.println("2222222222222222222222222222222222222222222222222");
+//                        try {
+//                            NetworkHandler.getInstance().updateInfo(UserModel.current.token, UserModel.current.name, Utilities.getInstance().s3UrlString(filename), new NetworkingClosure() {
+//                                @Override
+//                                public void completion(JSONObject object, String message) {
+//                                    if (object == null){
+//                                        Utilities.getInstance().createSingleActionAlert(message, "Okay", getContext(), null).show();
+//                                    }else{
+//                                        Utilities.getInstance().createSingleActionAlert("Successfully updated profile picture", "Okay", getContext(), new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                            }
+//                                        }).show();
+//                                    }
+//                                }
+//                            });
+//                        } catch (Exception e) {
+//                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+//                        }
+//                    }else{
+//                    }
+//                }
+//
+//                @Override
+//                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) { }
+//
+//                @Override
+//                public void onError(int id, Exception ex) {
+//                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", getContext(), null).show();
+//                }
+//            });
+//        } catch (Exception e) {
+//            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+//        }
+
+
         refreshDb();
     }
 
@@ -225,4 +290,5 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
         }
     }
+
 }

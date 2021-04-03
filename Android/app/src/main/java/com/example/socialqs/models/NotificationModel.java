@@ -11,6 +11,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *  Information for each notification item
+ */
 public class NotificationModel {
 
     private String notificationID, questionID, title, message;

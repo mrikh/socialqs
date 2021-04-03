@@ -1,12 +1,20 @@
 package com.example.socialqs.models;
 
+import android.util.Base64;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class VideoItemModel {
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+
+/**
+ * Information for each video item
+ */
+public class VideoItemModel implements Serializable {
 
     private String videoID, videoURL, videoQuestion, authorName, authorImg, category;
-    private int replyAmount;
+    private int replyAmount, count;
     private boolean isBookmarked;
 
     public VideoItemModel(JSONObject object) throws JSONException {
@@ -18,6 +26,8 @@ public class VideoItemModel {
         this.authorImg = object.getJSONObject("creator").getString("profilePhoto");
         this.replyAmount = object.getInt("answerCount");
         this.isBookmarked = object.getBoolean("isBookmarked");
+
+        count = replyAmount;
     }
 
     public String getVideoID(){ return videoID; }
@@ -30,13 +40,17 @@ public class VideoItemModel {
 
     public String getAuthorName(){ return authorName; }
 
-//    public int getAuthorImg(){return authorImg; }
+    public String getAuthorImg() { return authorImg; }
+
+    public void setVideoReplyAmount(int count){ this.count = count; }
+
+    public int getCount(){ return count;}
 
     public String getVideoReplyAmount(){
-        if(replyAmount == 1){
-            return replyAmount + " Answer  >";
+        if(count == 1){
+            return count + " Answer  >";
         }else{
-            return replyAmount + " Answers  >";
+            return count + " Answers  >";
         }
     }
 

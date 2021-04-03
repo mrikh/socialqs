@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
+import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
@@ -22,11 +23,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-
 import java.util.ArrayList;
 
 /**
  * Main App Navigation Menu Controller
+ *
+ * Landing Activity once logged in or exploring app
  */
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -39,10 +41,15 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_create, R.id.navigation_profile)
-                .build();
+                    R.id.navigation_home, R.id.navigation_create, R.id.navigation_profile)
+                    .build();
+
+        //No profile view if not logged in
+        if (UserModel.current == null){
+            navView.getMenu().findItem(R.id.navigation_login).setVisible(true);
+            navView.getMenu().findItem(R.id.navigation_profile).setVisible(false);
+        }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -72,6 +79,11 @@ public class MainMenuActivity extends AppCompatActivity {
                 default:
                     NavigationUI.onNavDestinationSelected(item, navController);
                     break;
+
+                case R.id.navigation_login:
+                    Intent intent = new Intent(MainMenuActivity.this, PreLoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
             }
 
 
