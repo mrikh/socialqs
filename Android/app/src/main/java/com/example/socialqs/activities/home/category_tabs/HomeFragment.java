@@ -79,25 +79,31 @@ public class HomeFragment extends Fragment {
         }
 
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
-        searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
-        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (UserModel.current != null) {
+            searchBar.setFocusable(false);
+            searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
+            searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if (actionId == EditorInfo.IME_ACTION_GO){
-                    ((MainMenuActivity)getActivity()).searchString = v.getText().toString();
-                    Intent newIntent = new Intent("Searched");
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
+                    if (actionId == EditorInfo.IME_ACTION_GO) {
+                        ((MainMenuActivity) getActivity()).searchString = v.getText().toString();
+                        Intent newIntent = new Intent("Searched");
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
 
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-                    return false;
+                        return false;
+                    }
+
+                    return true;
                 }
+            });
+        }else{searchBar.setFocusable(false);
+            searchBar.setOnClickListener(v -> Utilities.getInstance().createSingleActionAlert("You must login to use this feature.", "Okay", getContext(), null).show());
+        }
 
-                return true;
-            }
-        });
 
         viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
