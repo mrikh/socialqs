@@ -130,6 +130,8 @@ router.get('/questions/list', async (req, res, next) => {
                 }else{
                     temp.isBookmarked = false
                 }
+            }else{
+                temp.isBookmarked = false
             }
 
             delete temp.bookmarkedBy
@@ -223,6 +225,8 @@ router.get('/questions/details', async (req, res, next) => {
                 }else{
                     temp.isBookmarked = false
                 }
+            }else{
+                temp.isBookmarked = false
             }
             delete temp.bookmarkedBy
             return temp
