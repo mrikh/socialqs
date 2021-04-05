@@ -40,10 +40,16 @@ import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -92,8 +98,8 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     public class VideoViewHolder extends RecyclerView.ViewHolder{
         private VideoView videoView;
         private TextView authorName, videoQuestion, videoReplies;
-        private ImageView authorImg, playBtn, replyToVideoBtn;
-        private CardView bookmarkBtn;
+        private ImageView authorImg, playBtn;
+        private CardView bookmarkBtn, replyToVideoBtn;
         private String videoID;
         private ProgressBar progressBar;
 
@@ -106,7 +112,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             videoView = itemView.findViewById(R.id.video_view);
             playBtn = itemView.findViewById(R.id.play_btn);
             bookmarkBtn = itemView.findViewById(R.id.bookmark_cardview);
-            replyToVideoBtn = itemView.findViewById(R.id.reply_to_video_img_view);
+            replyToVideoBtn = itemView.findViewById(R.id.reply_to_video_cardview);
 
             progressBar = itemView.findViewById(R.id.progress);
             Sprite doubleBounce = new DoubleBounce();
@@ -120,53 +126,52 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             videoView.setVideoPath(videoItemModel.getVideoURL());
             videoQuestion.setText(videoItemModel.getVideoQuestion());
             authorName.setText(videoItemModel.getAuthorName());
-
+            authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             videoReplies.setText(videoItemModel.getVideoReplyAmount());
 
-            //This code snippet will be updated/changed when profile photo is uploaded to database
-            //For now it adds the users profile image and other users have a 'no image' icon
-            if(videoItemModel.getAuthorName().equals(UserModel.current.name)){
-                String img = UserModel.current.profilePhoto;
-                if(img.equals("")) {
-                    authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
-                }else{
-                    byte[] data = Base64.decode(img, Base64.DEFAULT);
-                    Bitmap bm = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    authorImg.setImageBitmap(bm);
-                }
+            //adds profile images to videos
+            if(!videoItemModel.getAuthorImg().equals(null)){
+                String img = videoItemModel.getAuthorImg();
+                Picasso.with(context).load(img).into(authorImg);
             }else{
                 authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             }
 
-            //Setting alpha if already bookmarked
-            if(videoItemModel.isBookmarked()){
-                bookmarkBtn.setAlpha((float) 1);
+
+            if(UserModel.current != null) {
+                //Setting alpha if already bookmarked
+                if (videoItemModel.isBookmarked()) {
+                    bookmarkBtn.setAlpha((float) 1);
+                }
+
+                //Add/Remove Bookmark
+                bookmarkBtn.setOnClickListener(v -> {
+                    //update UI display
+                    if(videoItemModel.isBookmarked()){
+                        videoItemModel.setBookmarked(false);
+                        bookmarkBtn.setAlpha((float) 0.6);
+                        Toast.makeText(context, context.getText(R.string.unbookmark_question), Toast.LENGTH_LONG).show();
+                    }else{
+                        videoItemModel.setBookmarked(true);
+                        bookmarkBtn.setAlpha((float) 1);
+                        Toast.makeText(context, context.getText(R.string.bookmark_question), Toast.LENGTH_LONG).show();
+                    }
+
+                    //update database
+                    try{
+                        JSONObject params = new JSONObject();
+                        params.put("questionId", videoItemModel.getVideoID());
+                        params.put("isBookmarked", videoItemModel.isBookmarked());
+                        NetworkHandler.getInstance().bookmarkQuestion(params, (object, message) -> { });
+
+                    } catch (Exception e) {
+                        System.out.println(e.getLocalizedMessage());
+                    }
+                });
+            }else{
+                bookmarkBtn.setVisibility(View.INVISIBLE);
             }
 
-            //Add/Remove Bookmark
-            bookmarkBtn.setOnClickListener(v -> {
-                //update UI display
-                if(videoItemModel.isBookmarked()){
-                    videoItemModel.setBookmarked(false);
-                    bookmarkBtn.setAlpha((float) 0.6);
-                    Toast.makeText(context, context.getText(R.string.unbookmark_question), Toast.LENGTH_LONG).show();
-                }else{
-                    videoItemModel.setBookmarked(true);
-                    bookmarkBtn.setAlpha((float) 1);
-                    Toast.makeText(context, context.getText(R.string.bookmark_question), Toast.LENGTH_LONG).show();
-                }
-
-                //update database
-                try{
-                    JSONObject params = new JSONObject();
-                    params.put("questionId", videoItemModel.getVideoID());
-                    params.put("isBookmarked", videoItemModel.isBookmarked());
-                    NetworkHandler.getInstance().bookmarkQuestion(params, (object, message) -> { });
-
-                } catch (Exception e) {
-                    System.out.println(e.getLocalizedMessage());
-                }
-            });
 
             //Prepare Video
             videoView.requestFocus();
@@ -208,21 +213,24 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
             //Navigate to Video Replies Screen
             videoReplies.setOnClickListener(v -> {
-                Intent myIntent = new Intent(context, VideoRepliesActivity.class);
-                myIntent.putExtra("video_id", videoID);
-                context.startActivity(myIntent);
-            });
-
-            //Open Alert Dialog
-            replyToVideoBtn.setOnClickListener(v -> {
-                videoView.pause();
-                if (UserModel.current == null){
-                    //just as a safety
-                    Utilities.getInstance().createSingleActionAlert("You need to login before using this feature.", "Okay", context, null).show();
-                }else {
-                    videoOptions(videoID);
+                if (UserModel.current == null) {
+                    Utilities.getInstance().createSingleActionAlert("You must login to see the answers.", "Okay", context, null).show();
+                } else {
+                    Intent myIntent = new Intent(context, VideoRepliesActivity.class);
+                    myIntent.putExtra("video_id", videoID);
+                    context.startActivity(myIntent);
                 }
             });
+
+            if(UserModel.current != null) {
+                //Open Alert Dialog
+                replyToVideoBtn.setOnClickListener(v -> {
+                    videoView.pause();
+                    videoOptions(videoID);
+                });
+            }else{
+                replyToVideoBtn.setVisibility(View.INVISIBLE);
+            }
         }
 
         private void videoOptions(String videoID){
@@ -253,6 +261,17 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
             });
             builder.show();
+        }
+
+        private Bitmap getBitmap(String src) {
+            try {
+                URL url = new URL(src);
+                Bitmap myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                return myBitmap;
+            }catch (IOException e){
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 

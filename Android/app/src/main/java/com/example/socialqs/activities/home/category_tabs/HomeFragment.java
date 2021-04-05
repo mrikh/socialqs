@@ -25,6 +25,7 @@ import com.example.socialqs.R;
 import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.home.notifications.NotificationActivity;
 import com.example.socialqs.models.CategoryModel;
+import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
@@ -65,13 +66,17 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         notifications = (ImageView) view.findViewById(R.id.notification_img);
-        notifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NotificationActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(UserModel.current == null){
+            notifications.setVisibility(View.INVISIBLE);
+        }else {
+            notifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), NotificationActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
         searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
