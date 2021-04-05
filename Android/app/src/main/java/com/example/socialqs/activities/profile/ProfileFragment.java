@@ -57,9 +57,6 @@ public class ProfileFragment extends Fragment {
     private ImageView setNameBtn, editNameBtn;
     private Uri imageUri = null;
 
-    // TODO DELETE
-    String url = "https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1-300x300.png";
-
     //CardView collapsedCardView, expandedCardView;
     //ImageView collapsedArrow, expandedArrow;
     //ConstraintLayout collapsedLayout, expandedLayout;
@@ -72,12 +69,11 @@ public class ProfileFragment extends Fragment {
         profileImage = view.findViewById(R.id.profileImageView);
 
         if (UserModel.current.profilePhoto.isEmpty()) {
-            Picasso.with(getContext()).load(url).into(profileImage);
+            profileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         } else {
             try {
-                byte[] encodeByte = Base64.decode(UserModel.current.profilePhoto, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                profileImage.setImageBitmap(bitmap);
+                String url = UserModel.current.profilePhoto;
+                Picasso.with(getContext()).load(url).into(profileImage);
             } catch (Exception e) {
                 Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
             }
@@ -162,23 +158,20 @@ public class ProfileFragment extends Fragment {
             InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-            refreshDb();
+            updateInfo();
         });
     }
 
     private void checkPermissionCamera() {
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.CAMERA}, Constant.CAMERA_PERMISSION);
         } else {
-            Intent intent = new Intent (MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, Constant.CAPTURE_PROFILE_IMAGE);
+            startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), Constant.CAPTURE_PROFILE_IMAGE);
         }
     }
 
     private void checkPermissionGallery() {
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -190,16 +183,18 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Bitmap imageBitMap = null;
-        if(requestCode == Constant.CAPTURE_PROFILE_IMAGE  && resultCode == RESULT_OK
-                && data != null) {
+        if(requestCode == Constant.CAPTURE_PROFILE_IMAGE  && resultCode == RESULT_OK && data != null) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
-            imageBitMap = captureImage;
             profileImage.setImageBitmap(captureImage);
+
+            ByteArrayOutputStream byteArrayOutputStream  = new ByteArrayOutputStream();
+            captureImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), captureImage, "Title", null);
+
+            imageUri =Uri.parse(path);
         }
         try {
-            if(requestCode == Constant.CHOOSE_PROFILE_IMAGE  && resultCode == RESULT_OK
-                    && data != null) {
+            if(requestCode == Constant.CHOOSE_PROFILE_IMAGE && resultCode == RESULT_OK && data != null) {
                 imageUri = data.getData();
                 String[] FILE = { MediaStore.Images.Media.DATA };
 
@@ -212,75 +207,80 @@ public class ProfileFragment extends Fragment {
                 String ImageDecode = cursor.getString(columnIndex);
                 cursor.close();
 
-                imageBitMap = BitmapFactory.decodeFile(ImageDecode);
-                profileImage.setImageBitmap(imageBitMap);
+                Bitmap selectedImg = BitmapFactory.decodeFile(ImageDecode);
+                profileImage.setImageBitmap(selectedImg);
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
         }
 
         if(data != null) {
-            uploadImage(imageBitMap);
+            uploadImage();
         }
     }
 
 
-    private void uploadImage(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream  = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray  = byteArrayOutputStream .toByteArray();
-        UserModel.current.profilePhoto = Base64.encodeToString(byteArray , Base64.DEFAULT);
+    private void uploadImage() {
+        String filePath = FilePath.getPath(getContext(), imageUri);
+        String filename = Utilities.getInstance().getFileName();
 
-        /**
-         * Code below doesn't work
-         */
-//        String filePath = FilePath.getPath(getContext(), imageUri);
-//        String filename = Utilities.getInstance().getFileName();
-//
-//        try {
-//            Utilities.getInstance().uploadFile(filename, "file:" + filePath, getContext(), new TransferListener() {
-//                @Override
-//                public void onStateChanged(int id, TransferState state) {
-//                    if (state == TransferState.IN_PROGRESS){
-//                        System.out.println("1111111111111111111111111111111111111111111111111");
-//                    }else if (state == TransferState.COMPLETED) {
-//                        System.out.println("2222222222222222222222222222222222222222222222222");
-//                        try {
-//                            NetworkHandler.getInstance().updateInfo(UserModel.current.token, UserModel.current.name, Utilities.getInstance().s3UrlString(filename), new NetworkingClosure() {
-//                                @Override
-//                                public void completion(JSONObject object, String message) {
-//                                    if (object == null){
-//                                        Utilities.getInstance().createSingleActionAlert(message, "Okay", getContext(), null).show();
-//                                    }else{
-//                                        Utilities.getInstance().createSingleActionAlert("Successfully updated profile picture", "Okay", getContext(), new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                            }
-//                                        }).show();
-//                                    }
-//                                }
-//                            });
-//                        } catch (Exception e) {
-//                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
-//                        }
-//                    }else{
-//                    }
-//                }
-//
-//                @Override
-//                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) { }
-//
-//                @Override
-//                public void onError(int id, Exception ex) {
-//                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", getContext(), null).show();
-//                }
-//            });
-//        } catch (Exception e) {
-//            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
-//        }
+        try {
+            Utilities.getInstance().uploadFile(filename, "file:" + filePath, getContext(), new TransferListener() {
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (state == TransferState.COMPLETED) {
+                        try {
+                            NetworkHandler.getInstance().updateInfo(UserModel.current.token, UserModel.current.name, Utilities.getInstance().s3UrlString(filename), new NetworkingClosure() {
+                                @Override
+                                public void completion(JSONObject object, String message) {
+                                    if (object == null){
+                                        Utilities.getInstance().createSingleActionAlert(message, "Okay", getContext(), null).show();
+                                    }else{
+                                        UserModel.current.profilePhoto = Utilities.getInstance().s3UrlString(filename);
+                                        Utilities.getInstance().createSingleActionAlert("Successfully updated profile picture", "Okay", getContext(), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                            }
+                                        }).show();
+                                        refreshDb();
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+                        }
+                    }
+                }
 
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) { }
 
-        refreshDb();
+                @Override
+                public void onError(int id, Exception ex) {
+                    Utilities.getInstance().createSingleActionAlert(ex.getLocalizedMessage(), "Okay", getContext(), null).show();
+                }
+            });
+        } catch (Exception e) {
+            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+        }
+
+    }
+
+    private void updateInfo(){
+        try {
+            NetworkHandler.getInstance().updateInfo(UserModel.current.token, UserModel.current.name, UserModel.current.profilePhoto, new NetworkingClosure() {
+                @Override
+                public void completion(JSONObject object, String message) {
+                    if (object == null){
+                        Utilities.getInstance().createSingleActionAlert(message, "Okay", getContext(), null).show();
+                    }else{
+                        refreshDb();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", getContext(), null).show();
+        }
     }
 
     private void refreshDb() {
