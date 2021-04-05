@@ -314,7 +314,7 @@ router.get('/users/details', auth, async (req, res, next) => {
     }
 })
 
-router.patch('/users/updateInfo', auth, async (req, res, next) => {
+router.post('/users/updateInfo', auth, async (req, res, next) => {
 
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'profilePhoto', 'pushToken']
