@@ -119,9 +119,10 @@ router.get('/questions/list', async (req, res, next) => {
             { $unset: ["createdAt", "updatedAt", "__v"] }
         ])
 
-        if (req.user){
-            var finalJson = results.map((question) => {
-                const temp = question
+        
+        var finalJson = results.map((question) => {
+            const temp = question
+            if (req.user){
                 if (req.user._id){
                     temp.isBookmarked = question.bookmarkedBy.some((id) => {
                         return id.equals(req.user._id)
@@ -129,11 +130,12 @@ router.get('/questions/list', async (req, res, next) => {
                 }else{
                     temp.isBookmarked = false
                 }
+            }
 
-                delete temp.bookmarkedBy
-                return temp
-            })
-        }
+            delete temp.bookmarkedBy
+            return temp
+        })
+        
 
         //dont show posts of users you are blocking
         // finalJson = finalJson.filter((question) => {
@@ -211,9 +213,9 @@ router.get('/questions/details', async (req, res, next) => {
             }
         ])
 
-        if (req.user){
-            const finalJson = results.map((question) => {
-                const temp = question
+        const finalJson = results.map((question) => {
+            const temp = question
+            if (req.user){
                 if (req.user._id){
                     temp.isBookmarked = question.bookmarkedBy.some((id) => {
                         return id.equals(req.user._id)
@@ -221,11 +223,10 @@ router.get('/questions/details', async (req, res, next) => {
                 }else{
                     temp.isBookmarked = false
                 }
-
-                delete temp.bookmarkedBy
-                return temp
-            })
-        }
+            }
+            delete temp.bookmarkedBy
+            return temp
+        })
 
         return res.status(200).send({code : 200, message : constants.success, data : { 'result':finalJson}})
     }catch(error){
