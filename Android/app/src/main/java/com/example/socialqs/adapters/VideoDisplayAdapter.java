@@ -59,9 +59,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
     private List<VideoItemModel> videoItemModels;
     private Context context;
-    private int position;
     private VideoViewHolder holder;
-    private VideoItemModel model;
 
     public VideoDisplayAdapter(List<VideoItemModel> videoItemModels, Context context){
         this.videoItemModels = videoItemModels;
@@ -77,20 +75,32 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
-        try {
-            this.position = position;
-            this.holder = holder;
+        this.holder = holder;
+        this.holder.setVideoData(videoItemModels.get(position));
 
-            model = videoItemModels.get(position);
-            holder.setVideoData(model);
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public int getItemCount() { return videoItemModels.size(); }
+
+    public void update(String id, String count) {
+        
+        int value = -1;
+        VideoItemModel item = null;
+        for(int i=0; i<videoItemModels.size(); i++){
+            if(videoItemModels.get(i).getVideoID().equals(id)){
+                value = i;
+                item = videoItemModels.get(i);
+            }
+        }
+
+        if(item != null) {
+            //update number of answers
+            item.setVideoReplyAmount(Integer.parseInt(count));
+            holder.videoReplies.setText(item.getVideoReplyAmount());
+            notifyItemChanged(value);
+        }
+    }
 
     /**
      *  Set up individual video item data
@@ -100,7 +110,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         private TextView authorName, videoQuestion, videoReplies;
         private ImageView authorImg, playBtn;
         private CardView bookmarkBtn, replyToVideoBtn;
-        private String videoID;
+        private String videoID, answerCount;
         private ProgressBar progressBar;
 
         public VideoViewHolder(@NonNull View itemView){
@@ -121,23 +131,22 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        void setVideoData(VideoItemModel videoItemModel) throws UnsupportedEncodingException {
+        void setVideoData(VideoItemModel videoItemModel) {
             videoID = videoItemModel.getVideoID();
             videoView.setVideoPath(videoItemModel.getVideoURL());
             videoQuestion.setText(videoItemModel.getVideoQuestion());
             authorName.setText(videoItemModel.getAuthorName());
             authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             videoReplies.setText(videoItemModel.getVideoReplyAmount());
+            answerCount = String.valueOf(videoItemModel.getCount());
 
             //adds profile images to videos
-            if(!videoItemModel.getAuthorImg().equals(null)){
+            if(!videoItemModel.getAuthorImg().isEmpty()){
                 String img = videoItemModel.getAuthorImg();
                 Picasso.with(context).load(img).into(authorImg);
-            }else{
-                authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             }
 
-
+            //Hide bookmark feature if not logged in
             if(UserModel.current != null) {
                 //Setting alpha if already bookmarked
                 if (videoItemModel.isBookmarked()) {
@@ -222,6 +231,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 }
             });
 
+            //Hide if not logged in
             if(UserModel.current != null) {
                 //Open Alert Dialog
                 replyToVideoBtn.setOnClickListener(v -> {
@@ -246,12 +256,14 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                     myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                     myIntent[0].putExtra("videoOption", "1");
                     myIntent[0].putExtra("questionID", videoID);
+                    myIntent[0].putExtra("answerCount", answerCount);
                     context.startActivity(myIntent[0]);
 
                 } else if (options[item].equals("Choose from Gallery")) {
                     myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                     myIntent[0].putExtra("videoOption", "2");
                     myIntent[0].putExtra("questionID", videoID);
+                    myIntent[0].putExtra("answerCount", answerCount);
                     context.startActivity(myIntent[0]);
 
                 } else {
@@ -261,17 +273,6 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
 
             });
             builder.show();
-        }
-
-        private Bitmap getBitmap(String src) {
-            try {
-                URL url = new URL(src);
-                Bitmap myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                return myBitmap;
-            }catch (IOException e){
-                e.printStackTrace();
-                return null;
-            }
         }
     }
 

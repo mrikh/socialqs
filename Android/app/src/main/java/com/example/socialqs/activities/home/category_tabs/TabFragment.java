@@ -35,6 +35,7 @@ import com.github.ybq.android.spinkit.style.DoubleBounce;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,20 @@ public class TabFragment extends Fragment {
         }
     };
 
+    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(isStateSaved()) {
+                if (intent != null && (intent.getAction().equalsIgnoreCase("Update"))) {
+                    //Update answer value
+                    String id = intent.getStringExtra("questionID");
+                    String count = intent.getStringExtra("count");
+                    adapter.update(id, count);
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +103,7 @@ public class TabFragment extends Fragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(messagesReceiver, new IntentFilter("CreatedQuestionIntent"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(updateReceiver, new IntentFilter("Update"));
     }
 
     @Override

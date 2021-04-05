@@ -57,8 +57,10 @@ public class VideoRepliesActivity extends AppCompatActivity {
     private ImageView answerQuestionBtn;
     private VideoRepliesAdapter adapter;
     private String videoID;
+    private List<VideoRepliesModel> videoReplies;
 
-    private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
+
+    private BroadcastReceiver answerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null && (intent.getAction().equalsIgnoreCase("CreatedAnswerIntent"))){
@@ -97,7 +99,6 @@ public class VideoRepliesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (UserModel.current == null){
-                    //just as a safety
                     Utilities.getInstance().createSingleActionAlert("You need to login before using this feature.", "Okay", getApplicationContext(), null).show();
                 }else {
                     videoOptions(videoID);
@@ -109,11 +110,11 @@ public class VideoRepliesActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(messagesReceiver, new IntentFilter("CreatedAnswerIntent"));
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(answerReceiver, new IntentFilter("CreatedAnswerIntent"));
     }
 
     private void fetchData(){
-        List<VideoRepliesModel> videoReplies = new ArrayList<>();
+        videoReplies = new ArrayList<>();
 
         NetworkHandler.getInstance().repliesListing(videoID, (object, message) -> {
             progressBar.setVisibility(View.INVISIBLE);
@@ -166,18 +167,19 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     myIntent[0] = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
                     myIntent[0].putExtra("videoOption", "1");
                     myIntent[0].putExtra("questionID", videoID);
+                    myIntent[0].putExtra("answerCount", String.valueOf(videoReplies.size()));
                     startActivity(myIntent[0]);
 
                 } else if (options[item].equals("Choose from Gallery")) {
                     myIntent[0] = new Intent(VideoRepliesActivity.this, AnswerQuestionActivity.class);
                     myIntent[0].putExtra("videoOption", "2");
                     myIntent[0].putExtra("questionID", videoID);
+                    myIntent[0].putExtra("answerCount", String.valueOf(videoReplies.size()));
                     startActivity(myIntent[0]);
 
                 } else {
                     dialog.dismiss();
                 }
-
             }
         });
         builder.show();
@@ -186,6 +188,11 @@ public class VideoRepliesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == android.R.id.home) {
+            Intent newIntent = new Intent("Update");
+            newIntent.putExtra("questionID", videoID);
+            newIntent.putExtra("count", String.valueOf(videoReplies.size()));
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(newIntent);
+
             finish();
             return true;
         }

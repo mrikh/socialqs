@@ -41,6 +41,7 @@ import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,17 +142,10 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             setDislikesBtn(videoReplies);
             authorName.setText(videoReplies.getAuthorName());
 
-            //This code snippet will be updated/changed when profile photo is uploaded to database
-            //For now it adds the users profile image and other users have a 'no image' icon
-            if(videoReplies.getAuthorName().equals(UserModel.current.name)){
-                String img = UserModel.current.profilePhoto;
-                if(img.equals("")) {
-                    authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
-                }else{
-                    byte[] data = Base64.decode(img, Base64.DEFAULT);
-                    Bitmap bm = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    authorImg.setImageBitmap(bm);
-                }
+            //adds profile images to videos
+            if(!videoReplies.getAuthorImg().isEmpty()){
+                String img = videoReplies.getAuthorImg();
+                Picasso.with(context).load(img).into(authorImg);
             }else{
                 authorImg.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
             }

@@ -49,7 +49,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
     private VideoView video;
     private ImageView backBtn, confirmBtn;
     private ProgressBar progressBar;
-    private String questionID, videoOption = "1";
+    private String questionID, answerCount, videoOption = "1";
 
     @SuppressLint("QueryPermissionsNeeded")
     @Override
@@ -69,6 +69,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
 
         videoOption = getIntent().getStringExtra("videoOption"); //1=Record; 2=Gallery
         questionID = getIntent().getStringExtra("questionID");
+        answerCount = getIntent().getStringExtra("answerCount");
 
         if(Integer.parseInt(videoOption) == VIDEO_RECORD){
             startActivityForResult(new Intent(MediaStore.ACTION_VIDEO_CAPTURE), VIDEO_RECORD);
@@ -84,14 +85,8 @@ public class AnswerQuestionActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == VIDEO_RECORD || requestCode == GET_FROM_GALLERY) {
-           //keep media controller on screen for longer
-            MediaController mediaController = new MediaController(video.getContext()){
-                @Override
-                public void show(int timeout){
-                    if(timeout == 3000) timeout = 200000; //Length stays on screen(per second)
-                    super.show(timeout);
-                }
-            };
+
+            MediaController mediaController = new MediaController(video.getContext());
             mediaController.setAnchorView(video);
             video.setMediaController(mediaController);
 
@@ -105,7 +100,8 @@ public class AnswerQuestionActivity extends AppCompatActivity{
             }
 
             mediaController.requestFocus();
-            video.setOnPreparedListener(mp -> {mediaController.show();
+            video.setOnPreparedListener(mp -> {
+                mediaController.show();
                 int duration=mp.getDuration()/1000;
                 int hours = duration / 3600;
                 int minutes = (duration / 60) - (hours * 60);
@@ -118,8 +114,6 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                     Toast.makeText(this, "Video must be longer than 2 seconds", Toast.LENGTH_LONG).show();
                 }
             });
-
-            video.setOnCompletionListener(mp -> mediaController.show());
 
             backBtn.setOnClickListener(v -> {
                 finish();
@@ -173,6 +167,14 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                                         Utilities.getInstance().createSingleActionAlert("Successfully answered the question", "Okay", AnswerQuestionActivity.this, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                Intent newIntent = new Intent("Update");
+                                                newIntent.putExtra("questionID", questionID);
+
+                                                int i = Integer.parseInt(answerCount) +1;
+                                                newIntent.putExtra("count", String.valueOf(i));
+
+                                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(newIntent);
+
                                                 finish();
                                             }
                                         }).show();

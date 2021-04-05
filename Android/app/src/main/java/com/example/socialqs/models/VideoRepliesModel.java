@@ -54,6 +54,8 @@ public class VideoRepliesModel {
 
     public String getAuthorName(){ return authorName; }
 
+    public String getAuthorImg(){ return authorImg; }
+
     public boolean hasUserLiked(){
         return likes.contains(UserModel.current.id);
     }
