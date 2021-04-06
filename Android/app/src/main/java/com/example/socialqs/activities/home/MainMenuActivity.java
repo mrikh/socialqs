@@ -76,14 +76,15 @@ public class MainMenuActivity extends AppCompatActivity {
                     myIntent.putExtras(arguments);
                     startActivity(myIntent);
                     return false;
-                default:
-                    NavigationUI.onNavDestinationSelected(item, navController);
-                    break;
 
                 case R.id.navigation_login:
                     Intent intent = new Intent(MainMenuActivity.this, PreLoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    break;
+                default:
+                    NavigationUI.onNavDestinationSelected(item, navController);
+                    break;
             }
 
 

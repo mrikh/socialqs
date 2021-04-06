@@ -40,10 +40,6 @@ public class SettingsFragment extends Fragment {
         ((MainMenuActivity)getActivity()).updateActionBarBack(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
 
-        disable = v.findViewById(R.id.notificationDisabled);
-        enable = v.findViewById(R.id.notificationEnabled);
-
-        toggler = v.findViewById(R.id.toggleButton);
         logOut = v.findViewById(R.id.logOutLayout);
 
         //default
@@ -90,12 +86,6 @@ public class SettingsFragment extends Fragment {
                         Intent login = new Intent(getContext(), PreLoginActivity.class);
                         login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(login);
-                        /*  1. Log out (Takes you to login page)
-                            2. Press back (Exits app)
-                            3. Open app again (Opens main menu)
-                            4. Clear task manager (Exits app)
-                            5. Open app again (Opens login page)
-                            */
                     }
                 });
 

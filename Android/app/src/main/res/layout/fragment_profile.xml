@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:id="@+id/profileBackground"
     android:layout_height="match_parent"
-    tools:context=".activities.profile.ProfileFragment">
+    tools:context=".activities.profile.fragments.ProfileFragment">
 
     <ImageView
         android:id="@+id/profileImageView"

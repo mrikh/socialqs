@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.profile;
+package com.example.socialqs.activities.profile.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -183,20 +183,20 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constant.CAPTURE_PROFILE_IMAGE  && resultCode == RESULT_OK && data != null) {
+        if (requestCode == Constant.CAPTURE_PROFILE_IMAGE && resultCode == RESULT_OK && data != null) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             profileImage.setImageBitmap(captureImage);
 
-            ByteArrayOutputStream byteArrayOutputStream  = new ByteArrayOutputStream();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             captureImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), captureImage, "Title", null);
 
-            imageUri =Uri.parse(path);
+            imageUri = Uri.parse(path);
         }
         try {
-            if(requestCode == Constant.CHOOSE_PROFILE_IMAGE && resultCode == RESULT_OK && data != null) {
+            if (requestCode == Constant.CHOOSE_PROFILE_IMAGE && resultCode == RESULT_OK && data != null) {
                 imageUri = data.getData();
-                String[] FILE = { MediaStore.Images.Media.DATA };
+                String[] FILE = {MediaStore.Images.Media.DATA};
 
                 Cursor cursor = getActivity().getContentResolver().query(imageUri,
                         FILE, null, null, null);
@@ -214,7 +214,7 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_LONG).show();
         }
 
-        if(data != null) {
+        if (data != null) {
             uploadImage();
         }
     }
@@ -283,7 +283,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void refreshDb() {
+    private void refreshDb(){
         try {
             UserModel.current.saveToDefaults(getActivity().getApplicationContext());
         } catch (Exception e) {

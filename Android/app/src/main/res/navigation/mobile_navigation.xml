@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.socialqs.activities.profile.ProfileFragment"
+        android:name="com.example.socialqs.activities.profile.fragments.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile">
         <action
