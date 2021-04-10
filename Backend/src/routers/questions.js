@@ -62,7 +62,10 @@ router.get('/questions/list', async (req, res, next) => {
     try{
         const categoryId = req.query.categoryId
         const search = req.query.search
-        const email = req.query.email
+        var email = null
+        if (req.query.email){
+            email = req.query.email
+        }
 
         var conditions = {}
 
@@ -182,7 +185,10 @@ router.get('/questions/list', async (req, res, next) => {
 router.get('/questions/details', async (req, res, next) => {
     try{
         const questionId = req.query.id
-        const email = req.query.email
+        var email = null
+        if (req.query.email){
+            email = req.query.email
+        }
 
         if (!questionId){
             const error = new Error(constants.params_missing)
