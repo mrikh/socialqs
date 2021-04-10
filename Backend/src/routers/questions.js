@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Category = require('../models/category.js')
 const auth = require('../middleware/auth')
 const Question = require('../models/question.js')
+const User = require('../models/user.js')
 const constants = require('../utils/constants.js')
 
 const router = new express.Router()
@@ -123,18 +124,15 @@ router.get('/questions/list', async (req, res, next) => {
             { $unset: ["createdAt", "updatedAt", "__v"] }
         ])
 
+        var finalJson = null
         if (email){
-            const user = await User.find({email : email})
-            var finalJson = results.map((question) => {
+            const user = await User.findOne({email : email})
+            finalJson = results.map((question) => {
                 const temp = question
                 if (user){
-                    if (user._id){
-                        temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                            return id.equals(user._id)
-                        })
-                    }else{
-                        temp.isBookmarked = false
-                    }
+                    temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                        return id.equals(user._id)
+                    })
                 }else{
                     temp.isBookmarked = false
                 }
@@ -143,7 +141,7 @@ router.get('/questions/list', async (req, res, next) => {
                 return temp
             })
         }else{
-            var finalJson = results.map((question) => {
+            finalJson = results.map((question) => {
                 const temp = question
                 temp.isBookmarked = false
                 delete temp.bookmarkedBy
@@ -234,18 +232,15 @@ router.get('/questions/details', async (req, res, next) => {
             }
         ])
 
+        var finalJson = null
         if (email){
-            const user = await User.find({email : email})
-            var finalJson = results.map((question) => {
+            const user = await User.findOne({email : email})
+            finalJson = results.map((question) => {
                 const temp = question
                 if (user){
-                    if (user._id){
-                        temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                            return id.equals(user._id)
-                        })
-                    }else{
-                        temp.isBookmarked = false
-                    }
+                    temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                        return id.equals(user._id)
+                    })
                 }else{
                     temp.isBookmarked = false
                 }
@@ -254,7 +249,7 @@ router.get('/questions/details', async (req, res, next) => {
                 return temp
             })
         }else{
-            var finalJson = results.map((question) => {
+            finalJson = results.map((question) => {
                 const temp = question
                 temp.isBookmarked = false
                 delete temp.bookmarkedBy
