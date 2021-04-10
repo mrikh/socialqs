@@ -76,8 +76,6 @@ public class VideoDescriptionFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        //TODO: Set scrollbar onto the spinner
-
         return view;
     }
 

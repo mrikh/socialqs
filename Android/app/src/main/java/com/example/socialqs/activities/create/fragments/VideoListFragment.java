@@ -12,14 +12,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
@@ -96,9 +99,8 @@ public class VideoListFragment extends Fragment implements VideoMyListAdapter.It
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 accessFile();
             } else {
-                //TODO: pop the current fragment and go back to previous fragment
-                //FragmentManager manager = getActivity().getSupportFragmentManager();
-                //manager.popBackStack();
+                Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
         }
     }

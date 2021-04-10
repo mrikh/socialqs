@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
@@ -56,9 +57,8 @@ public class VideoRecordFragment extends Fragment {
                 startRecordAction();
             }
             else {
-                //TODO: pop the current fragment and go back to previous fragment
-                //FragmentManager manager = getActivity().getSupportFragmentManager();
-                //manager.popBackStack();
+                Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
         }
     }
