@@ -89,6 +89,14 @@ public class ProfileFragment extends Fragment {
         tabLayout = view.findViewById(R.id.profile_tabLayout);
         profilePager = view.findViewById(R.id.profile_viewPager);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+
         int[] tabTitles = new int[]{R.string.my_questions, R.string.bookmarked};
 
         for(int i=0; i<tabTitles.length; i++){
@@ -100,14 +108,6 @@ public class ProfileFragment extends Fragment {
         profilePager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, profilePager, (tab, position) -> tab.setText(tabTitles[position])).attach();
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @SuppressLint("ResourceAsColor")

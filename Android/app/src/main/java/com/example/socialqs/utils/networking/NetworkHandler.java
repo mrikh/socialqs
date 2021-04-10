@@ -173,6 +173,13 @@ public class NetworkHandler {
         performDeleteRequest(EndPoints.deleteAnswer, hashmap, completion);
     }
 
+    public void deleteQuestion(String id, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("id", id);
+
+        performDeleteRequest(EndPoints.deleteQuestion, hashmap, completion);
+    }
+
     public void notificationListing(NetworkingClosure completion){
         performGetRequest(EndPoints.notificationList, new HashMap<>(), completion);
     }

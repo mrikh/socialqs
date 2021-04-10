@@ -21,5 +21,7 @@ public class EndPoints{
     public static String createAnswer = "answers/answer";
     public static String bookmarkQuestion = "questions/bookmark";
     public static String questionDetails = "questions/details";
+    public static String deleteQuestion = "questions/{id}";
+
 
 }

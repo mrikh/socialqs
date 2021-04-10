@@ -103,5 +103,7 @@
 
     <string name="bookmarked">Bookmarked</string>
     <string name="my_questions">My Questions</string>
+    <string name="delete_question">Delete Question</string>
+    <string name="delete_question_warning">Are you sure you want to permanently delete this question?</string>
 
 </resources>

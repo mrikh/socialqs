@@ -4,12 +4,15 @@ import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -43,6 +47,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
     private CardView bookmarkBtn, answerVideoBtn;
     private ProgressBar progressBar;
     private String questionID;
+    private Menu menu;
 
     @Override
     protected void onResume() {
@@ -55,7 +60,6 @@ public class ViewQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_video);
 
-        actionBar();
         bindUI();
 
         questionID = getIntent().getStringExtra("questionID");
@@ -189,14 +193,42 @@ public class ViewQuestionActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.video_menu, menu);
+        Drawable deleteAll = menu.getItem(0).getIcon();
+        deleteAll.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+        updateActionBar();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
         }
+
+        if (item.getItemId() == R.id.btn_delete) {
+            //Delete Confirmation
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.delete_question_warning).setTitle(R.string.delete_question)
+                    .setCancelable(false)
+                    //Delete
+                    .setPositiveButton(R.string.title_delete, (dialog, which) -> {
+                        NetworkHandler.getInstance().deleteQuestion(questionID, (object, message) -> { });
+                        finish();
+                    })
+                    //Cancel
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
+            builder.create().show();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    private void actionBar(){
+    private void updateActionBar(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
