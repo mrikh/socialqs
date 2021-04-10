@@ -110,6 +110,10 @@ public class ViewQuestionActivity extends AppCompatActivity {
                     }
 
                     //Bookmark Button
+                    if (item.isBookmarked()) {
+                        bookmarkBtn.setAlpha((float) 1);
+                    }
+
                     bookmarkBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
