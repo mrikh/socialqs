@@ -62,6 +62,7 @@ router.get('/questions/list', async (req, res, next) => {
     try{
         const categoryId = req.query.categoryId
         const search = req.query.search
+        const email = req.query.email
 
         var conditions = {}
 
@@ -119,13 +120,13 @@ router.get('/questions/list', async (req, res, next) => {
             { $unset: ["createdAt", "updatedAt", "__v"] }
         ])
 
-        
+        const user = await User.find({email : email})
         var finalJson = results.map((question) => {
             const temp = question
-            if (req.user){
-                if (req.user._id){
+            if (user){
+                if (user._id){
                     temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                        return id.equals(req.user._id)
+                        return id.equals(user._id)
                     })
                 }else{
                     temp.isBookmarked = false
@@ -170,6 +171,7 @@ router.get('/questions/list', async (req, res, next) => {
 router.get('/questions/details', async (req, res, next) => {
     try{
         const questionId = req.query.id
+        const email = req.query.email
 
         if (!questionId){
             const error = new Error(constants.params_missing)
@@ -215,12 +217,13 @@ router.get('/questions/details', async (req, res, next) => {
             }
         ])
 
+        const user = await User.find({email : email})
         const finalJson = results.map((question) => {
             const temp = question
-            if (req.user){
-                if (req.user._id){
+            if (user){
+                if (user._id){
                     temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                        return id.equals(req.user._id)
+                        return id.equals(user._id)
                     })
                 }else{
                     temp.isBookmarked = false
