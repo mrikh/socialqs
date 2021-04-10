@@ -120,24 +120,35 @@ router.get('/questions/list', async (req, res, next) => {
             { $unset: ["createdAt", "updatedAt", "__v"] }
         ])
 
-        const user = await User.find({email : email})
-        var finalJson = results.map((question) => {
-            const temp = question
-            if (user){
-                if (user._id){
-                    temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                        return id.equals(user._id)
-                    })
+        if (email){
+            const user = await User.find({email : email})
+            var finalJson = results.map((question) => {
+                const temp = question
+                if (user){
+                    if (user._id){
+                        temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                            return id.equals(user._id)
+                        })
+                    }else{
+                        temp.isBookmarked = false
+                    }
                 }else{
                     temp.isBookmarked = false
                 }
-            }else{
-                temp.isBookmarked = false
-            }
 
-            delete temp.bookmarkedBy
-            return temp
-        })
+                delete temp.bookmarkedBy
+                return temp
+            })
+        }else{
+            var finalJson = results.map((question) => {
+                const temp = question
+                temp.isBookmarked = false
+                delete temp.bookmarkedBy
+                return temp
+            })
+        }
+
+        
         
 
         //dont show posts of users you are blocking
@@ -217,23 +228,33 @@ router.get('/questions/details', async (req, res, next) => {
             }
         ])
 
-        const user = await User.find({email : email})
-        const finalJson = results.map((question) => {
-            const temp = question
-            if (user){
-                if (user._id){
-                    temp.isBookmarked = question.bookmarkedBy.some((id) => {
-                        return id.equals(user._id)
-                    })
+        if (email){
+            const user = await User.find({email : email})
+            var finalJson = results.map((question) => {
+                const temp = question
+                if (user){
+                    if (user._id){
+                        temp.isBookmarked = question.bookmarkedBy.some((id) => {
+                            return id.equals(user._id)
+                        })
+                    }else{
+                        temp.isBookmarked = false
+                    }
                 }else{
                     temp.isBookmarked = false
                 }
-            }else{
+
+                delete temp.bookmarkedBy
+                return temp
+            })
+        }else{
+            var finalJson = results.map((question) => {
+                const temp = question
                 temp.isBookmarked = false
-            }
-            delete temp.bookmarkedBy
-            return temp
-        })
+                delete temp.bookmarkedBy
+                return temp
+            })
+        }
 
         return res.status(200).send({code : 200, message : constants.success, data : { 'result':finalJson}})
     }catch(error){
