@@ -149,12 +149,20 @@ public class NetworkHandler {
         }
         hashmap.put("search", searchString);
 
+        if (UserModel.current != null){
+            hashmap.put("email", UserModel.current.email);
+        }
+
         performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
     public void questionDetails(String id, NetworkingClosure completion){
         HashMap hashmap = new HashMap<>();
         hashmap.put("id", id);
+
+        if (UserModel.current != null){
+            hashmap.put("email", UserModel.current.email);
+        }
 
         performGetRequest(EndPoints.questionDetails, hashmap, completion);
     }

@@ -129,7 +129,6 @@ public class ViewQuestionActivity extends AppCompatActivity {
                                 JSONObject params = new JSONObject();
                                 params.put("questionId", item.getVideoID());
                                 params.put("isBookmarked", item.isBookmarked());
-                                params.put("email", UserModel.current.email);
                                 NetworkHandler.getInstance().bookmarkQuestion(params, (object, message) -> { });
 
                             } catch (Exception e) {
