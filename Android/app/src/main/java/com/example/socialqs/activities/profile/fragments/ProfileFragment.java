@@ -52,6 +52,10 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * Users profile fragment
+ * Change profile pic, navigate to settings, view 'my questions' & bookmarked questions
+ */
 public class ProfileFragment extends Fragment {
     private ImageView profileImage, settingsBtn, cameraBtn, setNameBtn, editNameBtn;
     private EditText profileName;

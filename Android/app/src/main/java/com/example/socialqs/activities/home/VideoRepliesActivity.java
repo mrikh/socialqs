@@ -48,6 +48,8 @@ import java.util.List;
 
 /**
  * Video post replies activity
+ *
+ * Displays all video answers
  */
 public class VideoRepliesActivity extends AppCompatActivity {
 

@@ -14,8 +14,7 @@ import com.example.socialqs.models.VideoItemModel;
 import java.util.List;
 
 /**
- * Category Tab Adapter that returns a fragment corresponding to
- * one of the tabs.
+ * Tab Adapter that returns a one of 2 fragments (my questions & bookmarked)
  */
 public class ProfileTabSectionsAdapter extends FragmentStateAdapter {
 

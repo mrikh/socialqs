@@ -34,6 +34,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  A tab fragment containing video list.
+ *  Either bookmarked video list or current users question list
+ */
 public class ProfileTabFragment extends Fragment {
 
     private ProgressBar progressBar;

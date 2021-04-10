@@ -21,6 +21,9 @@ import android.view.ViewGroup;
 import com.example.socialqs.R;
 import com.example.socialqs.constant.Constant;
 
+/**
+ * Record video question from camera
+ */
 public class VideoRecordFragment extends Fragment {
 
     Uri video;

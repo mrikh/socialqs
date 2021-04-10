@@ -1,11 +1,7 @@
 package com.example.socialqs.activities.create.fragments;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -15,6 +11,9 @@ import android.widget.VideoView;
 
 import com.example.socialqs.R;
 
+/**
+ * Display video question created
+ */
 public class VideoDisplayFragment extends Fragment {
 
     VideoView videoView;

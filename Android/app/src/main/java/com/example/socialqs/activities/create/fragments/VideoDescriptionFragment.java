@@ -40,6 +40,10 @@ import java.util.ArrayList;
 
 import okhttp3.internal.Util;
 
+/**
+ * User describes their question
+ *      creates a title & chooses topic
+ */
 public class VideoDescriptionFragment extends Fragment {
 
     private ArrayList<CategoryModel> categories;

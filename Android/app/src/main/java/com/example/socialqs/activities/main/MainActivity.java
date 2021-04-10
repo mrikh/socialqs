@@ -25,6 +25,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
 
+/**
+ * Main Application Activity - checks user is already logged in
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

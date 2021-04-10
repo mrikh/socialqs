@@ -31,6 +31,9 @@ import com.example.socialqs.utils.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Display list of videos on users phone
+ */
 public class VideoListFragment extends Fragment implements VideoMyListAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;

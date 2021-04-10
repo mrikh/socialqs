@@ -38,6 +38,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Create and upload a question post activity
+ */
 public class CreateActivity extends AppCompatActivity {
 
     public ArrayList<CategoryModel> categories;

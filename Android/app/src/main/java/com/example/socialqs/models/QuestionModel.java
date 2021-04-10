@@ -1,5 +1,8 @@
 package com.example.socialqs.models;
 
+/**
+ *  Information for each question item
+ */
 public class QuestionModel {
 
     private String qId;
