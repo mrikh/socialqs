@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
 
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
         if (UserModel.current != null) {
-            searchBar.setFocusable(false);
             searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
             searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override

@@ -1,4 +1,4 @@
-package com.example.socialqs.activities.profile;
+package com.example.socialqs.activities.profile.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -26,10 +27,12 @@ import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.Utilities;
 
+/**
+ * Application Settings Screen
+ * Allows user to log out
+ */
 public class SettingsFragment extends Fragment {
 
-    ImageView disable, enable, back;
-    ConstraintLayout toggler;
     LinearLayout logOut;
 
     @Override
@@ -42,29 +45,11 @@ public class SettingsFragment extends Fragment {
 
         logOut = v.findViewById(R.id.logOutLayout);
 
-        //default
-        enable.setVisibility(View.INVISIBLE);
-        disable.setVisibility(View.VISIBLE);
-
         return v;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        toggler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Toggle Notification
-                if (disable.getVisibility() == View.VISIBLE) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                } else {
-                    enable.setVisibility(View.INVISIBLE);
-                    disable.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override

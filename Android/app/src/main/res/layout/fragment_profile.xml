@@ -11,198 +11,114 @@
     <ImageView
         android:id="@+id/profileImageView"
         android:layout_width="match_parent"
-        android:layout_height="410dp"
+        android:layout_height="380dp"
+        android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/profile_empty" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/profile_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:clipToPadding="true"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/black"
+        app:tabIndicatorHeight="4dp"
+        app:tabMode="fixed" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/profile_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_tabLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:background="@drawable/black_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:focusableInTouchMode="false"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@android:color/transparent"
+        android:focusableInTouchMode="false"
         android:inputType="textShortMessage"
         android:text="Name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton
         android:id="@+id/cameraButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="100dp"
-        android:background="@drawable/background_button"
-        android:elevation="5dp"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="4dp"
+        android:elevation="10dp"
         android:src="@drawable/ic_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/settingsButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
-        app:layout_constraintVertical_bias="0.788" />
+        app:layout_constraintBottom_toTopOf="@+id/profile_tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/settingsButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="100dp"
-        android:background="@drawable/background_button"
-        android:elevation="5dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:elevation="10dp"
         android:src="@drawable/ic_settings"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
-        app:layout_constraintVertical_bias="0.788" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/profile_name"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/editButton"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="38dp"
-        android:alpha="0.6"
+        android:layout_marginTop="28dp"
         android:src="@drawable/ic_pencil"
         app:layout_constraintStart_toEndOf="@+id/profile_name"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/tickButton"
-        android:layout_width="28dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="34dp"
-        android:src="@drawable/ic_tick2"
+        android:src="@drawable/ic_tick"
         android:visibility="invisible"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintStart_toEndOf="@+id/profile_name"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
-
-
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/collapsedLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/nav_view">-->
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/collapsedView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="110dp"-->
-<!--            android:background="@color/white"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:layout_editor_absoluteX="0dp">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/collapsedArrowToggle"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="185dp"-->
-<!--                android:layout_marginLeft="185dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                tools:src="@drawable/ic_up_arrow" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="30dp"-->
-<!--                android:layout_marginLeft="30dp"-->
-<!--                android:layout_marginBottom="25dp"-->
-<!--                android:text="Created Posts"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginEnd="35dp"-->
-<!--                android:layout_marginRight="35dp"-->
-<!--                android:layout_marginBottom="25dp"-->
-<!--                android:text="Bookmarked"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/collapsedCardView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="180dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            tools:layout_editor_absoluteX="0dp" />-->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/expandedLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/nav_view">-->
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/expandedView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="110dp"-->
-<!--            android:background="@color/white"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:layout_editor_absoluteX="0dp">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/expandedArrowToggle"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="185dp"-->
-<!--                android:layout_marginLeft="185dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                tools:src="@drawable/ic_down_arrow" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="30dp"-->
-<!--                android:layout_marginLeft="30dp"-->
-<!--                android:layout_marginBottom="25dp"-->
-<!--                android:text="Created Posts"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginEnd="35dp"-->
-<!--                android:layout_marginRight="35dp"-->
-<!--                android:layout_marginBottom="25dp"-->
-<!--                android:text="Bookmarked"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/expandedCardView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1000dp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/expandedView" />-->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 

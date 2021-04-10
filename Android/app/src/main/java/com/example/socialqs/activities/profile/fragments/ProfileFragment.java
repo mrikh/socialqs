@@ -13,7 +13,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,38 +27,37 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.Navigation;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
-import com.example.socialqs.activities.create.CreateActivity;
-import com.example.socialqs.activities.home.AnswerQuestionActivity;
-import com.example.socialqs.activities.home.MainMenuActivity;
+import com.example.socialqs.activities.profile.tabs.ProfileTabSectionsAdapter;
 import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.utils.FilePath;
 import com.example.socialqs.utils.Utilities;
 import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-    private ImageView profileImage, settingsBtn, cameraBtn;
+    private ImageView profileImage, settingsBtn, cameraBtn, setNameBtn, editNameBtn;
     private EditText profileName;
-    private ImageView setNameBtn, editNameBtn;
     private Uri imageUri = null;
-
-    //CardView collapsedCardView, expandedCardView;
-    //ImageView collapsedArrow, expandedArrow;
-    //ConstraintLayout collapsedLayout, expandedLayout;
+    private TabLayout tabLayout;
+    private ViewPager2 profilePager;
 
     String[] option = new String[]{"Open Camera", "Choose from Gallery"};
 
@@ -88,13 +86,21 @@ public class ProfileFragment extends Fragment {
         setNameBtn = view.findViewById(R.id.tickButton);
         editNameBtn = view.findViewById(R.id.editButton);
 
-        //collapsedCardView = view.findViewById(R.id.collapsedCardView);
-        //collapsedLayout = view.findViewById(R.id.collapsedLayout);
+        tabLayout = view.findViewById(R.id.profile_tabLayout);
+        profilePager = view.findViewById(R.id.profile_viewPager);
 
-        //expandedCardView = view.findViewById(R.id.expandedCardView);
-        //expandedLayout = view.findViewById(R.id.expandedLayout);
+        int[] tabTitles = new int[]{R.string.my_questions, R.string.bookmarked};
 
-        //arrowToggle = view.findViewById(R.id.);
+        for(int i=0; i<tabTitles.length; i++){
+            tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]));
+        }
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ProfileTabSectionsAdapter adapter = new ProfileTabSectionsAdapter(ProfileFragment.this, tabTitles.length);
+        profilePager.setAdapter(adapter);
+
+        new TabLayoutMediator(tabLayout, profilePager, (tab, position) -> tab.setText(tabTitles[position])).attach();
+
         return view;
     }
 
@@ -140,7 +146,7 @@ public class ProfileFragment extends Fragment {
         editNameBtn.setOnClickListener(v -> {
             profileName.setCursorVisible(true);
             profileName.setFocusableInTouchMode(true);
-            profileName.getBackground().setColorFilter(R.color.black, PorterDuff.Mode.SRC_IN);
+            profileName.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.SRC_IN);
             editNameBtn.setVisibility(View.INVISIBLE);
             setNameBtn.setVisibility(View.VISIBLE);
         });

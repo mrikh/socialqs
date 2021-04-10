@@ -152,6 +152,13 @@ public class NetworkHandler {
         performGetRequest(EndPoints.questionList, hashmap, completion);
     }
 
+    public void questionDetails(String id, NetworkingClosure completion){
+        HashMap hashmap = new HashMap<>();
+        hashmap.put("id", id);
+
+        performGetRequest(EndPoints.questionDetails, hashmap, completion);
+    }
+
     public void repliesListing(String questionId, NetworkingClosure completion){
         HashMap hashmap = new HashMap<>();
         hashmap.put("questionId", questionId);

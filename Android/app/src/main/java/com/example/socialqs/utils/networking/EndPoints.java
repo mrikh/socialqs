@@ -20,5 +20,6 @@ public class EndPoints{
     public static String updateAnswer = "answers/update";
     public static String createAnswer = "answers/answer";
     public static String bookmarkQuestion = "questions/bookmark";
+    public static String questionDetails = "questions/details";
 
 }

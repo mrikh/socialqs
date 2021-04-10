@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.socialqs.activities.profile.SettingsFragment"
+        android:name="com.example.socialqs.activities.profile.fragments.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 

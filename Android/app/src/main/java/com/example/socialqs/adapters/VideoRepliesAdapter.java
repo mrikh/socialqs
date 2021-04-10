@@ -2,16 +2,9 @@ package com.example.socialqs.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,28 +20,19 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialqs.R;
-import com.example.socialqs.activities.home.AnswerQuestionActivity;
-import com.example.socialqs.activities.home.VideoRepliesActivity;
-import com.example.socialqs.models.NotificationModel;
 import com.example.socialqs.models.UserModel;
-import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
-import com.example.socialqs.utils.helperInterfaces.NetworkingClosure;
 import com.example.socialqs.utils.networking.NetworkHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 /**
  * List of video replies
