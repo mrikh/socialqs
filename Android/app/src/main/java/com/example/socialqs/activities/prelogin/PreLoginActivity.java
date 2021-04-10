@@ -29,7 +29,9 @@ import com.example.socialqs.activities.prelogin.fragments.ForgotPasswordFragment
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
-
+/**
+ * Login Activity - calls login/sign up fragments
+ */
 public class PreLoginActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;

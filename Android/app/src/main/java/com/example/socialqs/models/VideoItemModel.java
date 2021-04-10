@@ -1,12 +1,9 @@
 package com.example.socialqs.models;
 
-import android.util.Base64;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Information for each video item

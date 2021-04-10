@@ -1,5 +1,5 @@
 package com.example.socialqs.activities.home.category_tabs;
-;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,19 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialqs.R;
-import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
-import com.example.socialqs.activities.prelogin.PreLoginActivity;
 import com.example.socialqs.adapters.VideoDisplayAdapter;
 import com.example.socialqs.models.CategoryModel;
 import com.example.socialqs.models.VideoItemModel;
@@ -35,7 +30,6 @@ import com.github.ybq.android.spinkit.style.DoubleBounce;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 

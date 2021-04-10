@@ -1,5 +1,6 @@
 package com.example.socialqs.activities.profile;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * view a single selected video question (not in list)
+ */
 public class ViewQuestionActivity extends AppCompatActivity {
 
     private VideoView videoView;
@@ -152,6 +156,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void videoSettings(){
         //Prepare Video
         videoView.requestFocus();

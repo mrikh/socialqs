@@ -40,6 +40,10 @@ import java.util.ArrayList;
 
 import okhttp3.internal.Util;
 
+/**
+ * User describes their question
+ *      creates a title & chooses topic
+ */
 public class VideoDescriptionFragment extends Fragment {
 
     private ArrayList<CategoryModel> categories;
@@ -71,8 +75,6 @@ public class VideoDescriptionFragment extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, categories);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-        //TODO: Set scrollbar onto the spinner
 
         return view;
     }

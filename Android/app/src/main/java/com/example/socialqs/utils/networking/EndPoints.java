@@ -23,5 +23,4 @@ public class EndPoints{
     public static String questionDetails = "questions/details";
     public static String deleteQuestion = "questions/{id}";
 
-
 }

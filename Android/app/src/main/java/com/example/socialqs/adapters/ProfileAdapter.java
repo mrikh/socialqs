@@ -18,6 +18,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ *  List of bookmarked items or current user created questions
+ */
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
 
     private List<VideoItemModel> videoItemModels;

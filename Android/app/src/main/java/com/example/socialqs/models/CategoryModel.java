@@ -1,12 +1,14 @@
 package com.example.socialqs.models;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ *  Category name and id for each item
+ */
 //parceable to pass them across activities easily
 public class CategoryModel implements Parcelable {
 

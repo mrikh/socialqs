@@ -8,6 +8,9 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ *  Information for current user
+ */
 public class UserModel {
 
     public static UserModel current;

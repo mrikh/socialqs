@@ -20,6 +20,9 @@ import com.example.socialqs.constant.Constant;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ *  List of users phone gallery video items
+ */
 public class VideoMyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
