@@ -239,7 +239,7 @@ router.get('/questions/details', async (req, res, next) => {
 })
 
 
-router.patch('/questions/bookmark', auth, async (req, res, next) => {
+router.post('/questions/bookmark', auth, async (req, res, next) => {
     try{
         const questionId = req.body.questionId
         const isBookmarked = req.body.isBookmarked

@@ -31,11 +31,11 @@ public class NetworkHandler {
     }
 
     public void updateAnswer(JSONObject params, NetworkingClosure completion){
-        performPatchRequest(EndPoints.updateAnswer, params, completion);
+        performPostRequest(EndPoints.updateAnswer, params, completion);
     }
 
     public void bookmarkQuestion(JSONObject params, NetworkingClosure completion){
-        performPatchRequest(EndPoints.bookmarkQuestion, params, completion);
+        performPostRequest(EndPoints.bookmarkQuestion, params, completion);
     }
 
     public void createQuestion(JSONObject params, NetworkingClosure completion){
@@ -203,11 +203,6 @@ public class NetworkHandler {
     private void performPostRequest(String endpoint, JSONObject params, NetworkingClosure completion){
 
         performBodyRequest(AndroidNetworking.post(httpUrl + endpoint).addJSONObjectBody(params), completion);
-    }
-
-    private void performPatchRequest(String endpoint, JSONObject params, NetworkingClosure completion){
-
-        performBodyRequest(AndroidNetworking.patch(httpUrl + endpoint).addJSONObjectBody(params), completion);
     }
 
     private void performDeleteRequest(String endpoint, HashMap<String, String> params, NetworkingClosure completion){

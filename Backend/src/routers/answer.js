@@ -111,7 +111,7 @@ router.get('/answers/list', auth, async (req, res, next) => {
     }
 })
 
-router.patch('/answers/update', auth, async (req, res, next) => {
+router.post('/answers/update', auth, async (req, res, next) => {
 
     try{
         const answerId = req.body.answerId
