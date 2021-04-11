@@ -2,7 +2,7 @@ module.exports = Object.freeze({
 
     //Sign up and verification
     success_signup : 'Please verify your account via the email you will receive shortly, otherwise your account will be deleted after 24 hours. Please check your spam folder if you do not see it in your inbox.',
-    user_not_found : 'User not found. Are you sure the details are correct?',
+    user_not_found : 'User not found. Are you sure the details are correct? Please logout and log back in again',
     forgot_success : 'You will shortly receive an email.',
     success_verified_email : 'You are all set! Have fun using the application!',
     success_unverified_email : 'You haven\'t verified your email address. Please login again after verification.',
@@ -35,7 +35,7 @@ module.exports = Object.freeze({
 
     //User Model
     authentication_missing : 'Authentication missing',
-    authenticate : 'Invalid authentication.',
+    authenticate : 'Invalid authentication. Please logout and log back in',
     email_exists : 'Email already exists',
     username_exists : 'Username is taken by someone else',
     invalid_email : 'Enter a valid email address',
