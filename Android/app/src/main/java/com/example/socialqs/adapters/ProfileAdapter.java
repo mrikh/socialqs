@@ -75,6 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ViewQuestionActivity.class);
                     intent.putExtra("questionID", videoItemModel.getVideoID());
+                    intent.putExtra("tab", tabTitle);
                     context.startActivity(intent);
                 }
             });

@@ -50,7 +50,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
     private ImageView authorImg, playBtn;
     private CardView bookmarkBtn, answerVideoBtn;
     private ProgressBar progressBar;
-    private String questionID;
+    private String questionID, tabTitle;
     private Menu menu;
 
     @Override
@@ -67,6 +67,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
         bindUI();
 
         questionID = getIntent().getStringExtra("questionID");
+        tabTitle = getIntent().getStringExtra("tab");
         fetchData();
     }
 
@@ -110,6 +111,10 @@ public class ViewQuestionActivity extends AppCompatActivity {
                     }
 
                     //Bookmark Button
+                    if (item.isBookmarked()) {
+                        bookmarkBtn.setAlpha((float) 1);
+                    }
+
                     bookmarkBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -201,8 +206,11 @@ public class ViewQuestionActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.video_menu, menu);
-        Drawable deleteAll = menu.getItem(0).getIcon();
-        deleteAll.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+
+        if(tabTitle.equalsIgnoreCase("myQuestions")) {
+            Drawable deleteAll = menu.getItem(0).getIcon();
+            deleteAll.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+        }
         updateActionBar();
 
         return true;
@@ -238,7 +246,12 @@ public class ViewQuestionActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
 
-        Spannable text = new SpannableString("Question");
+        Spannable text;
+        if(tabTitle.equalsIgnoreCase("myQuestions")) {
+            text = new SpannableString("My Questions");
+        }else{
+            text = new SpannableString("Bookmarked");
+        }
         text.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(text);
     }
