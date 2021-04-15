@@ -2,7 +2,7 @@
 
 Android app code for the SocialQ's app.
 
-SocialQ's is a question and answer socail media application where users can ask and answer questions through video.
+SocialQ's is a question-and-answer social media application where users can ask and answer questions via video.
 
 ## Setup
 
