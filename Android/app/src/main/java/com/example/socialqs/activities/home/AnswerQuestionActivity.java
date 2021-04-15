@@ -1,9 +1,12 @@
 package com.example.socialqs.activities.home;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -16,14 +19,18 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.example.socialqs.R;
 import com.example.socialqs.activities.create.CreateActivity;
+import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.QuestionModel;
 import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.models.VideoRepliesModel;
@@ -71,13 +78,14 @@ public class AnswerQuestionActivity extends AppCompatActivity{
         questionID = getIntent().getStringExtra("questionID");
         answerCount = getIntent().getStringExtra("answerCount");
 
-        if(Integer.parseInt(videoOption) == VIDEO_RECORD){
+        if (Integer.parseInt(videoOption) == VIDEO_RECORD) {
             startActivityForResult(new Intent(MediaStore.ACTION_VIDEO_CAPTURE), VIDEO_RECORD);
-        }else{
+        } else {
             Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
             galleryIntent.setType("video/*");
             startActivityForResult(galleryIntent, GET_FROM_GALLERY);
         }
+
     }
 
     @Override
@@ -128,8 +136,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                     String filePath = FilePath.getPath(getApplicationContext(), videoUri);
                     uploadVideo(Utilities.getInstance().getFileName(), filePath);
                     //stops user interrupting upload
-                    confirmBtn.setClickable(false);
-                    backBtn.setClickable(false);
+                    btnBoolean(false);
                 }
             });
         }else {
@@ -139,6 +146,11 @@ public class AnswerQuestionActivity extends AppCompatActivity{
 
     public void updateProgress(int visibility){
         progressBar.setVisibility(visibility);
+    }
+
+    private void btnBoolean(boolean clickable){
+        confirmBtn.setClickable(clickable);
+        backBtn.setClickable(clickable);
     }
 
     public void uploadVideo(String filename, String filePath){
@@ -184,9 +196,11 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                         } catch (Exception e) {
                             updateProgress(View.INVISIBLE);
                             Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", AnswerQuestionActivity.this, null).show();
+                            btnBoolean(true);
                         }
                     }else{
                         updateProgress(View.INVISIBLE);
+                        btnBoolean(true);
                     }
                 }
 
@@ -201,6 +215,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
             });
         } catch (Exception e) {
             Utilities.getInstance().createSingleActionAlert(e.getLocalizedMessage(), "Okay", this, null).show();
+            btnBoolean(true);
         }
     }
 }

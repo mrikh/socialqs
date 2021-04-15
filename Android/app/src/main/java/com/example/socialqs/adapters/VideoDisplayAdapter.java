@@ -1,14 +1,17 @@
 package com.example.socialqs.adapters;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -26,6 +29,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialqs.R;
@@ -34,6 +38,7 @@ import com.example.socialqs.activities.home.AnswerQuestionActivity;
 import com.example.socialqs.activities.home.MainMenuActivity;
 import com.example.socialqs.activities.home.VideoRepliesActivity;
 import com.example.socialqs.activities.home.category_tabs.TabFragment;
+import com.example.socialqs.constant.Constant;
 import com.example.socialqs.models.UserModel;
 import com.example.socialqs.models.VideoItemModel;
 import com.example.socialqs.utils.Utilities;
@@ -254,18 +259,22 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                 final Intent[] myIntent = {null};
 
                 if (options[item].equals("Record Video")) {
-                    myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
-                    myIntent[0].putExtra("videoOption", "1");
-                    myIntent[0].putExtra("questionID", videoID);
-                    myIntent[0].putExtra("answerCount", answerCount);
-                    context.startActivity(myIntent[0]);
+                    if(checkStoragePermission("Record Video")) {
+                        myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent[0].putExtra("videoOption", "1");
+                        myIntent[0].putExtra("questionID", videoID);
+                        myIntent[0].putExtra("answerCount", answerCount);
+                        context.startActivity(myIntent[0]);
+                    }
 
                 } else if (options[item].equals("Choose from Gallery")) {
-                    myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
-                    myIntent[0].putExtra("videoOption", "2");
-                    myIntent[0].putExtra("questionID", videoID);
-                    myIntent[0].putExtra("answerCount", answerCount);
-                    context.startActivity(myIntent[0]);
+                    if(checkStoragePermission("Choose from Gallery")) {
+                        myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
+                        myIntent[0].putExtra("videoOption", "2");
+                        myIntent[0].putExtra("questionID", videoID);
+                        myIntent[0].putExtra("answerCount", answerCount);
+                        context.startActivity(myIntent[0]);
+                    }
 
                 } else {
                     dialog.dismiss();
@@ -277,4 +286,40 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         }
     }
 
+    private boolean checkStoragePermission(String option) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (option.equalsIgnoreCase("Record Video")) {
+                int camera = context.checkSelfPermission(Manifest.permission.CAMERA);
+
+                if (camera == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+
+                } else {
+                    Utilities.getInstance().createSingleActionAlert("Permission to access camera required", "Okay", context, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((MainMenuActivity) context, new String[]{Manifest.permission.CAMERA}, Constant.CAMERA_PERMISSION);
+                        }
+                    }).show();
+                }
+            }else if (option.equalsIgnoreCase("Choose from Gallery")) {
+                int storage = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+                if (storage == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+
+                } else {
+                    Utilities.getInstance().createSingleActionAlert("Permission to access storage required", "Okay", context, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((MainMenuActivity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.FILE_ACCESS_PERMISSION);
+                        }
+                    }).show();
+                }
+            }
+        }
+        return false;
+    }
 }
