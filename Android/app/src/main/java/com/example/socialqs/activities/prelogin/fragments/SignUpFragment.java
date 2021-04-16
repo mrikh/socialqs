@@ -36,10 +36,14 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONObject;
 
+/**
+ * Sign up view
+ */
 public class SignUpFragment extends Fragment {
 
     private InputValidator validator;
 
+    //below variables are created as this screen may be opened with pre-populated data
     private String name;
     private String email;
     private String profilePhoto;
@@ -59,6 +63,7 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
         validator = new InputValidator();
 
+        //update instance variables with the passed parameters
         Bundle bundle = this.getArguments();
         if (bundle != null){
             String paramsString = bundle.getString("params");
@@ -121,9 +126,7 @@ public class SignUpFragment extends Fragment {
         terms.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         terms.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                //TODO: Add terms screens
-            }
+            public void onClick(View v) { }
         });
 
         TextView loginTextView = view.findViewById(R.id.loginTextView);

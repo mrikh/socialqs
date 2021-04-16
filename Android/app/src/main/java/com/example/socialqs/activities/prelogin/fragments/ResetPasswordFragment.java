@@ -24,10 +24,16 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONObject;
 
+/**
+ * Fragment to use as the reset password and update password screen.
+ */
 public class ResetPasswordFragment extends Fragment {
 
     private InputValidator validator;
+
+    //email you want to reset the password for
     private String email;
+    //boolean to determine what flow the screen is opened from
     private boolean isResetPassword;
 
     public ResetPasswordFragment() {
@@ -49,8 +55,6 @@ public class ResetPasswordFragment extends Fragment {
             this.isResetPassword = bundle.getBoolean("isResetPassword");
             this.email = bundle.getString("email");
         }
-
-
     }
 
     @Override
@@ -77,6 +81,7 @@ public class ResetPasswordFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) { oldPassField.setError(null); }
         });
 
+        //For reset password, we don't need to know the old password since the user probably forgot it anyways
         if (isResetPassword){
             TextInputLayout oldPassLayout = view.findViewById(R.id.oldPasswordTextField);
             oldPassLayout.setVisibility(View.GONE);
@@ -142,9 +147,6 @@ public class ResetPasswordFragment extends Fragment {
                             }
                         }
                     });
-                }else{
-
-                    //TODO: Add update pass api
                 }
             }
         });
@@ -153,5 +155,4 @@ public class ResetPasswordFragment extends Fragment {
     private void updateProgress(int visibility){
         ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
-
 }

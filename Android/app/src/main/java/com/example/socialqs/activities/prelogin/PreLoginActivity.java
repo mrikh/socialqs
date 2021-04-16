@@ -37,6 +37,10 @@ public class PreLoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     public String pushToken;
 
+    /**
+     * Receiver created to obtain the push token in case it was generated in the main activity after this activity loads.
+     * This was necessary since receiving the push token from firebase is an async operation.
+     */
     private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -87,6 +91,12 @@ public class PreLoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method to update the action bar. It is called by the fragment being displayed
+     * @param title Title to set
+     * @param color Color the background of the action bar
+     * @param titleColorId Color to set for the title
+     */
     public void setActionBarTitle(String title, String color, int titleColorId) {
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
@@ -101,6 +111,10 @@ public class PreLoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(text);
     }
 
+    /**
+     * Method to update the visibility of the action bar on top.
+     * @param show Boolean value that determines whether the action bar is displayed
+     */
     public void updateActionBarBack(boolean show){
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(show);
@@ -127,6 +141,10 @@ public class PreLoginActivity extends AppCompatActivity {
         fragment.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Update the api request progress display status.
+     * @param visibility Pass in .VISIBLE or .INVISIBLE to update the progress indicator.
+     */
     public void updateProgress(int visibility){
         progressBar.setVisibility(visibility);
     }

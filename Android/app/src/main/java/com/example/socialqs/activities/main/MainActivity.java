@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         AndroidNetworking.initialize(getApplicationContext());
 
+        //check if user is already logged in
         try{
             JSONObject object = Utilities.getInstance().fetchJsonObject(getApplicationContext(), "user");
             UserModel currentUser = new UserModel(object);
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.print(e.getMessage());
         }
 
+        //fetch push token
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
@@ -71,9 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 if (UserModel.current != null){
                     NetworkHandler.getInstance().updateInfo(token, null, null, new NetworkingClosure() {
                         @Override
-                        public void completion(JSONObject object, String message) {
-                            //update token on server if already logged in
-                        }
+                        public void completion(JSONObject object, String message) { }
                     });
                 }else{
 

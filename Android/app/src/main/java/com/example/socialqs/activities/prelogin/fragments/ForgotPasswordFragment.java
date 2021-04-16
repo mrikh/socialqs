@@ -29,6 +29,9 @@ import org.json.JSONObject;
 
 import javax.xml.validation.Validator;
 
+/**
+ * Fragment for user to add their email to receive an OTP code.
+ */
 public class ForgotPasswordFragment extends Fragment {
 
     private InputValidator validator;

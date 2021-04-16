@@ -28,8 +28,12 @@ import com.example.socialqs.utils.networking.NetworkHandler;
 
 import org.json.JSONObject;
 
+/**
+ * This is the OTP screen.
+ */
 public class VerifyEmailFragment extends Fragment {
 
+    //Boolean value to track which flow opened this screen. This is passed on to the next update password screen
     private boolean forgot;
     private String email;
 

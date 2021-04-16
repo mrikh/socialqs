@@ -1,5 +1,8 @@
 package com.example.socialqs.utils.networking;
 
+/**
+ * Class containing all networking related endpoints.
+ */
 public class EndPoints{
 
     public static String signUp = "users/signUp";

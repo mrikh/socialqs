@@ -3,8 +3,16 @@ package com.example.socialqs.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class created to validate user input.
+ */
 public class InputValidator {
 
+    /**
+     * Checks if the input string is correctly formatted to represent an email
+     * @param s Argument containing the email string
+     * @return True if it is valid, false otherwise
+     */
     public boolean isValidEmail(String s){
 
         if (s == null) {return false;}
@@ -15,6 +23,11 @@ public class InputValidator {
         return matcher.matches();
     }
 
+    /**
+     * Checks if the input string is correctly formatted to represent a password
+     * @param s Argument containing the password string
+     * @return True if it is valid, false otherwise
+     */
     public boolean isValidPassword(String s){
 
         if (s == null) {return false;}
@@ -27,6 +40,11 @@ public class InputValidator {
         return true;
     }
 
+    /**
+     * Checks if the input string is correctly formatted to represent a name
+     * @param s Argument containing the name string
+     * @return True if it is valid, false otherwise
+     */
     public boolean isValidName(String s){
 
         String stripped = s.trim();

@@ -53,12 +53,18 @@ import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
 
+    //storing context to pass for different methods
     private Context context;
+    //To validate user input
     private InputValidator validator;
+
+    //needed for the facebook login flow
     private CallbackManager callbackManager;
+
+    //needed for the google sign in flow
     private GoogleSignInClient mGoogleSignInClient;
     private ProfileTracker profileTracker;
-    //needed for google
+    //needed for google sign in
     private static int RC_SIGN_IN = 100;
 
     public LoginFragment() {}
@@ -104,7 +110,8 @@ public class LoginFragment extends Fragment {
                                         params.put("profilePhoto", profilePhotoUri.toString());
                                     }
 
-                                    //now we may not receive email, in which case we need to go to sign up
+                                    //now we may not receive email, in which case we need to go to sign up. This happense in case the user
+                                    //hasn't verified their email on facebook
                                     if (!responseObject.has("email")){
                                         Utilities.getInstance().createSingleActionAlert(getText(R.string.fb_no_email), getText(R.string.okay), getActivity(), new DialogInterface.OnClickListener() {
                                             @Override
@@ -145,9 +152,8 @@ public class LoginFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // had to check which callback is received since facebook and google both get back in this method.
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }else {
@@ -270,10 +276,13 @@ public class LoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
+    /**
+     * Created a separate method to complete login  since it can be called from different flows.
+     * @param object Params containing the information to pass to our login service.
+     */
     private void beginLogin(JSONObject object){
 
         //get push token and add if it exists
-
         String pushToken = ((PreLoginActivity)getActivity()).pushToken;
 
         if (pushToken != null){
@@ -312,6 +321,10 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    /**
+     * Method to open sign up screen with pre populated data.
+     * @param params Items to pass to the sign up screen.
+     */
     private void goToSignUp(JSONObject params){
         FragmentManager manager = getActivity().getSupportFragmentManager();
 
@@ -355,9 +368,11 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    /**
+     * There can be multiple calls to update the progress indicator. This method was created to avoid repeating code
+     * @param visibility Pass in .VISIBLE or .INVISIBLE to update the status
+     */
     private void updateProgress(int visibility){
         ((PreLoginActivity) getActivity()).updateProgress(visibility);
     }
-
-
 }
