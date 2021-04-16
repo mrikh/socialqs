@@ -41,7 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * view a single selected video question (not in list)
+ * View a single selected video question in full screen
  */
 public class ViewQuestionActivity extends AppCompatActivity {
 
@@ -83,6 +83,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
     }
 
+    //get question data details from database
     private void fetchData(){
         NetworkHandler.getInstance().questionDetails(questionID, new NetworkingClosure() {
             @Override
@@ -222,7 +223,7 @@ public class ViewQuestionActivity extends AppCompatActivity {
             finish();
             return true;
         }
-
+        //Delete question btn
         if (item.getItemId() == R.id.btn_delete) {
             //Delete Confirmation
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

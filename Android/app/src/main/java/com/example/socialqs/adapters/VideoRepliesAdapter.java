@@ -56,6 +56,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
         this.onDataChangeListener = onDataChangeListener;
     }
 
+    //update layout immediately
     private void updateActivityLayout(){
         if(onDataChangeListener != null){
             onDataChangeListener.onDataChanged(replyList.size());
@@ -136,7 +137,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
 
             replyDate.setText(videoReplies.getTime());
 
-            //Show Menu if reply is from current user
+            //Show Menu if answer is from current user only
             if(UserModel.current.id.equals(videoReplies.getAuthorID())){
                 menuBtn.setVisibility(View.VISIBLE);
                 menuBtn.setOnClickListener(v -> {
@@ -153,7 +154,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
                                         .setCancelable(false)
                                         //Delete
                                         .setPositiveButton(R.string.title_delete, (dialog, which) -> {
-                                            //error if when size = 1 (position = 1 instead of 0)
+                                            //fix for error when size = 1 (position = 1 instead of 0)
                                             if(replyList.size() == position){
                                                 replyList.remove(0);
                                             }else{
@@ -208,7 +209,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             dislikesBtn.setOnClickListener(v -> dislikeAnswer(videoReplies));
         }
 
-
+        //play video & show progress bar for 3 seconds while it loads
         private void play(){
             videoView.start();
             playBtn.setVisibility(View.INVISIBLE);
@@ -224,6 +225,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             }
         }
 
+        //pause video
         private void pause(){
             videoView.pause();
             playBtn.setVisibility(View.VISIBLE);
@@ -238,6 +240,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             });
         }
 
+        //add or remove like count
         private void likeAnswer(VideoRepliesModel videoReplies){
 
             if (videoReplies.hasUserLiked()){
@@ -250,6 +253,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             commonButtonHandling(videoReplies);
         }
 
+        //add or remove dislike count
         private void dislikeAnswer(VideoRepliesModel videoReplies){
 
             if (videoReplies.hasUserDisliked()){
@@ -262,6 +266,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             commonButtonHandling(videoReplies);
         }
 
+        //call like/dislike button display & upload current like/dislike data to database
         private void commonButtonHandling(VideoRepliesModel videoReplies){
 
             setLikesBtn(videoReplies);
@@ -279,6 +284,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             }
         }
 
+        //Update like button visual display
         @SuppressLint("SetTextI18n")
         private void setLikesBtn(VideoRepliesModel videoReplies){
 
@@ -293,6 +299,7 @@ public class VideoRepliesAdapter extends RecyclerView.Adapter<VideoRepliesAdapte
             }
         }
 
+        //update dislike button visual display
         @SuppressLint("SetTextI18n")
         private void setDislikesBtn(VideoRepliesModel videoReplies){
 

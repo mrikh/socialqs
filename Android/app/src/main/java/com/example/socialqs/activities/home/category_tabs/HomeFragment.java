@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //notifications feature
         notifications = (ImageView) view.findViewById(R.id.notification_img);
         if(UserModel.current == null){
             notifications.setVisibility(View.INVISIBLE);
@@ -78,6 +79,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
+        //search bar feature
         searchBar = (AutoCompleteTextView) view.findViewById(R.id.search_bar);
         if (UserModel.current != null) {
             searchBar.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
@@ -90,6 +92,7 @@ public class HomeFragment extends Fragment {
                         Intent newIntent = new Intent("Searched");
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(newIntent);
 
+                        //close keyboard
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
@@ -103,7 +106,7 @@ public class HomeFragment extends Fragment {
             searchBar.setOnClickListener(v -> Utilities.getInstance().createSingleActionAlert("You must login to use this feature.", "Okay", getContext(), null).show());
         }
 
-
+        //Tab UI set up
         viewPager = (ViewPager2) view.findViewById(R.id.view_pager);
         tabs = (TabLayout) view.findViewById(R.id.tabLayout);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -115,6 +118,7 @@ public class HomeFragment extends Fragment {
 
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
 
+        //Get list of categories
         NetworkHandler.getInstance().categoryListing(new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {

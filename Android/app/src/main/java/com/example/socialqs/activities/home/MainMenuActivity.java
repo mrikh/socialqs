@@ -51,6 +51,7 @@ public class MainMenuActivity extends AppCompatActivity {
             navView.getMenu().findItem(R.id.navigation_profile).setVisible(false);
         }
 
+        //nav controller set up
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);

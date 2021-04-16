@@ -55,12 +55,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notificationList.size();
     }
 
+    //update layout immediately of change
     public interface OnDataChangeListener{ void onDataChanged(int size);}
 
     public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
         this. onDataChangeListener = onDataChangeListener;
     }
 
+    //delete individual notification
     public void deleteNotification(int position){
         deletedItem = notificationList.get(position);
         deletedItemPos = position;
@@ -70,6 +72,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         updateActivityLayout();
     }
 
+    //show delete notification snackbar at bottom of screen
     private void showUndoSnackbar() {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.delete_notification_text, Snackbar.LENGTH_LONG);
 

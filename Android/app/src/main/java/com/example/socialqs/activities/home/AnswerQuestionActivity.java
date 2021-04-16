@@ -78,6 +78,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
         questionID = getIntent().getStringExtra("questionID");
         answerCount = getIntent().getStringExtra("answerCount");
 
+        //open phone camera or gallery
         if (Integer.parseInt(videoOption) == VIDEO_RECORD) {
             startActivityForResult(new Intent(MediaStore.ACTION_VIDEO_CAPTURE), VIDEO_RECORD);
         } else {
@@ -144,15 +145,18 @@ public class AnswerQuestionActivity extends AppCompatActivity{
         }
     }
 
+    //progress bar visibility
     public void updateProgress(int visibility){
         progressBar.setVisibility(visibility);
     }
 
+    //confirm & back button usability
     private void btnBoolean(boolean clickable){
         confirmBtn.setClickable(clickable);
         backBtn.setClickable(clickable);
     }
 
+    //upload video answer to database
     public void uploadVideo(String filename, String filePath){
         try {
             updateProgress(View.VISIBLE);
@@ -179,6 +183,7 @@ public class AnswerQuestionActivity extends AppCompatActivity{
                                         Utilities.getInstance().createSingleActionAlert("Successfully answered the question", "Okay", AnswerQuestionActivity.this, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                //update answer count on question screen
                                                 Intent newIntent = new Intent("Update");
                                                 newIntent.putExtra("questionID", questionID);
 

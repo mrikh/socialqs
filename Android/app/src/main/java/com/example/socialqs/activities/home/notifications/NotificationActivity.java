@@ -70,6 +70,7 @@ public class NotificationActivity extends AppCompatActivity {
         super.onResume();
         notificationList = new ArrayList<>();
 
+        //get list of notifications from database
         NetworkHandler.getInstance().notificationListing(new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
@@ -86,10 +87,12 @@ public class NotificationActivity extends AppCompatActivity {
                         notificationList.add(item);
                     }
 
+                    //update background depending on list size
                     if(notificationList.size() == 0){
                         noNotificationsLayout.setVisibility(View.VISIBLE);
                         menu.getItem(0).setVisible(false);
                     }else {
+                        //immediate display response if notification deleted
                         adapter = new NotificationAdapter(notificationList, coordinatorLayout, NotificationActivity.this);
                         adapter.setOnDataChangeListener(size -> {
                             if(size == 0){
@@ -102,6 +105,7 @@ public class NotificationActivity extends AppCompatActivity {
                         });
 
                         recyclerView.setAdapter(adapter);
+                        //Swipe to delete visual
                         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDelete(adapter, getApplicationContext()));
                         itemTouchHelper.attachToRecyclerView(recyclerView);
                     }
@@ -131,6 +135,7 @@ public class NotificationActivity extends AppCompatActivity {
             return true;
         }
 
+        //delete all notifications
         if (item.getItemId() == R.id.btn_delete_all) {
             //Delete Confirmation
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -141,6 +146,7 @@ public class NotificationActivity extends AppCompatActivity {
                         NetworkHandler.getInstance().deleteAllNotifications((object, message) -> {
                         });
                         noNotificationsLayout.setVisibility(View.VISIBLE);
+                        //hide delete all icon
                         item.getIcon().setAlpha(0);
                     })
                     //Cancel

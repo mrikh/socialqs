@@ -88,6 +88,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
     @Override
     public int getItemCount() { return videoItemModels.size(); }
 
+    //update the video answer count
     public void update(String id, String count) {
         
         int value = -1;
@@ -254,12 +255,11 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
             final CharSequence[] options = { "Record Video", "Choose from Gallery","Cancel" };
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-
             builder.setItems(options, (dialog, item) -> {
                 final Intent[] myIntent = {null};
 
                 if (options[item].equals("Record Video")) {
-                    if(checkStoragePermission("Record Video")) {
+                    if(checkPermission("Record Video")) {
                         myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                         myIntent[0].putExtra("videoOption", "1");
                         myIntent[0].putExtra("questionID", videoID);
@@ -268,7 +268,7 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
                     }
 
                 } else if (options[item].equals("Choose from Gallery")) {
-                    if(checkStoragePermission("Choose from Gallery")) {
+                    if(checkPermission("Choose from Gallery")) {
                         myIntent[0] = new Intent(context, AnswerQuestionActivity.class);
                         myIntent[0].putExtra("videoOption", "2");
                         myIntent[0].putExtra("questionID", videoID);
@@ -286,7 +286,9 @@ public class VideoDisplayAdapter extends RecyclerView.Adapter<VideoDisplayAdapte
         }
     }
 
-    private boolean checkStoragePermission(String option) {
+    //check camera or storage permissions
+    //if denied, ask for permission
+    private boolean checkPermission(String option) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 

@@ -66,7 +66,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
     private String videoID;
     private List<VideoRepliesModel> videoReplies;
 
-
+    //refresh answer list when new answer created
     private BroadcastReceiver answerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -96,12 +96,14 @@ public class VideoRepliesActivity extends AppCompatActivity {
 
         answerQuestionBtn = findViewById(R.id.answer_question_img_view);
 
+        //recycler view set up
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
         fetchData();
 
+        //answer a question
         answerQuestionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +122,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(answerReceiver, new IntentFilter("CreatedAnswerIntent"));
     }
 
+    //get list of question answers from database
     private void fetchData(){
         videoReplies = new ArrayList<>();
 
@@ -131,7 +134,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
             }
 
             try {
-                //Video Replies list
+                //Question answer list
                 JSONArray arr = object.getJSONArray("result");
                 for (int i = 0; i < arr.length(); i++) {
                     VideoRepliesModel item = new VideoRepliesModel(arr.getJSONObject(i));
@@ -142,6 +145,7 @@ public class VideoRepliesActivity extends AppCompatActivity {
                     noRepliesLayout.setVisibility(View.VISIBLE);
                 }else {
                     noRepliesLayout.setVisibility(View.INVISIBLE);
+                    //Update layout when list size changes (added or deleted)
                     adapter = new VideoRepliesAdapter(getApplicationContext(), videoReplies);
                     adapter.setOnDataChangeListener(size -> {
                         if(size == 0){

@@ -52,7 +52,7 @@ public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
         int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
         int iconBottom = iconTop + icon.getIntrinsicHeight();
 
-        if(dX < 0){ //Swipe Left
+        if(dX < 0){ //Swipe from Right to Left
             int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
             int iconRight = itemView.getRight() - iconMargin;
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
@@ -60,6 +60,7 @@ public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
             background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
                     itemView.getTop(), itemView.getRight(), itemView.getBottom());
         }else{
+            //no other swipe option
             background.setBounds(0,0,0,0);
         }
         background.draw(c);

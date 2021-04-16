@@ -49,6 +49,7 @@ public class TabFragment extends Fragment {
         this.category = category;
     }
 
+    //refresh list with new question added
     private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -58,6 +59,7 @@ public class TabFragment extends Fragment {
         }
     };
 
+    //fetch listing with just search word
     private BroadcastReceiver searchReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -67,6 +69,7 @@ public class TabFragment extends Fragment {
         }
     };
 
+    //Update video answer count
     private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -143,6 +146,7 @@ public class TabFragment extends Fragment {
                         VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
                         videoList.add(item);
                     }
+                    //update background depending on list size
                     if(videoList.size() == 0){
                         noQuestionsLayout.setVisibility(View.VISIBLE);
                     }else{

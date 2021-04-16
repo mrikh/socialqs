@@ -50,6 +50,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         return videoItemModels.size();
     }
 
+    /**
+     *  Set up individual list item data
+     *  profile pic & question title
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView questionTitle;
         private ImageView profilePhoto;
@@ -63,6 +67,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
         public void setData(VideoItemModel videoItemModel){
              questionTitle.setText(videoItemModel.getVideoQuestion());
+             //default profile pic
              profilePhoto.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
 
             if (!videoItemModel.getAuthorImg().isEmpty()) {
@@ -70,6 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
                 Picasso.with(context).load(img).into(profilePhoto);
             }
 
+            //open question video
             questionTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

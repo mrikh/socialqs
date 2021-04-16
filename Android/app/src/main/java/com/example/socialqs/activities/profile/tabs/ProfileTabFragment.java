@@ -67,6 +67,7 @@ public class ProfileTabFragment extends Fragment {
 
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
 
+        //get list of categories to add to String searchString so questions can be searched for
         NetworkHandler.getInstance().categoryListing(new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
@@ -109,6 +110,7 @@ public class ProfileTabFragment extends Fragment {
     private void fetchListing() {
         videoList = new ArrayList<>();
 
+        //get list of questions from database
         NetworkHandler.getInstance().questionListing((((MainMenuActivity)getActivity())).searchString, null, new NetworkingClosure() {
             @Override
             public void completion(JSONObject object, String message) {
@@ -121,6 +123,8 @@ public class ProfileTabFragment extends Fragment {
                 try {
                     videoList.clear();
                     JSONArray arr = object.getJSONArray("result");
+
+                    //add questions to My Questions tab or Bookmarked tab
                     if(tabTitle.equalsIgnoreCase("myQuestions")) {
                         for (int i = 0; i < arr.length(); i++) {
                             VideoItemModel item = new VideoItemModel(arr.getJSONObject(i));
@@ -129,7 +133,7 @@ public class ProfileTabFragment extends Fragment {
                             }
                         }
 
-
+                        //update layout
                         if (videoList.size() == 0) {
                             noQuestionsLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -142,6 +146,7 @@ public class ProfileTabFragment extends Fragment {
                                 videoList.add(item);
                             }
                         }
+                        //update layout
                         if (videoList.size() == 0) {
                             noBookmarkLayout.setVisibility(View.VISIBLE);
                         } else {
