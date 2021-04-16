@@ -4,6 +4,8 @@ Android app code for the SocialQ's app.
 
 SocialQ's is a question-and-answer social media application where users can ask and answer questions via video.
 
+Also, the bypass otp to test the application is: 4321
+
 ## Setup
 
 ### If you want to have a look at the code
